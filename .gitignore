@@ -1,0 +1,7 @@
+*.log
+*.py[co]
+*.sublime-workspace
+*~
+.*.cfg
+.DS_Store
+._*
