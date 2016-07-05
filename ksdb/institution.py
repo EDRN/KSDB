@@ -1,7 +1,8 @@
-# protocols.py
+# institution.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-import requests
+import simplejson
+import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
@@ -9,6 +10,7 @@ from ksdb.models import institution
 
 # Allow external command processing
 from django.http import JsonResponse
+from ksdb.forms import InstitutionForm
 
 #import settings
 import logging
@@ -16,31 +18,28 @@ logger = logging.getLogger(__name__)
 
 def institution_input(request):
     if request.method == 'POST':
-        name= request.POST.get('institutionname')
-        department = request.POST.get('institutiondept')
-        abbreviation = request.POST.get('institutionabbr')
-        url = request.POST.get('institutionurl')
-        description = request.POST.get('institutiondesc')
 
         ins_id = None
         message = "You have successfully added a institution."
+        success = True
+        parameters = copy.copy(request.POST)
         if request.POST.get('action') == "edit":
             ins_id = int(request.POST.get('institutionid'))
             message = "You have successfull edited institution "+str(ins_id)+"."
+            parameters["id"] = ins_id
+            institutioni = institution.objects.get(id=ins_id)
+            institutionm = InstitutionForm(parameters or None, instance=institutioni)
         else:
             ins_id = IdSeq.objects.raw("select sequence_name, nextval('institution_seq') from institution_seq")[0].nextval
+            parameters["id"] = ins_id
+            institutionm = InstitutionForm(parameters)
         
-        institutionm = institution(id = ins_id, 
-                            name = name, 
-                            department = department, 
-                            abbreviation = abbreviation, 
-                            url = url, 
-                            description = description, 
-                    )
-        institutionm.save()
-
-        return JsonResponse({'Success':"True",
-                             'errors':'',
+        if institutionm.is_valid():
+            institutionm.save()
+        else:
+            message = simplejson.dumps(institutionm.errors)
+            success = False
+        return JsonResponse({'Success':success,
                             'Message':message})
     data = {"action" : "New" ,
            }

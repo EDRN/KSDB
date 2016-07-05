@@ -32,8 +32,6 @@ class organ(models.Model):
 
 
 class organ_protocol_link(models.Model):
-    #protocolid = models.ForeignKey(protocol, id)
-    #organid = models.ForeignKey(organ, id)
     protocolid = models.IntegerField()
     organid = models.IntegerField()
 
@@ -64,6 +62,7 @@ class pi_protocol_link(models.Model):
         unique_together = (("protocolid", "personid"),)
 #Project related models
 class project(models.Model):
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
     abbreviation = models.CharField(max_length=128)
     sites = models.CharField(max_length=500)
@@ -82,6 +81,7 @@ class project_site_link(models.Model):
 
 #Institution related models
 class institution(models.Model):
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128)
     department = models.CharField(max_length=128)
     abbreviation = models.CharField(max_length=128)
@@ -93,6 +93,7 @@ class institution(models.Model):
 
 #Publication related models
 class publication(models.Model):
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
     authors = models.CharField(max_length=500)
     journal = models.CharField(max_length=500)
@@ -112,6 +113,7 @@ class publication_author_link(models.Model):
 
 #Fundedsite related models
 class fundedsite(models.Model):
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
     pis = models.CharField(max_length=500)
     organs = models.CharField(max_length=500)
@@ -161,20 +163,4 @@ class IdSeq(models.Model):
     log_cnt = models.IntegerField()
     is_cycled = models.BooleanField()
     is_called = models.BooleanField()
-
-
-def new_input_file_id(instance, file_name):
-
-    today = datetime.date.today()
-    year = u'%4s' % today.year
-    month = u'%02i' % today.month
-    day = u'%02i' % today.day
-
-    folder_name = u'%06i' % instance.folder
-    return folder_name+'/'+file_name
-
-
-class InputSeqFile(models.Model):
-    seq_file = models.FileField(upload_to=new_input_file_id)
-    folder   = models.IntegerField()
 
