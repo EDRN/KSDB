@@ -7,11 +7,11 @@
 
         <script>
             function fillpersonform() {
-                    $('#personfirst').val("{{personfirst}}");
-                    $('#personlast').val("{{personlast}}");
-                    $('#persondegree').val("{{persondegree}}".split(","));
-                    $('#personemail').val("{{personemail}}");
-                    $('#personphone').val("{{personphone}}");
+                    $('#firstname').val("{{firstname}}");
+                    $('#lastname').val("{{lastname}}");
+                    $('#degrees').val("{{degrees}}".split(","));
+                    $('#email').val("{{email}}");
+                    $('#telephone').val("{{telephone}}");
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}fillpersonform();{% endifequal %}
@@ -34,16 +34,16 @@
                 {% csrf_token %}
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="personfirst">First Name</label>
-                <input type="text" class="form-control" name="personfirst" id="personfirst" placeholder="Enter First Name">
+                <label for="firstname">First Name</label>
+                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter First Name">
                 </fieldset>
                 <fieldset class="form-group">
-                  <label for="personemail">Email</label>
-                  <input type="email" class="form-control" name="personemail" id="personemail" placeholder="Enter email">
+                  <label for="email">Email</label>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="persondegree">Degrees</label>
-                <select multiple class="form-control" id="persondegree" name="persondegree">
+                <label for="degrees">Degrees</label>
+                <select class="form-control" id="degrees" name="degrees">
                   <option value='1'>M.D.</option>
                   <option value='2'>M.P.H</option>
                   <option value='3'>Ph.D.</option>
@@ -53,12 +53,12 @@
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="personlast">Last Name</label>
-                <input type="text" class="form-control" name="personlast" id="personlast" placeholder="Enter Last Name">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter Last Name">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="personphone">Telephone</label>
-                <input type="text" class="form-control" name="personphone" id="personphone" placeholder="Enter Phone Number">
+                <label for="telephone">Telephone</label>
+                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="Enter Phone Number">
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
@@ -69,6 +69,9 @@
                 {% endifequal %}
                 </div>
             </form>
+            </div>
+            <div class="col-md-12">
+                <font color="red"><center><div id="results"></div></center></font>
             </div>
             <div class="col-md-12">
             <center>
@@ -89,8 +92,20 @@
                 type : 'POST',
                 data : personform.serialize(),
                 success : function (response) {
-                    alert(response.Message);
-                    window.location = '/ksdb/view?tabpage=person';
+                    if(response.Success){
+                        alert(response.Message);
+                        window.location = '/ksdb/view?tabpage=person';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
+
                 },
                 error : function(xhr, status, error) {
                     alert("Error: "+xhr.responseText);

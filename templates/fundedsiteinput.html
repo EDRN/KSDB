@@ -8,34 +8,34 @@
         <script>
             function initfundedsiteform() {
                 $.each({{organs|safe}}, function(key, value) { 
-                    $('#fundedsiteorgan').append($("<option></option>")
+                    $('#organs').append($("<option></option>")
                         .attr("value",value[0])
                         .text(value[1])); 
                 });
                 $.each({{pis|safe}}, function(key, value) { 
-                    $('#fundedsitepi').append($("<option></option>")
+                    $('#pis').append($("<option></option>")
                         .attr("value",value[0])
                         .text(value[1]+" "+value[2])); 
                 });
                 $.each({{staffs|safe}}, function(key, value) { 
-                    $('#fundedsitestaff').append($("<option></option>")
+                    $('#staff').append($("<option></option>")
                         .attr("value",value[0])
                         .text(value[1]+" "+value[2])); 
                 });
             }
 
             function fillfundedsiteform() {
-                    $('#fundedsitetitle').val("{{title}}");
-                    $('#fundedsitepi').val({{pi_link_id}});
-                    $('#fundedsitestaff').val({{staff_link_id}});
-                    $('#fundedsiteorgan').val({{organ_link_id}});
-                    $('#fundedsitedesc').val("{{description}}");
-                    $('#fundedsiteabstract').html("{{abstract}}");
+                    $('#title').val("{{title}}");
+                    $('#pis').val({{pi_link_id}});
+                    $('#staff').val({{staff_link_id}});
+                    $('#organs').val({{organ_link_id}});
+                    $('#description').val("{{description}}");
+                    $('#abstract').html("{{abstract}}");
             }
             $(document).ready( function () {
                 initfundedsiteform();
                 {% ifequal action "Edit" %}fillfundedsiteform();{% endifequal %}
-                tinymce.init({ selector:'#fundedsiteabstract'});
+                tinymce.init({ selector:'#abstract'});
         } );
         </script>
     </head>
@@ -55,33 +55,33 @@
                 {% csrf_token %}
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="fundedsitetitle">Title</label>
-                <input type="text" class="form-control" name="fundedsitetitle" id="fundedsitetitle" placeholder="Enter Funded Site Title">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Funded Site Title">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="fundedsitedesc">Funded Site Description</label>
-                <textarea class="form-control" id="fundedsitedesc" name="fundedsitedesc" rows="6"></textarea>
+                <label for="description">Funded Site Description</label>
+                <textarea class="form-control" id="description" name="description" rows="6"></textarea>
                 </fieldset>
                 <fieldset class="form-group">
-                  <label for="fundedsiteabstract">Abstract</label>
-                  <textarea class="form-control" id="fundedsiteabstract" name="fundedsiteabstract" rows="5"></textarea>
+                  <label for="abstract">Abstract</label>
+                  <textarea class="form-control" id="abstract" name="abstract" rows="5"></textarea>
                   <small class="text-muted">Enter abstract for this fundedsite.</small>
                 </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="fundedsitepi">Principle Investigators</label>
-                <select multiple class="form-control" id="fundedsitepi" name="fundedsitepi">
+                <label for="pis">Principle Investigators</label>
+                <select multiple class="form-control" id="pis" name="pis">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="fundedsitestaff">Additional Staff</label>
-                <select multiple class="form-control" id="fundedsitestaff" name="fundedsitestaff">
+                <label for="staff">Additional Staff</label>
+                <select multiple class="form-control" id="staff" name="staff">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="fundedsiteorgan">Organs</label>
-                <select multiple class="form-control" id="fundedsiteorgan" name="fundedsiteorgan">
+                <label for="organs">Organs</label>
+                <select multiple class="form-control" id="organs" name="organs">
                 </select>
                 </fieldset>
                 {% ifequal action "Edit" %}
@@ -93,6 +93,9 @@
                 {% endifequal %}
                 </div>
             </form>
+            </div>
+            <div class="col-md-12">
+                <font color="red"><center><div id="results"></div></center></font>
             </div>
             <div class="col-md-12">
             <center>
@@ -110,10 +113,21 @@
                 $.ajax({
                 url : fundedsiteform.attr('action'),
                 type : 'POST',
-                data : fundedsiteform.serialize()+"&fundedsiteabstract="+encodeURIComponent(tinymce.get('fundedsiteabstract').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                data : fundedsiteform.serialize()+"&abstract="+encodeURIComponent(tinymce.get('abstract').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
                 success : function (response) {
-                    alert(response.Message);
-                    window.location = '/ksdb/view?tabpage=fundedsite';
+                    if(response.Success){
+                        alert(response.Message);
+                        window.location = '/ksdb/view?tabpage=fundedsite';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
                 },
                 error : function(xhr, status, error) {
                     alert("Error: "+xhr.responseText);

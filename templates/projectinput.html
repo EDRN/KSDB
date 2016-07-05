@@ -11,21 +11,21 @@
         <script>
             function initprojectform() {
                 $.each({{sites|safe}}, function(key, value) { 
-                    $('#projectsites').append($("<option></option>")
+                    $('#sites').append($("<option></option>")
                         .attr("value",value[0])
                         .text(value[1])); 
                 });
             }
             function fillprojectform() {
-                    $('#projecttitle').val("{{title}}");
-                    $('#projectabbr').val("{{abbreviation}}");
-                    $('#projectdesc').html("{{description}}");
-                    $('#projectsites').val({{site_link_id}});
+                    $('#title').val("{{title}}");
+                    $('#abbreviation').val("{{abbreviation}}");
+                    $('#description').html("{{description}}");
+                    $('#sites').val({{site_link_id}});
             }
             $(document).ready( function () {
                 initprojectform();
                 {% ifequal action "Edit" %}fillprojectform();{% endifequal %}
-                tinymce.init({ selector:'#projectdesc'});
+                tinymce.init({ selector:'#description'});
         } );
         </script>
     </head>
@@ -43,21 +43,21 @@
             <form id="projectinput" action="/ksdb/projectinput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <fieldset class="form-group">
-                <label for="projecttitle">Project Title</label>
-                <input type="text" class="form-control" name="projecttitle" id="projecttitle" placeholder="Enter Title">
+                <label for="title">Project Title</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="projectabbr">Abbreviation</label>
-                <input type="text" class="form-control" name="projectabbr" id="projectabbr" placeholder="Enter Abbreviation">
+                <label for="abbreviation">Abbreviation</label>
+                <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Abbreviation">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="projectdesc">Project Description</label>
-                <textarea class="form-control" name="projectdesc" id="projectdesc" rows="5"></textarea>
+                <label for="description">Project Description</label>
+                <textarea class="form-control" name="description" id="description" rows="5"></textarea>
                 <small class="text-muted">Describe your project.</small>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="projectsites">Sites</label>
-                <select multiple class="form-control" id="projectsites" name="projectsites">
+                <label for="sites">Sites</label>
+                <select multiple class="form-control" id="sites" name="sites">
                 </select>
                 </fieldset>
                 {% ifequal action "Edit" %}
@@ -69,10 +69,15 @@
                 {% endifequal %}
                 </div>
             </form>
+            <div class="col-md-12">
+                <font color="red"><center><div id="results"></div></center></font>
+            </div>
+            <div class="col-md-12">
                 <center>
                 <button type="button" class="btn btn-success" id="submit-project" type="button" >Add</button>
                 <button type="button" class="btn btn-danger" onClick="window.location = '/ksdb/view?tabpage=project';" id="cancel-project" type="button" >Cancel</button>
                 </center>
+            </div>
             </div>
         </div>
     </div>
@@ -85,10 +90,21 @@
                 $.ajax({
                 url : projectform.attr('action'),
                 type : 'POST',
-                data : projectform.serialize()+"&projectdesc="+encodeURIComponent(tinymce.get('projectdesc').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                data : projectform.serialize()+"&description="+encodeURIComponent(tinymce.get('description').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
                 success : function (response) {
-                    alert(response.Message);
-                    window.location = '/ksdb/view?tabpage=project';
+                    if(response.Success){
+                      alert(response.Message);
+                      window.location = '/ksdb/view?tabpage=project';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
                 },
                 error : function(xhr, status, error) {
                     alert("Error: "+xhr.responseText);

@@ -8,15 +8,15 @@
 
         <script>
             function fillinstitutionform() {
-                    $('#institutionname').val("{{name}}");
-                    $('#institutiondept').val("{{department}}");
-                    $('#institutionabbr').val("{{abbreviation}}".split(","));
-                    $('#institutionurl').val("{{url}}");
-                    $('#institutiondesc').html("{{description}}");
+                    $('#name').val("{{name}}");
+                    $('#department').val("{{department}}");
+                    $('#abbreviation').val("{{abbreviation}}".split(","));
+                    $('#url').val("{{url}}");
+                    $('#description').html("{{description}}");
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}fillinstitutionform();{% endifequal %}
-                tinymce.init({ selector:'#institutiondesc'});
+                tinymce.init({ selector:'#description'});
         } );
         </script>
     </head>
@@ -36,24 +36,24 @@
                 {% csrf_token %}
                 <div class="col-md-12">
                 <fieldset class="form-group">
-                <label for="institutionname">Name</label>
-                <input type="text" class="form-control" name="institutionname" id="institutionname" placeholder="Enter Institution Name">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Enter Institution Name">
                 </fieldset>
                 <fieldset class="form-group">
-                  <label for="institutiondept">Department</label>
-                  <input type="text" class="form-control" name="institutiondept" id="institutiondept" placeholder="Enter Department">
+                  <label for="department">Department</label>
+                  <input type="text" class="form-control" name="department" id="department" placeholder="Enter Department">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="institutionabbr">Abbreviation</label>
-                <input type="text" class="form-control" name="institutionabbr" id="institutionabbr" placeholder="Enter Abbreviation">
+                <label for="abbreviation">Abbreviation</label>
+                <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Abbreviation">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="institutionurl">URL</label>
-                <input type="text" class="form-control" name="institutionurl" id="institutionurl" placeholder="Enter URL">
+                <label for="url">URL</label>
+                <input type="text" class="form-control" name="url" id="url" placeholder="Enter URL">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="institutiondesc">Institution Description</label>
-                <textarea class="form-control" name="institutiondesc" id="institutiondesc" rows="5"></textarea>
+                <label for="description">Institution Description</label>
+                <textarea class="form-control" name="description" id="description" rows="5"></textarea>
                 <small class="text-muted">Describe your institution.</small>
                 </fieldset>
                 {% ifequal action "Edit" %}
@@ -65,6 +65,9 @@
                 {% endifequal %}
                 </div>
             </form>
+            </div>
+            <div class="col-md-12">
+                <font color="red"><center><div id="results"></div></center></font>
             </div>
             <div class="col-md-12">
             <center>
@@ -82,10 +85,21 @@
                 $.ajax({
                 url : institutionform.attr('action'),
                 type : 'POST',
-                data : institutionform.serialize()+"&institutiondesc="+encodeURIComponent(tinymce.get('institutiondesc').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                data : institutionform.serialize()+"&description="+encodeURIComponent(tinymce.get('description').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
                 success : function (response) {
-                    alert(response.Message);
-                    window.location = '/ksdb/view?tabpage=institution';
+                    if(response.Success){
+                      alert(response.Message);
+                      window.location = '/ksdb/view?tabpage=institution';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
                 },
                 error : function(xhr, status, error) {
                     alert("Error: "+xhr.responseText);

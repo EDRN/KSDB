@@ -7,11 +7,15 @@ Knowledge System DB: The goal of this system is to maintain generalized project 
 
 pip install -r conf/dependencies.cfg
 
+
+
 # Running the project
 
 To run this project:
 
     # Setup the database
+    Change db, username, password in sitemain/settings.py for postgres database to reflect your database
+    sh conf/initdb.sh
     python manage.py migrate
     python manage.py makemigrations
 

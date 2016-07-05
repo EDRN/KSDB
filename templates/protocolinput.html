@@ -159,7 +159,7 @@
               <small class="text-muted">Enter abstract for this protocol.</small>
             </fieldset>
             <div class="col-md-12">
-                <font color="red"><center><div id="protocolresults"></div></center></font>
+                <font color="red"><center><div id="results"></div></center></font>
             </div>
             <div class="col-md-12">
                 <center>
@@ -181,8 +181,8 @@
                 data : protocolform.serialize()+"&abstract="+encodeURIComponent(tinymce.get('abstract').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
                 success : function (response) {
                     if(response.Success){
-                        alert(response.Message);
-//                    window.location = '/ksdb/view?tabpage=protocol';
+                      alert(response.Message);
+                      window.location = '/ksdb/view?tabpage=protocol';
                     }else{
                         $('span.label-danger').remove();
                         jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
@@ -191,7 +191,7 @@
                             $lab_span.html(val);
                             $('#'+i).parent().append($lab_span, '\n');
                         });
-                        $('#protocolresults').html("<font color='red'>Please fix the above form input errors</font>");
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
                     }
                 },
                 error : function(xhr, status, error) {

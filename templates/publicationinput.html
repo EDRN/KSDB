@@ -12,18 +12,18 @@
         <script>
             function initpublicationform() {
                 $.each({{authors|safe}}, function(key, value) { 
-                    $('#publicationauthor').append($("<option></option>")
+                    $('#authors').append($("<option></option>")
                         .attr("value",value[0])
                         .text(value[1]+" "+value[2])); 
                 });
             }
 
             function fillpublicationform() {
-                    $('#publicationtitle').val("{{title}}");
-                    $('#publicationauthor').val({{author_link_id}});
-                    $('#publicationjournal').val("{{journal}}");
-                    $('#publicationpubdateinput').val("{{pubdate}}");
-                    $('#publicationpubid').val("{{pubmedid}}");
+                    $('#title').val("{{title}}");
+                    $('#authors').val({{author_link_id}});
+                    $('#journal').val("{{journal}}");
+                    $('#pubdate').val("{{pubdate}}");
+                    $('#pubmedid').val("{{pubmedid}}");
             }
             $(document).ready( function () {
                 $('#publicationpubdate').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
@@ -48,30 +48,30 @@
                 {% csrf_token %}
                 <div class="col-md-12">
                 <fieldset class="form-group">
-                <label for="publicationtitle">Title</label>
-                <input type="text" class="form-control" name="publicationtitle" id="publicationtitle" placeholder="Enter Publication Title">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Publication Title">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="publicationauthor">Authors</label>
-                <select multiple class="form-control" id="publicationauthor" name="publicationauthor">
+                <label for="authors">Authors</label>
+                <select multiple class="form-control" id="authors" name="authors">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="publicationjournal">Journal</label>
-                <input type="text" class="form-control" name="publicationjournal" id="publicationjournal" placeholder="Enter Journal">
+                <label for="journal">Journal</label>
+                <input type="text" class="form-control" name="journal" id="journal" placeholder="Enter Journal">
                 </fieldset>
                 <fieldset class="form-group">
-                  <label for="publicationpubdateinput">Start Date</label>
+                  <label for="pubdate">Start Date</label>
                   <div class='input-group date' id='publicationpubdate'>
-                    <input type='text' class="form-control" id='publicationpubdateinput' name='publicationpubdateinput' />
+                    <input type='text' class="form-control" id='pubdate' name='pubdate' />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                   </div>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="publicationpubid">PubMed ID</label>
-                <input type="text" class="form-control" name="publicationpubid" id="publicationpubid" placeholder="Enter Publication ID">
+                <label for="pubmedid">PubMed ID</label>
+                <input type="text" class="form-control" name="pubmedid" id="pubmedid" placeholder="Enter Publication ID">
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
@@ -82,6 +82,9 @@
                 {% endifequal %}
                 </div>
             </form>
+            </div>
+            <div class="col-md-12">
+                <font color="red"><center><div id="results"></div></center></font>
             </div>
             <div class="col-md-12">
             <center>
@@ -101,8 +104,19 @@
                 type : 'POST',
                 data : publicationform.serialize(),
                 success : function (response) {
-                    alert(response.Message);
-                    window.location = '/ksdb/view?tabpage=publication';
+                    if(response.Success){
+                        alert(response.Message);
+                        window.location = '/ksdb/view?tabpage=publication';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
                 },
                 error : function(xhr, status, error) {
                     alert("Error: "+xhr.responseText);
