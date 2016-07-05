@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ action }} Protocol</title>
+	{% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        <script>
+            function initprotocolform() {
+                $.each({{pis|safe}}, function(key, value) { 
+                    $('#pis').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1]+" "+value[2])); 
+                });
+                $.each({{organs|safe}}, function(key, value) { 
+                    $('#organs').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1])); 
+                });
+            }
+            function fillprotocolform() {
+                    $('#title').val("{{title}}");
+                    $('#description').val("{{description}}");
+                    $('#organs').val({{organ_link_id}});
+                    $('#pis').val({{pi_link_id}});
+                    $('#start_date').val("{{start_date}}");
+                    $('#site_contact').val("{{site_contact}}");
+                    $('input:radio[name=irb_approval]').filter('[value={{irb_approval}}]').prop('checked', true);
+                    $('#irb_approval_num').val("{{irb_approval_num}}");
+                    $('#irb_contact').val("{{irb_contact}}");
+                    $('#contact_email').val("{{contact_email}}");
+                    $('input:radio[name=hum_sub_train]').filter('[value="{{hum_sub_train}}"]').prop('checked', true);
+                    $('#abstract').html("{{abstract}}");
+            }
+            $(document).ready( function () {
+                $('#protocolstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+                initprotocolform();
+                {% ifequal action "Edit" %}fillprotocolform();{% endifequal %}
+                tinymce.init({ selector:'#abstract'});
+        } );
+        </script>
+    </head>
+
+<body>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>{{ action }} Protocol {{ id }}</H2>
+            <p>
+                Please update the KSDB database with accurate protocol information.
+            </p>
+            <br>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+            <form id="protocolinput" action="/ksdb/protocolinput/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-6">
+                <fieldset class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="description">Protocol Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                <small class="text-muted">Describe your protocol.</small>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="organs">Organs</label>
+                <select multiple class="form-control" id="organs" name="organs">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="pis">PIs</label>
+                <select multiple class="form-control" id="pis" name="pis">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="protocolstart">Start Date</label>
+                  <div class='input-group date' id='protocolstart'>
+                    <input type='text' class="form-control" id='start_date' name='start_date' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </fieldset>
+                </div>
+                <div class="col-md-6">
+                <fieldset class="form-group">
+                  <label for="site_contact">Site Contact</label>
+                  <input type="text" class="form-control" id="site_contact" name="site_contact" placeholder="Enter Site Contact">
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="irb_approval">IRB Approval</label>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="irb_approval" id="irb_approval1" value="Yes" checked>
+                            Yes
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="irb_approval" id="irb_approval2" value="No">
+    `                       No
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="irb_approval_num">Approval #</label>
+                  <input type="number" class="form-control" id="irb_approval_num" name="irb_approval_num" placeholder="Enter Approval #">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="irb_contact">IRB Contact</label>
+                  <input type="text" class="form-control" id="irb_contact" name="irb_contact" placeholder="Enter IRB Contact">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="contact_email">Contact Email</label>
+                  <input type="email" class="form-control" name="contact_email" id="contact_email" placeholder="Enter email">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="hum_sub_train">Human Subjects Training</label>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="hum_sub_train" id="hum_sub_train1" value="Yes" checked>
+                            Yes
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="hum_sub_train" id="hum_sub_train2" value="No">
+                            No
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="hum_sub_train" id="hum_sub_train3" value="Not Required">
+                            Not Required
+                        </label>
+                    </div>
+                </fieldset>
+                {% ifequal action "Edit" %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="protocolid" value="{{id}}">
+                {% endifequal %}
+                {% ifequal action "New" %}
+                <input type="hidden" name="action" value="new">
+                {% endifequal %}
+                </div>
+            </form>
+            </div>
+            <div class="col-md-12">
+            <fieldset class="form-group">
+              <label for="abstract">Abstract</label>
+              <textarea class="form-control" id="abstract" name="abstract" rows="8"></textarea>
+              <small class="text-muted">Enter abstract for this protocol.</small>
+            </fieldset>
+            <div class="col-md-12">
+                <font color="red"><center><div id="protocolresults"></div></center></font>
+            </div>
+            <div class="col-md-12">
+                <center>
+                <button type="button" class="btn btn-success" id="submit-protocol" type="button" >Add</button>
+                <button type="button" class="btn btn-danger" id="cancel-protocol" onClick="window.location = '/ksdb/view?tabpage=protocol';" type="button" >Cancel</button>
+                </center>
+            </div>
+            </div>
+        </div>
+    </div>
+	<script>
+        var submitButton = document.querySelector("#submit-protocol")
+        var protocolform = $('#protocolinput');
+        //var removeButton = document.querySelector("#cancel-protocol")
+            submitButton.addEventListener("click", function () {
+                $.ajax({
+                url : protocolform.attr('action'),
+                type : 'POST',
+                data : protocolform.serialize()+"&abstract="+encodeURIComponent(tinymce.get('abstract').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                success : function (response) {
+                    if(response.Success){
+                        alert(response.Message);
+//                    window.location = '/ksdb/view?tabpage=protocol';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#protocolresults').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+	</script>
+</body>

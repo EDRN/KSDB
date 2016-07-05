@@ -1,0 +1,87 @@
+<head>
+    <meta charset="utf-8">
+    <title>KSDB</title>
+    {% load staticfiles %}
+    <!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
+    <!--<script src="{% static 'js/jquery/dist/jquery.js' %}"></script>-->
+    <!--     <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}"/>-->
+    <!--<script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function changeTab(ele){
+                var currentAttrValue = ele.attr('href');
+                // Show/Hide Tabs
+                $(currentAttrValue).siblings().hide();
+                $(currentAttrValue).show();
+
+                // Change/remove current tab to active
+                ele.parent('li').addClass('active').siblings().removeClass('active');
+            }
+            $('#protocol_table').dataTable();
+            $('#person_table').dataTable();
+            $('#project_table').dataTable();
+            $('#institution_table').dataTable();
+            $('#fundedsite_table').dataTable();
+            $('#publication_table').dataTable();
+            $('.nav li a').on('click', function(e) {
+                changeTab($(this));
+                e.preventDefault();
+            });
+            {% if request.GET.tabpage %}
+                changeTab($('#'+{{request.GET.tabpage}}.getAttribute("id")+"tab"));
+            {% endif %}
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>Welcome to KSDB!</H2>
+            <p>
+                Knowledge System DB: The goal of this system is to maintain generalized project information to be used for any bioinformatics knowledge system that the JPL Informatics Center supports. For example, EDRN or MCL.
+            </p>
+            <br>
+        </div>
+        <div class="row"></div>
+
+        <div class="col-12 col-sm-12 col-lg-12">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a id="projecttab" href="#project">Projects</a>
+                </li>
+                <li><a id="institutiontab" href="#institution">Institutions</a>
+                </li>
+                <li><a id="fundedsitetab" href="#fundedsite">Funded Sites</a>
+                </li>
+                <li><a id="persontab" href="#person">Personnel</a>
+                </li>
+                <li><a id="protocoltab" href="#protocol">Protocols</a>
+                </li>
+                <li><a id="publicationtab" href="#publication">Publications</a>
+                </li>
+            </ul>
+        </div>
+        <div id="content" class="tab-content">
+            <div class="tab-pane" id="protocol">
+                {% include "protocolview.html" %} 
+            </div>
+            <div class="tab-pane active" id="project">
+                {% include "projectview.html" %} 
+            </div>
+            <div class="tab-pane" id="person">
+                {% include "personview.html" %} 
+            </div>
+            <div class="tab-pane" id="institution">
+                {% include "institutionview.html" %} 
+            </div>
+            <div class="tab-pane" id="fundedsite">
+                {% include "fundedsiteview.html" %} 
+            </div>
+            <div class="tab-pane" id="publication">
+                {% include "publicationview.html" %} 
+            </div>
+        </div>
+    </div>
+</body>

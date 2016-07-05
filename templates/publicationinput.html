@@ -1,0 +1,113 @@
+    <head>
+        <meta charset="utf-8">
+        <title>{{ action }} Publication</title>
+	{% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+        <script>
+            function initpublicationform() {
+                $.each({{authors|safe}}, function(key, value) { 
+                    $('#publicationauthor').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1]+" "+value[2])); 
+                });
+            }
+
+            function fillpublicationform() {
+                    $('#publicationtitle').val("{{title}}");
+                    $('#publicationauthor').val({{author_link_id}});
+                    $('#publicationjournal').val("{{journal}}");
+                    $('#publicationpubdateinput').val("{{pubdate}}");
+                    $('#publicationpubid').val("{{pubmedid}}");
+            }
+            $(document).ready( function () {
+                $('#publicationpubdate').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+                initpublicationform();
+                {% ifequal action "Edit" %}fillpublicationform();{% endifequal %}
+        } );
+        </script>
+    </head>
+
+<body>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>{{ action }} Institution {{ id }}</H2>
+            <p>
+                Please update the KSDB database with accurate publication information.
+            </p>
+            <br>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+            <form id="publicationinput" action="/ksdb/publicationinput/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-12">
+                <fieldset class="form-group">
+                <label for="publicationtitle">Title</label>
+                <input type="text" class="form-control" name="publicationtitle" id="publicationtitle" placeholder="Enter Publication Title">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="publicationauthor">Authors</label>
+                <select multiple class="form-control" id="publicationauthor" name="publicationauthor">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="publicationjournal">Journal</label>
+                <input type="text" class="form-control" name="publicationjournal" id="publicationjournal" placeholder="Enter Journal">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="publicationpubdateinput">Start Date</label>
+                  <div class='input-group date' id='publicationpubdate'>
+                    <input type='text' class="form-control" id='publicationpubdateinput' name='publicationpubdateinput' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="publicationpubid">PubMed ID</label>
+                <input type="text" class="form-control" name="publicationpubid" id="publicationpubid" placeholder="Enter Publication ID">
+                </fieldset>
+                {% ifequal action "Edit" %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="publicationid" value="{{id}}">
+                {% endifequal %}
+                {% ifequal action "New" %}
+                <input type="hidden" name="action" value="new">
+                {% endifequal %}
+                </div>
+            </form>
+            </div>
+            <div class="col-md-12">
+            <center>
+            <button type="button" class="btn btn-success" id="submit-publication" type="button" >Add</button>
+            <button type="button" class="btn btn-danger" id="cancel-publication" onClick="window.location = '/ksdb/view?tabpage=publication';" type="button" >Cancel</button>
+            </center>
+            </div>
+        </div>
+    </div>
+
+	<script>
+        var submitButton = document.querySelector("#submit-publication")
+        var publicationform = $('#publicationinput');
+            submitButton.addEventListener("click", function () {
+                $.ajax({
+                url : publicationform.attr('action'),
+                type : 'POST',
+                data : publicationform.serialize(),
+                success : function (response) {
+                    alert(response.Message);
+                    window.location = '/ksdb/view?tabpage=publication';
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+	</script>
+</body>

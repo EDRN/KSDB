@@ -1,0 +1,27 @@
+<div class="col-md-12">
+    <br>
+    <table id="institution_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                {%for x in institutionheaders%}
+                <th> {{x}} </th>
+                {% endfor%}
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in institutiontable %}
+            <tr>
+                {% for y in x %}
+                <td> {{y|safe}} </td>
+                {%endfor %}
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <center>
+        <button type="button" class="btn btn-success" onClick="window.location = '/ksdb/institutioninput';" id="submit-all" type="button">Add Institution</button>
+        <button type="button" class="btn btn-danger" id="remove-all" type="button">Delete Institution</button>
+    </center>
+</div>

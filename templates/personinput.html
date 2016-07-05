@@ -1,0 +1,101 @@
+    <head>
+        <meta charset="utf-8">
+        <title>{{ action }} Personnel</title>
+	{% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
+
+        <script>
+            function fillpersonform() {
+                    $('#personfirst').val("{{personfirst}}");
+                    $('#personlast').val("{{personlast}}");
+                    $('#persondegree').val("{{persondegree}}".split(","));
+                    $('#personemail').val("{{personemail}}");
+                    $('#personphone').val("{{personphone}}");
+            }
+            $(document).ready( function () {
+                {% ifequal action "Edit" %}fillpersonform();{% endifequal %}
+        } );
+        </script>
+    </head>
+
+<body>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>{{ action }} Personnel {{ id }}</H2>
+            <p>
+                Please update the KSDB database with accurate personnel information.
+            </p>
+            <br>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+            <form id="personinput" action="/ksdb/personinput/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-6">
+                <fieldset class="form-group">
+                <label for="personfirst">First Name</label>
+                <input type="text" class="form-control" name="personfirst" id="personfirst" placeholder="Enter First Name">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="personemail">Email</label>
+                  <input type="email" class="form-control" name="personemail" id="personemail" placeholder="Enter email">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="persondegree">Degrees</label>
+                <select multiple class="form-control" id="persondegree" name="persondegree">
+                  <option value='1'>M.D.</option>
+                  <option value='2'>M.P.H</option>
+                  <option value='3'>Ph.D.</option>
+                  <option value='4'>Honorary Ph.D.</option>
+                </select>
+                </fieldset>
+                </div>
+                <div class="col-md-6">
+                <fieldset class="form-group">
+                <label for="personlast">Last Name</label>
+                <input type="text" class="form-control" name="personlast" id="personlast" placeholder="Enter Last Name">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="personphone">Telephone</label>
+                <input type="text" class="form-control" name="personphone" id="personphone" placeholder="Enter Phone Number">
+                </fieldset>
+                {% ifequal action "Edit" %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="personid" value="{{id}}">
+                {% endifequal %}
+                {% ifequal action "New" %}
+                <input type="hidden" name="action" value="new">
+                {% endifequal %}
+                </div>
+            </form>
+            </div>
+            <div class="col-md-12">
+            <center>
+            <button type="button" class="btn btn-success" id="submit-person" type="button" >Add</button>
+            <button type="button" class="btn btn-danger" id="cancel-person" onClick="window.location = '/ksdb/view?tabpage=person';" type="button" >Cancel</button>
+            </center>
+            </div>
+        </div>
+    </div>
+
+	<script>
+        var submitButton = document.querySelector("#submit-person")
+        var personform = $('#personinput');
+        //var removeButton = document.querySelector("#cancel-person")
+            submitButton.addEventListener("click", function () {
+                $.ajax({
+                url : personform.attr('action'),
+                type : 'POST',
+                data : personform.serialize(),
+                success : function (response) {
+                    alert(response.Message);
+                    window.location = '/ksdb/view?tabpage=person';
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+	</script>
+</body>

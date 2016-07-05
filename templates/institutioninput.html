@@ -1,0 +1,96 @@
+    <head>
+        <meta charset="utf-8">
+        <title>{{ action }} Institution</title>
+	{% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+        <script>
+            function fillinstitutionform() {
+                    $('#institutionname').val("{{name}}");
+                    $('#institutiondept').val("{{department}}");
+                    $('#institutionabbr').val("{{abbreviation}}".split(","));
+                    $('#institutionurl').val("{{url}}");
+                    $('#institutiondesc').html("{{description}}");
+            }
+            $(document).ready( function () {
+                {% ifequal action "Edit" %}fillinstitutionform();{% endifequal %}
+                tinymce.init({ selector:'#institutiondesc'});
+        } );
+        </script>
+    </head>
+
+<body>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>{{ action }} Institution {{ id }}</H2>
+            <p>
+                Please update the KSDB database with accurate institution information.
+            </p>
+            <br>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+            <form id="institutioninput" action="/ksdb/institutioninput/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-12">
+                <fieldset class="form-group">
+                <label for="institutionname">Name</label>
+                <input type="text" class="form-control" name="institutionname" id="institutionname" placeholder="Enter Institution Name">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="institutiondept">Department</label>
+                  <input type="text" class="form-control" name="institutiondept" id="institutiondept" placeholder="Enter Department">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="institutionabbr">Abbreviation</label>
+                <input type="text" class="form-control" name="institutionabbr" id="institutionabbr" placeholder="Enter Abbreviation">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="institutionurl">URL</label>
+                <input type="text" class="form-control" name="institutionurl" id="institutionurl" placeholder="Enter URL">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="institutiondesc">Institution Description</label>
+                <textarea class="form-control" name="institutiondesc" id="institutiondesc" rows="5"></textarea>
+                <small class="text-muted">Describe your institution.</small>
+                </fieldset>
+                {% ifequal action "Edit" %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="institutionid" value="{{id}}">
+                {% endifequal %}
+                {% ifequal action "New" %}
+                <input type="hidden" name="action" value="new">
+                {% endifequal %}
+                </div>
+            </form>
+            </div>
+            <div class="col-md-12">
+            <center>
+            <button type="button" class="btn btn-success" id="submit-institution" type="button" >Add</button>
+            <button type="button" class="btn btn-danger" id="cancel-institution" onClick="window.location = '/ksdb/view?tabpage=institution';" type="button" >Cancel</button>
+            </center>
+            </div>
+        </div>
+    </div>
+
+	<script>
+        var submitButton = document.querySelector("#submit-institution")
+        var institutionform = $('#institutioninput');
+            submitButton.addEventListener("click", function () {
+                $.ajax({
+                url : institutionform.attr('action'),
+                type : 'POST',
+                data : institutionform.serialize()+"&institutiondesc="+encodeURIComponent(tinymce.get('institutiondesc').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                success : function (response) {
+                    alert(response.Message);
+                    window.location = '/ksdb/view?tabpage=institution';
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+	</script>
+</body>
