@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import fundedsite, fundedsite_pi_link, fundedsite_staff_link, fundedsite_organ_link, person, organ
+from ksdb.models import fundedsite, fundedsite_pi_link, fundedsite_staff_link, fundedsite_organ_link, fundedsite_institution_link, fundedsite_project_link, person, organ, project, institution,institution_personnel_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -16,9 +16,18 @@ from ksdb.forms import FundedsiteForm
 import logging
 logger = logging.getLogger(__name__)
 
-def fundedsite_input(request):
-    if request.method == 'POST':
+def getPersonnelFromInst(institutions):
+    personfield = []
+    for ins in institutions:
+        for ipl in institution_personnel_link.objects.filter(institutionid = ins):
+            per = person.objects.get(id = ipl.personid)
+            personfield.append([str(per.id), str(per.firstname), str(per.lastname)])
+    return personfield
 
+def fundedsite_input(request):
+    #check if this is change of institution event or regular save/edit post
+    instchange = request.POST.get('instchange', 0)
+    if request.method == 'POST' and instchange == 0:
         fun_id = None
         message = "You have successfully added a fundedsite."
         success = True
@@ -53,13 +62,27 @@ def fundedsite_input(request):
                 fundedsite_staff_linkm = fundedsite_staff_link(fundedsiteid = fun_id, personid = per)
                 fundedsite_staff_linkm.save()
 
-
             #delete and save new person fundedsite associations
             organs = request.POST.getlist('organs')
             fundedsite_organ_link.objects.filter(fundedsiteid=fun_id).delete()
             for org in organs:
                 fundedsite_organ_linkm = fundedsite_organ_link(fundedsiteid = fun_id, organid = org)
                 fundedsite_organ_linkm.save()
+
+            #delete and save new project fundedsite associations
+            projects = request.POST.getlist('projects')
+            fundedsite_project_link.objects.filter(fundedsiteid=fun_id).delete()
+            for pro in projects:
+                fundedsite_project_linkm = fundedsite_project_link(fundedsiteid = fun_id, projectid = pro)
+                fundedsite_project_linkm.save()
+
+            #delete and save new institution fundedsite associations
+            institutions = request.POST.getlist('institutions')
+            fundedsite_institution_link.objects.filter(fundedsiteid=fun_id).delete()
+            for ins in institutions:
+                fundedsite_institution_linkm = fundedsite_institution_link(fundedsiteid = fun_id, institutionid = ins)
+                fundedsite_institution_linkm.save()
+
         else:
             message = simplejson.dumps(fundedsitem.errors)
             success = False
@@ -67,28 +90,40 @@ def fundedsite_input(request):
         return JsonResponse({'Success':success,
                                 'Message':message})
 
-    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
+    elif request.method == 'POST' and instchange == "1":
+            institutions = request.POST.getlist('institutions')
+            personfield = getPersonnelFromInst(institutions)
+            return JsonResponse({'Personnel':personfield})
+    
     organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
+    projectfield = [ [str(obj.id), str(obj.title)] for obj in list(project.objects.all()) ]
+    institutionfield = [ [str(obj.id), str(obj.name)] for obj in list(institution.objects.all()) ]
     data = {"action" : "New" ,
-            "pis" : personfield ,
-            "staffs" : personfield ,
-            "organs" : organfield ,
-           }
+        "pis" : [] ,
+        "staffs" : [] ,
+        "organs" : organfield ,
+        "projects" : projectfield ,
+        "institutions" : institutionfield ,
+       }
     if request.method == 'GET':
         fundedsiteid = request.GET.get('id')
         if fundedsiteid:
             obj = fundedsite.objects.get(pk=int(fundedsiteid))
+            institutionids = [ fil.institutionid for fil in list(fundedsite_institution_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]
+            personfield = getPersonnelFromInst(institutionids)
             data = { "action" : "Edit",
                     "id" : obj.id,
-                    "title" : obj.title,
                     "description" : obj.description,
-                    "abstract" : obj.abstract,
                     "pi_link_id" : [ fpl.personid for fpl in list(fundedsite_pi_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "staff_link_id" : [ fsl.personid for fsl in list(fundedsite_staff_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "organ_link_id" : [ fol.organid for fol in list(fundedsite_organ_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
+                    "project_link_id" : [ fpl.projectid for fpl in list(fundedsite_project_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
+                    "institution_link_id" : institutionids,
                     "pis" : personfield ,
                     "staffs" : personfield ,
                     "organs" : organfield ,
+                    "projects" : projectfield ,
+                    "institutions" : institutionfield ,
                    }
     # Render input page with the documents and the form
     return render_to_response(

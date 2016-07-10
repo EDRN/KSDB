@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link
+from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, protocol_sitecon_link, protocol_irbcon_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -20,18 +20,6 @@ logger = logging.getLogger(__name__)
 
 def protocol_input(request):
     if request.method == 'POST':
-        #title = request.POST.get('protocoltitle')
-        #description = request.POST.get('protocoldesc')
-        #organlist = request.POST.getlist('protocolorgan')
-        #pilist = request.POST.getlist('protocolpi')
-        #start = request.POST.get('protocolstartinput')
-        #contact = request.POST.get('protocolsitecontact')
-        #irbapproval = request.POST.get('protocolirbapproval')
-        #approvalnum = request.POST.get('protocolapprovalnum')
-        #irbcontact = request.POST.get('protocolirbcontact')
-        #email = request.POST.get('protocolcontactemail')
-        #humsubtrain = request.POST.get('protocolhumsubtrain')
-        #abstract = request.POST.get('protocolabstract')
 
         pro_id = None
         message = "You have successfully added a protocol."
@@ -48,23 +36,6 @@ def protocol_input(request):
             parameters["id"] = pro_id
             protocolm = ProtocolForm(parameters)
             
-#        if request.POST.get('action') == "edit":
-#        else:
-
-        #protocolm = protocol(id = pro_id,
-        #                    title = title, 
-        #                    description = description, 
-        #                    organs = ",".join(organlist), 
-        #                    pis = ",".join(pilist), 
-        #                    start_date = start, 
-        #                    site_contact = contact, 
-        #                    irb_approval = irbapproval, 
-        #                    irb_approval_num = approvalnum, 
-        #                    irb_contact = irbcontact, 
-        #                    contact_email = email, 
-        #                    hum_sub_train = humsubtrain, 
-        #                    abstract = abstract, 
-        #            )
         if protocolm.is_valid():
             protocolm.save()
 
@@ -81,6 +52,21 @@ def protocol_input(request):
             for org in organlist:
                 organ_protocol_linkm = organ_protocol_link(protocolid = pro_id, organid = org)
                 organ_protocol_linkm.save()
+
+            #delete and save new site contact protocol associations
+            protocol_sitecon_link.objects.filter(protocolid=pro_id).delete()
+            siteconlist = request.POST.getlist('site_contact')
+            for site in siteconlist:
+                protocol_sitecon_linkm = protocol_sitecon_link(protocolid = pro_id, personid = site)
+                protocol_sitecon_linkm.save()
+
+            #delete and save new organ protocol associations
+            protocol_irbcon_link.objects.filter(protocolid=pro_id).delete()
+            irbconlist = request.POST.getlist('irb_contact')
+            for irb in irbconlist:
+                protocol_irbcon_linkm = protocol_irbcon_link(protocolid = pro_id, personid = irb)
+                protocol_irbcon_linkm.save()
+
         else:
             message = simplejson.dumps(protocolm.errors)
             success = False
@@ -92,6 +78,8 @@ def protocol_input(request):
     organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
     data = {"action" : "New" ,
                     "pis" : personfield ,
+                    "irb_contact" : personfield ,
+                    "site_contact" : personfield ,
                     "organs" : organfield ,
             }
     if request.method == 'GET':
@@ -107,11 +95,12 @@ def protocol_input(request):
                     "organ_link_id" : [ opl.organid for opl in list(organ_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "pi_link_id" : [ ppl.personid for ppl in list(pi_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "start_date" : str(obj.start_date),
-                    "site_contact" : obj.site_contact,
+                    "irbcon_link_id" : [ pil.personid for pil in list(protocol_irbcon_link.objects.filter(protocolid=int(protocolid))) ],
+                    "sitecon_link_id" : [ psl.personid for psl in list(protocol_sitecon_link.objects.filter(protocolid=int(protocolid))) ],
                     "irb_approval" : obj.irb_approval,
+                    "irb_contact" : personfield ,
+                    "site_contact" : personfield ,
                     "irb_approval_num" : obj.irb_approval_num,
-                    "irb_contact" : obj.irb_contact,
-                    "contact_email" : obj.contact_email,
                     "hum_sub_train" : obj.hum_sub_train,
                     "abstract" : obj.abstract,
                    }

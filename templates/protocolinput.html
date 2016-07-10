@@ -22,6 +22,16 @@
                         .attr("value",value[0])
                         .text(value[1])); 
                 });
+                $.each({{site_contact|safe}}, function(key, value) { 
+                    $('#site_contact').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1])); 
+                });
+                $.each({{irb_contact|safe}}, function(key, value) { 
+                    $('#irb_contact').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1])); 
+                });
             }
             function fillprotocolform() {
                     $('#title').val("{{title}}");
@@ -29,10 +39,10 @@
                     $('#organs').val({{organ_link_id}});
                     $('#pis').val({{pi_link_id}});
                     $('#start_date').val("{{start_date}}");
-                    $('#site_contact').val("{{site_contact}}");
+                    $('#site_contact').val("{{sitecon_link_id}}");
                     $('input:radio[name=irb_approval]').filter('[value={{irb_approval}}]').prop('checked', true);
                     $('#irb_approval_num').val("{{irb_approval_num}}");
-                    $('#irb_contact').val("{{irb_contact}}");
+                    $('#irb_contact').val("{{irbcon_link_id}}");
                     $('#contact_email').val("{{contact_email}}");
                     $('input:radio[name=hum_sub_train]').filter('[value="{{hum_sub_train}}"]').prop('checked', true);
                     $('#abstract').html("{{abstract}}");
@@ -70,16 +80,6 @@
                 <small class="text-muted">Describe your protocol.</small>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="organs">Organs</label>
-                <select multiple class="form-control" id="organs" name="organs">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="pis">PIs</label>
-                <select multiple class="form-control" id="pis" name="pis">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
                   <label for="protocolstart">Start Date</label>
                   <div class='input-group date' id='protocolstart'>
                     <input type='text' class="form-control" id='start_date' name='start_date' />
@@ -88,11 +88,22 @@
                     </span>
                   </div>
                 </fieldset>
+                <fieldset class="form-group">
+                <label for="organs">Organs</label>
+                <select multiple class="form-control" size=10 id="organs" name="organs">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="pis">PIs</label>
+                <select multiple class="form-control" size=14 id="pis" name="pis">
+                </select>
+                </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
                   <label for="site_contact">Site Contact</label>
-                  <input type="text" class="form-control" id="site_contact" name="site_contact" placeholder="Enter Site Contact">
+                  <select multiple class="form-control" size=10 id="site_contact" name="site_contact">
+                  </select>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="irb_approval">IRB Approval</label>
@@ -105,21 +116,24 @@
                     <div class="radio">
                         <label>
                           <input type="radio" name="irb_approval" id="irb_approval2" value="No">
-    `                       No
+                           No
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="irb_approval" id="irb_approval3" value="Unknown">
+                           Unknown
                         </label>
                     </div>
                 </fieldset>
                 <fieldset class="form-group">
                   <label for="irb_approval_num">Approval #</label>
-                  <input type="number" class="form-control" id="irb_approval_num" name="irb_approval_num" placeholder="Enter Approval #">
+                  <input type="text" class="form-control" id="irb_approval_num" name="irb_approval_num" placeholder="Enter Approval #">
                 </fieldset>
                 <fieldset class="form-group">
                   <label for="irb_contact">IRB Contact</label>
-                  <input type="text" class="form-control" id="irb_contact" name="irb_contact" placeholder="Enter IRB Contact">
-                </fieldset>
-                <fieldset class="form-group">
-                  <label for="contact_email">Contact Email</label>
-                  <input type="email" class="form-control" name="contact_email" id="contact_email" placeholder="Enter email">
+                  <select multiple class="form-control" size=10 id="irb_contact" name="irb_contact">
+                  </select>
                 </fieldset>
                 <fieldset class="form-group">
                   <label for="hum_sub_train">Human Subjects Training</label>
@@ -139,6 +153,12 @@
                         <label>
                           <input type="radio" name="hum_sub_train" id="hum_sub_train3" value="Not Required">
                             Not Required
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                          <input type="radio" name="hum_sub_train" id="hum_sub_train4" value="Unknown">
+                            Unknown
                         </label>
                     </div>
                 </fieldset>

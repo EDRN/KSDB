@@ -4,7 +4,7 @@ from django.template import RequestContext
 import requests
 
 # Create your views here.
-from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, project, institution, fundedsite, publication
+from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, project, institution, fundedsite, publication, degree
 
 #import settings
 from django.conf import settings
@@ -18,12 +18,18 @@ def view_service(request):
     protocoltable = [ ["<a href='/ksdb/protocolinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.description] for obj in list(protocol.objects.all()) ]
     publicationheaders = ["Publication ID", "Title", "Author", "Pubmed ID"]
     publicationtable = [ ["<a href='/ksdb/publicationinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.authors, obj.pubmedid] for obj in list(publication.objects.all()) ]
-    fundedsiteheaders = ["Funded Site ID", "Title", "Description"]
-    fundedsitetable = [ ["<a href='/ksdb/fundedsiteinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.description] for obj in list(fundedsite.objects.all()) ]
+    fundedsiteheaders = ["Funded Site ID", "Institutions", "Description"]
+    fundedsitetable = [ ["<a href='/ksdb/fundedsiteinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.institutions, obj.description] for obj in list(fundedsite.objects.all()) ]
     institutionheaders = ["Institution ID", "Name", "Abbreviation"]
     institutiontable = [ ["<a href='/ksdb/institutioninput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.name, obj.abbreviation] for obj in list(institution.objects.all()) ]
     projectheaders = ["Project ID", "Title", "Abbreviation"]
     projecttable = [ ["<a href='/ksdb/projectinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.abbreviation] for obj in list(project.objects.all()) ]
+
+    organheaders = ["Organ ID", "Name"]
+    organtable = [ ["<a href='/ksdb/organinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.name] for obj in list(organ.objects.all()) ]
+
+    degreeheaders = ["Degree ID", "Title"]
+    degreetable = [ ["<a href='/ksdb/degreeinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title] for obj in list(degree.objects.all()) ]
 
     # Render input page with the documents and the form
     return render(
@@ -40,7 +46,11 @@ def view_service(request):
             'institutionheaders': institutionheaders,
             'institutiontable': institutiontable,
             'projectheaders': projectheaders,
-            'projecttable': projecttable
+            'projecttable': projecttable,
+            'organheaders': organheaders,
+            'organtable': organtable,
+            'degreeheaders': degreeheaders,
+            'degreetable': degreetable
         }
     )
 

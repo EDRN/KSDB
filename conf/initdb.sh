@@ -23,23 +23,43 @@ CREATE TABLE protocol(
        start_date timestamp,
        site_contact text,
        irb_approval text,
-       irb_approval_num int,
+       irb_approval_num text,
        irb_contact text,
-       contact_email text,
        hum_sub_train text,
        abstract text,
        PRIMARY KEY( id )
     );
+CREATE TABLE protocol_sitecon_link(
+        id serial NOT NULL,
+        protocolid int references protocol(id),
+        personid int references person(id),
+        UNIQUE ( protocolid, personid ));
+CREATE TABLE protocol_irbcon_link(
+        id serial NOT NULL,
+        protocolid int references protocol(id),
+        personid int references person(id),
+        UNIQUE ( protocolid, personid ));
+
 CREATE TABLE organ(
         id int,
         name text,
         description text,
         PRIMARY KEY( id ));
+
+CREATE SEQUENCE organ_seq START 1;
+
 CREATE TABLE organ_protocol_link(
         id serial NOT NULL,
         protocolid int references protocol(id),
         organid int references organ(id),
         UNIQUE ( protocolid, organid ));
+
+CREATE TABLE pi_protocol_link(
+        id serial NOT NULL,
+        protocolid int references protocol(id),
+        personid int references person(id),
+        UNIQUE ( protocolid, personid ));
+
 
 
 
@@ -56,13 +76,6 @@ CREATE TABLE person(
        telephone text,
        PRIMARY KEY( id )
     );
-CREATE TABLE pi_protocol_link(
-        id serial NOT NULL,
-        protocolid int references protocol(id),
-        personid int references person(id),
-        UNIQUE ( protocolid, personid ));
-
-
 
     #project tables
 CREATE TABLE project(
@@ -70,15 +83,9 @@ CREATE TABLE project(
         title text,
         abbreviation text,
         description text,
-        sites text,
         PRIMARY KEY( id )
     );
 
-CREATE TABLE project_site_link(
-        id serial NOT NULL,
-        projectid int references project(id),
-        fundedsiteid int references fundedsite(id),
-        UNIQUE ( projectid, fundedsiteid ));
 
 CREATE SEQUENCE project_seq START 1;
 
@@ -91,8 +98,15 @@ CREATE TABLE institution(
         abbreviation text,
         url text,
         description text,
+        personnel text,
         PRIMARY KEY( id )
     );
+
+CREATE TABLE institution_personnel_link(
+        id serial NOT NULL,
+        institutionid int references institution(id),
+        personid int references person(id),
+        UNIQUE ( institutionid, personid ));
 
 CREATE SEQUENCE institution_seq START 1;
 
@@ -100,11 +114,11 @@ CREATE SEQUENCE institution_seq START 1;
     #fundedsite tables
 CREATE TABLE fundedsite(
         id serial NOT NULL,
-        title text,
         description text,
-        abstract text,
         organs text,
         pis text,
+        projects text,
+        institutions text,
         staff text,
         PRIMARY KEY( id )
     );
@@ -126,6 +140,18 @@ CREATE TABLE fundedsite_staff_link(
         fundedsiteid int references fundedsite(id),
         personid int references person(id),
         UNIQUE ( fundedsiteid, personid ));
+
+CREATE TABLE fundedsite_project_link(
+        id serial NOT NULL,
+        fundedsiteid int references fundedsite(id),
+        projectid int references project(id),
+        UNIQUE ( fundedsiteid, projectid ));
+
+CREATE TABLE fundedsite_institution_link(
+        id serial NOT NULL,
+        fundedsiteid int references fundedsite(id),
+        institutionid int references institution(id),
+        UNIQUE ( fundedsiteid, institutionid ));
 
 CREATE SEQUENCE fundedsite_seq START 1;
 
@@ -149,5 +175,21 @@ CREATE TABLE publication_author_link(
 
 CREATE SEQUENCE publication_seq START 1;
 
+
+    #degree tables
+CREATE TABLE degree(
+        id serial NOT NULL,
+        title text,
+        description text,
+        PRIMARY KEY( id )
+    );
+
+CREATE TABLE person_degree_link(
+        id serial NOT NULL,
+        personid int references person(id),
+        degreeid int references degree(id),
+        UNIQUE ( degreeid, personid ));
+
+CREATE SEQUENCE degree_seq START 1;
 
     exit

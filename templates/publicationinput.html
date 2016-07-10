@@ -36,7 +36,7 @@
 <body>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Institution {{ id }}</H2>
+            <H2>{{ action }} Publication {{ id }}</H2>
             <p>
                 Please update the KSDB database with accurate publication information.
             </p>
@@ -48,7 +48,7 @@
                 {% csrf_token %}
                 <div class="col-md-12">
                 <fieldset class="form-group">
-                <label for="title">Title</label>
+                <label for="title">Publication</label>
                 <input type="text" class="form-control" name="title" id="title" placeholder="Enter Publication Title">
                 </fieldset>
                 <fieldset class="form-group">

@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import institution
+from ksdb.models import institution, institution_personnel_link, person
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -36,12 +36,23 @@ def institution_input(request):
         
         if institutionm.is_valid():
             institutionm.save()
+
+            #delete and save new person institution associations
+            personnel = request.POST.getlist('personnel')
+            institution_personnel_link.objects.filter(institutionid=ins_id).delete()
+            for per in personnel:
+                institution_personnel_linkm = institution_personnel_link(institutionid = ins_id, personid = per)
+                institution_personnel_linkm.save()
+
         else:
             message = simplejson.dumps(institutionm.errors)
             success = False
         return JsonResponse({'Success':success,
                             'Message':message})
+
+    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
     data = {"action" : "New" ,
+            "personnel" : personfield,
            }
     if request.method == 'GET':
         institutionid = request.GET.get('id')
@@ -53,6 +64,8 @@ def institution_input(request):
                     "department" : obj.department,
                     "abbreviation" : obj.abbreviation,
                     "url" : obj.url,
+                    "person_link_id": [ ipl.personid for ipl in list(institution_personnel_link.objects.filter(institutionid=int(institutionid))) ],
+                    "personnel" : personfield,
                     "description" : obj.description,
                    }
     # Render input page with the documents and the form

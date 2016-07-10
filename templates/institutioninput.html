@@ -7,14 +7,23 @@
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
         <script>
+            function initinstitutionform() {
+                $.each({{personnel|safe}}, function(key, value) { 
+                        $('#personnel').append($("<option></option>")
+                            .attr("value",value[0])
+                            .text(value[1]+" "+value[2])); 
+                    });
+            }
             function fillinstitutionform() {
                     $('#name').val("{{name}}");
                     $('#department').val("{{department}}");
                     $('#abbreviation').val("{{abbreviation}}".split(","));
                     $('#url').val("{{url}}");
                     $('#description').html("{{description}}");
+                    $('#personnel').val({{person_link_id}});
             }
             $(document).ready( function () {
+                initinstitutionform();
                 {% ifequal action "Edit" %}fillinstitutionform();{% endifequal %}
                 tinymce.init({ selector:'#description'});
         } );
@@ -35,34 +44,45 @@
             <form id="institutioninput" action="/ksdb/institutioninput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="col-md-12">
-                <fieldset class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" name="name" id="name" placeholder="Enter Institution Name">
-                </fieldset>
-                <fieldset class="form-group">
-                  <label for="department">Department</label>
-                  <input type="text" class="form-control" name="department" id="department" placeholder="Enter Department">
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="abbreviation">Abbreviation</label>
-                <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Abbreviation">
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="url">URL</label>
-                <input type="text" class="form-control" name="url" id="url" placeholder="Enter URL">
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="description">Institution Description</label>
-                <textarea class="form-control" name="description" id="description" rows="5"></textarea>
-                <small class="text-muted">Describe your institution.</small>
-                </fieldset>
-                {% ifequal action "Edit" %}
-                <input type="hidden" name="action" value="edit">
-                <input type="hidden" name="institutionid" value="{{id}}">
-                {% endifequal %}
-                {% ifequal action "New" %}
-                <input type="hidden" name="action" value="new">
-                {% endifequal %}
+                <div class="col-md-6">
+                    <fieldset class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Institution Name">
+                    </fieldset>
+                    <fieldset class="form-group">
+                      <label for="department">Department</label>
+                      <input type="text" class="form-control" name="department" id="department" placeholder="Enter Department">
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="abbreviation">Abbreviation</label>
+                    <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Abbreviation">
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="url">URL</label>
+                    <input type="text" class="form-control" name="url" id="url" placeholder="Enter URL">
+                    </fieldset>
+                </div>
+                <div class="col-md-6">
+                    <fieldset class="form-group">
+                    <label for="personnel">Personnel</label>
+                    <select multiple class="form-control" size='14' id="personnel" name="personnel">
+                    </select>
+                    </fieldset>
+                </div>
+                <div class="col-md-12">
+                    <fieldset class="form-group">
+                    <label for="description">Institution Description</label>
+                    <textarea class="form-control" name="description" id="description" rows="5"></textarea>
+                    <small class="text-muted">Describe your institution.</small>
+                    </fieldset>
+                    {% ifequal action "Edit" %}
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="institutionid" value="{{id}}">
+                    {% endifequal %}
+                    {% ifequal action "New" %}
+                    <input type="hidden" name="action" value="new">
+                    {% endifequal %}
+                </div>
                 </div>
             </form>
             </div>

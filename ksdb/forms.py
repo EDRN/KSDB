@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.forms import ModelForm
-from models import protocol, person, project, institution, publication, fundedsite
+from models import protocol, person, project, institution, publication, fundedsite, organ, degree
 
 class ProtocolForm(ModelForm):
     class Meta:
@@ -32,3 +32,14 @@ class FundedsiteForm(ModelForm):
     class Meta:
         model = fundedsite
         fields = '__all__'
+
+class DegreeForm(ModelForm):
+    class Meta:
+        model = degree
+        fields = '__all__'
+
+class OrganForm(ModelForm):
+    class Meta:
+        model = organ
+        fields = '__all__'
+

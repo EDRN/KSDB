@@ -6,36 +6,51 @@
     <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script>
+            function initInstPersonnel(pis, staffs) {
+                $('#pis').html("");
+                $.each(pis, function(key, value) { 
+                    $('#pis').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1]+" "+value[2])); 
+                });
+                $('#staff').html("");
+                $.each(staffs, function(key, value) { 
+                    $('#staff').append($("<option></option>")
+                        .attr("value",value[0])
+                        .text(value[1]+" "+value[2])); 
+                });
+
+            }
             function initfundedsiteform() {
                 $.each({{organs|safe}}, function(key, value) { 
                     $('#organs').append($("<option></option>")
                         .attr("value",value[0])
                         .text(value[1])); 
                 });
-                $.each({{pis|safe}}, function(key, value) { 
-                    $('#pis').append($("<option></option>")
+                $.each({{projects|safe}}, function(key, value) { 
+                    $('#projects').append($("<option></option>")
                         .attr("value",value[0])
-                        .text(value[1]+" "+value[2])); 
+                        .text(value[1])); 
                 });
-                $.each({{staffs|safe}}, function(key, value) { 
-                    $('#staff').append($("<option></option>")
+                $.each({{institutions|safe}}, function(key, value) { 
+                    $('#institutions').append($("<option></option>")
                         .attr("value",value[0])
-                        .text(value[1]+" "+value[2])); 
+                        .text(value[1])); 
                 });
+                initInstPersonnel({{pis|safe}}, {{staffs|safe}});
             }
 
             function fillfundedsiteform() {
-                    $('#title').val("{{title}}");
                     $('#pis').val({{pi_link_id}});
                     $('#staff').val({{staff_link_id}});
                     $('#organs').val({{organ_link_id}});
+                    $('#projects').val({{project_link_id}});
+                    $('#institutions').val({{institution_link_id}});
                     $('#description').val("{{description}}");
-                    $('#abstract').html("{{abstract}}");
             }
             $(document).ready( function () {
                 initfundedsiteform();
                 {% ifequal action "Edit" %}fillfundedsiteform();{% endifequal %}
-                tinymce.init({ selector:'#abstract'});
         } );
         </script>
     </head>
@@ -55,33 +70,34 @@
                 {% csrf_token %}
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Funded Site Title">
+                <label for="institutions">Institution</label>
+                <select multiple class="form-control" size=7 id="institutions" name="institutions">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="projects">Projects</label>
+                <select multiple class="form-control" size=7 id="projects" name="projects">
+                </select>
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="description">Funded Site Description</label>
                 <textarea class="form-control" id="description" name="description" rows="6"></textarea>
                 </fieldset>
-                <fieldset class="form-group">
-                  <label for="abstract">Abstract</label>
-                  <textarea class="form-control" id="abstract" name="abstract" rows="5"></textarea>
-                  <small class="text-muted">Enter abstract for this fundedsite.</small>
-                </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="pis">Principle Investigators</label>
-                <select multiple class="form-control" id="pis" name="pis">
+                <label for="pis">Principle Investigators - please select institution first</label>
+                <select multiple class="form-control" size=7 id="pis" name="pis">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="staff">Additional Staff</label>
-                <select multiple class="form-control" id="staff" name="staff">
+                <label for="staff">Additional Staff - please select institution first</label>
+                <select multiple class="form-control" size=7 id="staff" name="staff">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="organs">Organs</label>
-                <select multiple class="form-control" id="organs" name="organs">
+                <select multiple class="form-control" size=7 id="organs" name="organs">
                 </select>
                 </fieldset>
                 {% ifequal action "Edit" %}
@@ -107,13 +123,13 @@
     </div>
 
 	<script>
-        var submitButton = document.querySelector("#submit-fundedsite")
+        var submitButton = document.querySelector("#submit-fundedsite");
         var fundedsiteform = $('#fundedsiteinput');
-            submitButton.addEventListener("click", function () {
-                $.ajax({
+        submitButton.addEventListener("click", function () {
+            $.ajax({
                 url : fundedsiteform.attr('action'),
                 type : 'POST',
-                data : fundedsiteform.serialize()+"&abstract="+encodeURIComponent(tinymce.get('abstract').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                data : fundedsiteform.serialize(),
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);
@@ -128,6 +144,19 @@
                         });
                         $('#results').html("<font color='red'>Please fix the above form input errors</font>");
                     }
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+        $('#institutions').change(function () {
+            $.ajax({
+                url : fundedsiteform.attr('action'),
+                type : 'POST',
+                data : fundedsiteform.serialize()+"&instchange=1",
+                success : function (response) {
+                    initInstPersonnel(response.Personnel, response.Personnel);
                 },
                 error : function(xhr, status, error) {
                     alert("Error: "+xhr.responseText);

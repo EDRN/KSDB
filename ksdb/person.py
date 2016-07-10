@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import person
+from ksdb.models import person, person_degree_link, degree
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -37,6 +37,14 @@ def person_input(request):
 
         if personm.is_valid():
             personm.save()
+
+            #delete and save new person degree associations
+            degrees = request.POST.getlist('degrees')
+            person_degree_link.objects.filter(personid=per_id).delete()
+            for deg in degrees:
+                person_degree_linkm = person_degree_link(personid = per_id, degreeid = deg)
+                person_degree_linkm.save()
+
         else:
             message = simplejson.dumps(personm.errors)
             success = False
@@ -44,7 +52,9 @@ def person_input(request):
         return JsonResponse({'Success':success,
                             'Message':message})
 
-    data = {"action" : "New" }
+    degreefield = [ [str(obj.id), str(obj.title)] for obj in list(degree.objects.all()) ]
+    data = {"action" : "New",
+            "degrees" : degreefield , }
     if request.method == 'GET':
         personid = request.GET.get('id')
         if personid:
@@ -53,7 +63,8 @@ def person_input(request):
                     "id" : obj.id,
                     "firstname" : obj.firstname,
                     "lastname" : obj.lastname,
-                    "degrees" : obj.degrees,
+                    "degree_link_id" : [ pdl.degreeid for pdl in list(person_degree_link.objects.filter(personid=int(personid))) ],
+                    "degrees" : degreefield,
                     "email" : obj.email,
                     "telephone" : obj.telephone,
                    }

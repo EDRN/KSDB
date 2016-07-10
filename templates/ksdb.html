@@ -22,6 +22,8 @@
             $('#protocol_table').dataTable();
             $('#person_table').dataTable();
             $('#project_table').dataTable();
+            $('#organ_table').dataTable();
+            $('#degree_table').dataTable();
             $('#institution_table').dataTable();
             $('#fundedsite_table').dataTable();
             $('#publication_table').dataTable();
@@ -61,6 +63,10 @@
                 </li>
                 <li><a id="publicationtab" href="#publication">Publications</a>
                 </li>
+                <li><a id="organtab" href="#organ">Organs</a>
+                </li>
+                <li><a id="degreetab" href="#degree">Degrees</a>
+                </li>
             </ul>
         </div>
         <div id="content" class="tab-content">
@@ -81,6 +87,12 @@
             </div>
             <div class="tab-pane" id="publication">
                 {% include "publicationview.html" %} 
+            </div>
+            <div class="tab-pane" id="organ">
+                {% include "organview.html" %} 
+            </div>
+            <div class="tab-pane" id="degree">
+                {% include "degreeview.html" %} 
             </div>
         </div>
     </div>
