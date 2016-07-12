@@ -43,10 +43,13 @@
             <br>
         </div>
         <div class="col-md-12">
-            <div class="col-md-12">
             <form id="publicationinput" action="/ksdb/publicationinput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="col-md-12">
+                <div class="col-md-6">
+                <fieldset class="form-group">
+                <label for="pubmedid">PubMed ID</label>
+                <input type="text" class="form-control" name="pubmedid" id="pubmedid" placeholder="Enter Publication ID">
+                </fieldset>
                 <fieldset class="form-group">
                 <label for="title">Publication</label>
                 <input type="text" class="form-control" name="title" id="title" placeholder="Enter Publication Title">
@@ -69,10 +72,6 @@
                     </span>
                   </div>
                 </fieldset>
-                <fieldset class="form-group">
-                <label for="pubmedid">PubMed ID</label>
-                <input type="text" class="form-control" name="pubmedid" id="pubmedid" placeholder="Enter Publication ID">
-                </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="publicationid" value="{{id}}">
@@ -80,6 +79,17 @@
                 {% ifequal action "New" %}
                 <input type="hidden" name="action" value="new">
                 {% endifequal %}
+                </div>
+                <div class="col-md-6">
+                    <label><span class="glyphicon glyphicon-arrow-left"></span> Please fill out pubmed id in order to query</label><br>
+                    <button type="button" class="btn btn-info" id="query-pubmed" type="button" >Query Pubmed ID</button>
+                    <br>
+                    <br>
+                    <div id="QueryTitle"></div>
+                    <div id="QueryAuthors"></div>
+                    <div id="QueryJournal"></div>
+                    <div id="QueryArticleDate"></div>
+                    <div id="QueryAbstract"></div>
                 </div>
             </form>
             </div>
@@ -91,12 +101,12 @@
             <button type="button" class="btn btn-success" id="submit-publication" type="button" >Add</button>
             <button type="button" class="btn btn-danger" id="cancel-publication" onClick="window.location = '/ksdb/view?tabpage=publication';" type="button" >Cancel</button>
             </center>
-            </div>
         </div>
     </div>
 
 	<script>
         var submitButton = document.querySelector("#submit-publication")
+        var queryPubButton = document.querySelector("#query-pubmed")
         var publicationform = $('#publicationinput');
             submitButton.addEventListener("click", function () {
                 $.ajax({
@@ -123,5 +133,59 @@
                 }
             });
         });
+        queryPubButton.addEventListener("click", function () {
+                pubid = $('#pubmedid').val();
+                $.ajax({
+                url : "/ksdb/querypubmed/?pubmed_id="+pubid,
+                type : 'GET',
+                success : function (response) {
+                    $('blockquote.blockquote').remove();
+                        var $label = $('<label>');
+                        $label.html("Publication Title");
+                        var $block_quote = $('<blockquote>');
+                        $block_quote.attr("class", "blockquote");
+                        $block_quote.html(response['QueryTitle']);
+                        $('#QueryTitle').append($label, '\n');
+                        $('#QueryTitle').append($block_quote, '\n');
+
+                        var $label = $('<label>');
+                        $label.html("Abstract");
+                        var $block_quote = $('<blockquote>');
+                        $block_quote.attr("class", "blockquote");
+                        $block_quote.html(response['QueryAbstract']);
+                        $('#QueryAbstract').append($label, '\n');
+                        $('#QueryAbstract').append($block_quote, '\n');
+
+                        var $label = $('<label>');
+                        $label.html("Journal");
+                        var $block_quote = $('<blockquote>');
+                        $block_quote.attr("class", "blockquote");
+                        $block_quote.html(response['QueryJournal']);
+                        $('#QueryJournal').append($label, '\n');
+                        $('#QueryJournal').append($block_quote, '\n');
+
+                        var $label = $('<label>');
+                        $label.html("Authors");
+                        var $block_quote = $('<blockquote>');
+                        $block_quote.attr("class", "blockquote");
+                        $block_quote.html(response['QueryAuthors']);
+                        $('#QueryAuthors').append($label, '\n');
+                        $('#QueryAuthors').append($block_quote, '\n');
+
+                        var $label = $('<label>');
+                        $label.html("Start Date");
+                        var $block_quote = $('<blockquote>');
+                        $block_quote.attr("class", "blockquote");
+                        $block_quote.html(response['QueryArticleDate']);
+                        $('#QueryArticleDate').append($label, '\n');
+                        $('#QueryArticleDate').append($block_quote, '\n');
+                },
+                error : function(xhr, status, error) {
+                    alert("Pubmed ID: "+pubid+" may not be a legitimate pubmed id, please try again!");
+                    //alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+
 	</script>
 </body>
