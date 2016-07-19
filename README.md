@@ -19,6 +19,9 @@ To run this project:
     python manage.py migrate
     python manage.py makemigrations
 
+    #ingest organs into database
+    python manage.py ingestorgans
+
     # Run the server
     python manage.py runserver 0.0.0.0:8000
 

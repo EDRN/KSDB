@@ -2,7 +2,7 @@
 
 from django.conf.urls import url
 
-from ksdb import protocols, project, person, institution, publication, fundedsite, view, organ, degree, querypubmed
+from ksdb import protocols, project, person, institution, publication, fundedsite, view, organ, degree, querypubmed, publishRDF
 from sitemain import settings
 
 urlpatterns = [
@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^organinput/$', organ.organ_input, name='organinput'),
     url(r'^degreeinput/$', degree.degree_input, name='degreeinput'),
     url(r'^querypubmed/$', querypubmed.pubmed_query, name='querypubmed'),
+    url(r'^publishrdf/$', publishRDF.publishrdf, name='publishrdf'),
 ]
