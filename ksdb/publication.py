@@ -63,7 +63,7 @@ def publication_input(request):
                     "title" : obj.title,
                     "journal" : obj.journal,
                     "pubmedid" : obj.pubmedid,
-                    "pubdate" : str(obj.pubdate),
+                    "pubyear" : str(obj.pubyear),
                     "author_link_id" : [ ppl.personid for ppl in list(publication_author_link.objects.filter(publicationid=int(publicationid))) ],
                     "authors" : personfield ,
                    }

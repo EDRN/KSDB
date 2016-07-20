@@ -93,7 +93,7 @@ CREATE TABLE publication(
         title text,
         authors text,
         journal text,
-        pubdate timestamp,
+        pubyear int,
         pubmedid text,
         PRIMARY KEY( id )
     );

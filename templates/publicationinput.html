@@ -22,11 +22,10 @@
                     $('#title').val("{{title}}");
                     $('#authors').val({{author_link_id}});
                     $('#journal').val("{{journal}}");
-                    $('#pubdate').val("{{pubdate}}");
+                    $('#pubyear').val("{{pubyear}}");
                     $('#pubmedid').val("{{pubmedid}}");
             }
             $(document).ready( function () {
-                $('#publicationpubdate').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
                 initpublicationform();
                 {% ifequal action "Edit" %}fillpublicationform();{% endifequal %}
         } );
@@ -64,13 +63,8 @@
                 <input type="text" class="form-control" name="journal" id="journal" placeholder="Enter Journal">
                 </fieldset>
                 <fieldset class="form-group">
-                  <label for="pubdate">Start Date</label>
-                  <div class='input-group date' id='publicationpubdate'>
-                    <input type='text' class="form-control" id='pubdate' name='pubdate' />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
+                  <label for="pubyear">Publication Year</label>
+                  <input type='number' class="form-control" id='pubyear' name='pubyear' />
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">

@@ -10,8 +10,8 @@ import json
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    _schema = Namespace("http://edrn.nci.nih.gov/rdf/_schema.rdf#")
-    _terms = Namespace("http://purl.org/dc/_terms/")
+    _schema = Namespace("http://edrn.nci.nih.gov/rdf/schema.rdf#")
+    _terms = Namespace("http://purl.org/dc/terms/")
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
     _edrntype = Namespace("http://edrn.nci.nih.gov/rdf/types.rdf#")
     _publication = Namespace("http://edrn.nci.nih.gov/data/pubs/")
@@ -23,13 +23,14 @@ class Command(BaseCommand):
     _fundedsite = Namespace("http://edrn.nci.nih.gov/data/sites/")
     _email = Namespace("mailto:")
 
-    _graph = Graph()
+    _graph = None
 
     def add_arguments(self, parser):
         parser.add_argument('rdftype', nargs='*', type=str)
 
     def handle(self, *args, **options):
         rdf = None
+        self._graph = Graph()
         if 'publication' in options['rdftype']:
             rdf = self.getpublicationrdf()
         if 'protocol' in options['rdftype']:
@@ -44,7 +45,9 @@ class Command(BaseCommand):
             rdf = self.getpersonrdf()
         if 'organ' in options['rdftype']:
             rdf = self.getorganrdf()
+
         return rdf
+
     def getpublicationrdf(self):
         #obj.id, obj.title, obj.authors, obj.pubmedid
 

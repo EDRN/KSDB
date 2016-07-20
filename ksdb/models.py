@@ -12,7 +12,7 @@ class protocol(models.Model):
     start_date = models.DateTimeField(blank=True, null=True)
     site_contact = models.CharField(max_length=500, blank=True, null=True)
     irb_approval = models.CharField(max_length=128)
-    irb_approval_num = models.CharField(max_length=128)
+    irb_approval_num = models.CharField(max_length=128, blank=True, null=True)
     irb_contact = models.CharField(max_length=500, blank=True, null=True)
     hum_sub_train = models.CharField(max_length=128)
     abstract = HTMLField()
@@ -89,7 +89,7 @@ class project(models.Model):
 class institution(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128)
-    department = models.CharField(max_length=128)
+    department = models.CharField(max_length=128, blank=True, null=True)
     abbreviation = models.CharField(max_length=128, blank=True, null=True)
     url = models.CharField(max_length=500)
     description = models.CharField(max_length=500, blank=True, null=True)
@@ -112,7 +112,7 @@ class publication(models.Model):
     title = models.CharField(max_length=128)
     authors = models.CharField(max_length=500)
     journal = models.CharField(max_length=500)
-    pubdate = models.DateTimeField()
+    pubyear = models.IntegerField()
     pubmedid = models.CharField(max_length=128)
 
     class Meta:
@@ -130,8 +130,8 @@ class publication_author_link(models.Model):
 class fundedsite(models.Model):
     id = models.IntegerField(primary_key=True)
     pis = models.CharField(max_length=500)
-    organs = models.CharField(max_length=500)
-    staff = models.CharField(max_length=500)
+    organs = models.CharField(max_length=500, blank=True, null=True)
+    staff = models.CharField(max_length=500, blank=True, null=True)
     projects = models.CharField(max_length=500)
     institutions = models.CharField(max_length=500)
     description = models.CharField(max_length=500, blank=True, null=True)
