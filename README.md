@@ -7,7 +7,9 @@ Knowledge System DB: The goal of this system is to maintain generalized project 
 
 pip install -r conf/dependencies.cfg
 
-
+# Create superuser
+python manage.py migrate
+python manage.py createsuperuser
 
 # Running the project
 

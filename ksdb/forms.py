@@ -1,45 +1,51 @@
 # -*- coding: utf-8 -*-
-
-from django.forms import ModelForm
+from django.contrib.auth.forms import AuthenticationForm 
+from django import forms
 from models import protocol, person, project, institution, publication, fundedsite, organ, degree
 
-class ProtocolForm(ModelForm):
+
+class ProtocolForm(forms.ModelForm):
     class Meta:
         model = protocol
         fields = '__all__'
 
-class PersonForm(ModelForm):
+class PersonForm(forms.ModelForm):
     class Meta:
         model = person
         fields = '__all__'
 
-class ProjectForm(ModelForm):
+class ProjectForm(forms.ModelForm):
     class Meta:
         model = project
         fields = '__all__'
 
-class InstitutionForm(ModelForm):
+class InstitutionForm(forms.ModelForm):
     class Meta:
         model = institution
         fields = '__all__'
 
-class PublicationForm(ModelForm):
+class PublicationForm(forms.ModelForm):
     class Meta:
         model = publication
         fields = '__all__'
 
-class FundedsiteForm(ModelForm):
+class FundedsiteForm(forms.ModelForm):
     class Meta:
         model = fundedsite
         fields = '__all__'
 
-class DegreeForm(ModelForm):
+class DegreeForm(forms.ModelForm):
     class Meta:
         model = degree
         fields = '__all__'
 
-class OrganForm(ModelForm):
+class OrganForm(forms.ModelForm):
     class Meta:
         model = organ
         fields = '__all__'
 
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label="Username", max_length=30, 
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'username'}))
+    password = forms.CharField(label="Password", max_length=30, 
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'password'}))

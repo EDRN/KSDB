@@ -31,6 +31,7 @@
                 changeTab($(this));
                 e.preventDefault();
             });
+            changeTab($('#projecttab'));
             {% if request.GET.tabpage %}
                 changeTab($('#'+{{request.GET.tabpage}}.getAttribute("id")+"tab"));
             {% endif %}

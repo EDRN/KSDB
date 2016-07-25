@@ -82,6 +82,15 @@ USE_TZ = True
 ESIS_ROOT    = os.path.join(BASE_DIR, 'ksdb')
 STATIC_URL  = '/static/'
 STATIC_ROOT = os.path.join(ESIS_ROOT, 'static')
+
+# Static settings
+#STATICFILES_DIRS = [
+#    os.path.join(ESIS_ROOT, 'static'),
+#]
+
+#Login settings
+LOGIN_REDIRECT_URL = '/' # It means home view
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Logging Settings
