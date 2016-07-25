@@ -34,7 +34,32 @@
             {% if request.GET.tabpage %}
                 changeTab($('#'+{{request.GET.tabpage}}.getAttribute("id")+"tab"));
             {% endif %}
+
         });
+        function deleteObj(obj,deleteapi){
+           var objs  = $.map($(':checkbox[name='+obj+']:checked'), function(n, i){
+              return n.id;
+           }).join(',');
+           if(confirm("Are you sure you want to delete "+obj+": "+objs+"?")) {
+               $.ajax({
+                url : "/ksdb/"+deleteapi+"/",
+                type : 'POST',
+                data : $('#viewform').serialize()+"&id="+objs,
+                success : function (response) {
+                    if(response.Success){
+                      alert(response.Message);
+                      window.location = '/ksdb/view?tabpage='+obj;
+                    }else{
+                      alert("Delete failed because:"+response.Message);
+                    }
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+              }); 
+            }
+        }
+        
     </script>
 </head>
 
@@ -72,33 +97,36 @@
             </ul>
         </div>
         <div id="content" class="tab-content">
-            <div class="tab-pane" id="protocol">
-                {% include "protocolview.html" %} 
+            <form id="viewform">
+                {% csrf_token %} 
+                <div class="tab-pane" id="protocol">
+                    {% include "protocolview.html" %} 
+                </div>
+                <div class="tab-pane active" id="project">
+                    {% include "projectview.html" %} 
+                </div>
+                <div class="tab-pane" id="person">
+                    {% include "personview.html" %} 
+                </div>
+                <div class="tab-pane" id="institution">
+                    {% include "institutionview.html" %} 
+                </div>
+                <div class="tab-pane" id="fundedsite">
+                    {% include "fundedsiteview.html" %} 
+                </div>
+                <div class="tab-pane" id="publication">
+                    {% include "publicationview.html" %} 
+                </div>
+                <div class="tab-pane" id="organ">
+                    {% include "organview.html" %} 
+                </div>
+                <div class="tab-pane" id="degree">
+                    {% include "degreeview.html" %} 
+                </div>
+                <div class="tab-pane" id="rdf">
+                    {% include "rdfview.html" %} 
             </div>
-            <div class="tab-pane active" id="project">
-                {% include "projectview.html" %} 
-            </div>
-            <div class="tab-pane" id="person">
-                {% include "personview.html" %} 
-            </div>
-            <div class="tab-pane" id="institution">
-                {% include "institutionview.html" %} 
-            </div>
-            <div class="tab-pane" id="fundedsite">
-                {% include "fundedsiteview.html" %} 
-            </div>
-            <div class="tab-pane" id="publication">
-                {% include "publicationview.html" %} 
-            </div>
-            <div class="tab-pane" id="organ">
-                {% include "organview.html" %} 
-            </div>
-            <div class="tab-pane" id="degree">
-                {% include "degreeview.html" %} 
-            </div>
-            <div class="tab-pane" id="rdf">
-                {% include "rdfview.html" %} 
-            </div>
+            </form>
         </div>
     </div>
 </body>

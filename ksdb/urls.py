@@ -17,4 +17,12 @@ urlpatterns = [
     url(r'^degreeinput/$', degree.degree_input, name='degreeinput'),
     url(r'^querypubmed/$', querypubmed.pubmed_query, name='querypubmed'),
     url(r'^publishrdf/$', publishRDF.publishrdf, name='publishrdf'),
+    url(r'^deleteprotocol/$', protocols.delete_protocol, name='deleteprotocol'),
+    url(r'^deleteproject/$', project.delete_project, name='deleteproject'),
+    url(r'^deleteinstitution/$', institution.delete_institution, name='deleteinstitution'),
+    url(r'^deletefundedsite/$', fundedsite.delete_fundedsite, name='deletefundedsite'),
+    url(r'^deleteperson/$', person.delete_person, name='deleteperson'),
+    url(r'^deletepublication/$', publication.delete_publication, name='deletepublication'),
+    url(r'^deleteorgan/$', organ.delete_organ, name='deleteorgan'),
+    url(r'^deletedegree/$', degree.delete_degree, name='deletedegree'),
 ]

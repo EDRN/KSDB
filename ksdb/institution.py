@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import institution, institution_personnel_link, person
+from ksdb.models import institution, institution_personnel_link, person, fundedsite_institution_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -15,6 +15,60 @@ from ksdb.forms import InstitutionForm
 #import settings
 import logging
 logger = logging.getLogger(__name__)
+
+def save_institution_links(ins_id, request):
+    #delete and save new person institution associations
+    personnel = request.POST.getlist('personnel')
+    institution_personnel_link.objects.filter(institutionid=ins_id).delete()
+    for per in personnel:
+        institution_personnel_linkm = institution_personnel_link(institutionid = ins_id, personid = per)
+        institution_personnel_linkm.save()
+
+def gen_institution_data(request):
+    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
+    data = {"action" : "New" ,
+            "personnel" : personfield,
+           }
+    if request.method == 'GET':
+        institutionid = request.GET.get('id')
+        if institutionid:
+            obj = institution.objects.get(pk=int(institutionid))
+            data = { "action" : "Edit",
+                    "id" : obj.id,
+                    "name" : obj.name,
+                    "department" : obj.department,
+                    "abbreviation" : obj.abbreviation,
+                    "url" : obj.url,
+                    "person_link_id": [ ipl.personid for ipl in list(institution_personnel_link.objects.filter(institutionid=int(institutionid))) ],
+                    "personnel" : personfield,
+                    "description" : obj.description,
+                   }
+    return data
+
+def delete_institution(request):
+    message = None
+    success = False
+
+    if request.method == 'POST':
+        ids = request.POST.get("id").split(",")
+        if len(ids) > 0:
+            for ins_id in ids:
+                #delete person institution associations
+                institution_personnel_link.objects.filter(institutionid=ins_id).delete()
+                #delete fundedsite institution associations
+                fundedsite_institution_link.objects.filter(institutionid=ins_id).delete()
+                #delete institution itself
+                institution.objects.filter(id=ins_id).delete()
+
+            message = "Successfully deleted institution id(s): "+request.POST.get("id")
+            success = True
+        else:
+            success = False
+            message = "No institutions selected, please select institution for deletion."
+    else:
+        message = "Not a post method, has to be post in order to delete object."
+    return JsonResponse({'Success':success,
+                                'Message':message})
 
 def institution_input(request):
     if request.method == 'POST':
@@ -37,37 +91,17 @@ def institution_input(request):
         if institutionm.is_valid():
             institutionm.save()
 
-            #delete and save new person institution associations
-            personnel = request.POST.getlist('personnel')
-            institution_personnel_link.objects.filter(institutionid=ins_id).delete()
-            for per in personnel:
-                institution_personnel_linkm = institution_personnel_link(institutionid = ins_id, personid = per)
-                institution_personnel_linkm.save()
-
+            #save institution data into db
+            save_institution_links(ins_id, request)
         else:
             message = simplejson.dumps(institutionm.errors)
             success = False
         return JsonResponse({'Success':success,
                             'Message':message})
 
-    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
-    data = {"action" : "New" ,
-            "personnel" : personfield,
-           }
-    if request.method == 'GET':
-        institutionid = request.GET.get('id')
-        if institutionid:
-            obj = institution.objects.get(pk=int(institutionid))
-            data = { "action" : "Edit",
-                    "id" : obj.id,
-                    "name" : obj.name,
-                    "department" : obj.department,
-                    "abbreviation" : obj.abbreviation,
-                    "url" : obj.url,
-                    "person_link_id": [ ipl.personid for ipl in list(institution_personnel_link.objects.filter(institutionid=int(institutionid))) ],
-                    "personnel" : personfield,
-                    "description" : obj.description,
-                   }
+    #generate institution data from db
+    data = gen_institution_data(request)
+
     # Render input page with the documents and the form
     return render_to_response(
         'institutioninput.html',

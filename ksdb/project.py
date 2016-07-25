@@ -5,7 +5,7 @@ import copy, simplejson
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import project
+from ksdb.models import project, fundedsite_project_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -15,6 +15,45 @@ from ksdb.forms import ProjectForm
 import logging
 logger = logging.getLogger(__name__)
 
+def gen_project_data(request):
+    data = {"action" : "New" ,
+           }
+    if request.method == 'GET':
+        projectid = request.GET.get('id')
+        if projectid:
+            obj = project.objects.get(pk=int(projectid))
+            data = { "action" : "Edit",
+                    "id" : obj.id,
+                    "title" : obj.title,
+                    "abbreviation" : obj.abbreviation,
+                    "description" : obj.description,
+                   }
+    return data
+
+def delete_project(request):
+    message = None
+    success = False
+
+    if request.method == 'POST':
+        ids = request.POST.get("id").split(",")
+        if len(ids) > 0:
+            for pro_id in ids:
+                #delete person project associations
+                fundedsite_project_link.objects.filter(projectid=pro_id).delete()
+                #delete project itself
+                project.objects.filter(id=pro_id).delete()
+
+            message = "Successfully deleted project id(s): "+request.POST.get("id")
+            success = True
+        else:
+            success = False
+            message = "No projects selected, please select project for deletion."
+    else:
+        message = "Not a post method, has to be post in order to delete object."
+
+    return JsonResponse({'Success':success,
+                                'Message':message})
+    
 def project_input(request):
     if request.method == 'POST':
 
@@ -42,19 +81,9 @@ def project_input(request):
         return JsonResponse({'Success':success,
                              'Message':message})
 
+    #generate protocol data from db
+    data = gen_project_data(request)
 
-    data = {"action" : "New" ,
-           }
-    if request.method == 'GET':
-        projectid = request.GET.get('id')
-        if projectid:
-            obj = project.objects.get(pk=int(projectid))
-            data = { "action" : "Edit",
-                    "id" : obj.id,
-                    "title" : obj.title,
-                    "abbreviation" : obj.abbreviation,
-                    "description" : obj.description,
-                   }
     # Render input page with the documents and the form
     return render_to_response(
         'projectinput.html',
