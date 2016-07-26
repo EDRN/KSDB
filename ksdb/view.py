@@ -1,6 +1,7 @@
 # protocols.py
 from django.shortcuts import render
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 import requests
 
 # Create your views here.
@@ -11,6 +12,7 @@ from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 
+@login_required(login_url="/login/")
 def view_service(request):
     personheaders = ["Select","Person ID", "First Name", "Last Name", "Phone"]
     persontable = [ ["<input type='checkbox' name='person' id='"+str(obj.id)+"'>","<a href='/ksdb/personinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.firstname, obj.lastname, obj.telephone] for obj in list(person.objects.all()) ]

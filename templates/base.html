@@ -5,9 +5,12 @@
     <head>
         <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Auth Demo</title>
+                <title>KSDB</title>
                 <!-- Core CSS - Include with every page -->
-                <link href="{% static 'css/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+<!--                <link href="{% static 'css/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">-->
+                {% load staticfiles %}
+                    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.css" />
+                    <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jq-2.2.3,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,af-2.1.2,b-1.2.1,b-colvis-1.2.1,b-html5-1.2.1,b-print-1.2.1,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,rr-1.1.2,sc-1.4.2,se-1.2.0/datatables.min.js"></script>
                 </head>
                 <body>
                     <nav class="navbar navbar-default">
@@ -24,32 +27,36 @@
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="nav navbar-nav navbar-right">
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Account
-                                            <span class="caret"></span>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user.username }}&nbsp;<span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/ksdb">Home</a>
+                                                <a href="/ksdb/view">Home</a>
                                             </li>
                                             <li class="divider"></li>
                                             <li>
-                                                <a href="#">KSDB - Projects</a>
+                                                <a href="/ksdb/view/?tabpage=project">KSDB - Projects</a>
                                             </li>
                                             <li>
-                                                <a href="#">KSDB - Projects</a>
+                                                <a href="/ksdb/view/?tabpage=institution">KSDB - Institution</a>
                                             </li>
                                             <li>
-                                                <a href="#">KSDB - Projects</a>
+                                                <a href="/ksdb/view/?tabpage=fundedsite">KSDB - Funded Sites</a>
                                             </li>
                                             <li>
-                                                <a href="#">KSDB - Projects</a>
+                                                <a href="/ksdb/view/?tabpage=person">KSDB - Personnel</a>
                                             </li>
                                             <li>
-                                                <a href="#">KSDB - Projects</a>
+                                                <a href="/ksdb/view/?tabpage=protocol">KSDB - Protocols</a>
                                             </li>
-                                            <li class="divider"></li>
                                             <li>
-                                                <a href="#">Separated link</a>
+                                                <a href="/ksdb/view/?tabpage=publication">KSDB - Publications</a>
+                                            </li>
+                                            <li>
+                                                <a href="/ksdb/view/?tabpage=organ">KSDB - Organs</a>
+                                            </li>
+                                            <li>
+                                                <a href="/ksdb/view/?tabpage=degree">KSDB - Degrees</a>
                                             </li>
                                             <li class="divider"></li>
                                             <li>
@@ -61,14 +68,12 @@
                             </div>
                         </div>
                     </nav>
-
-                {% block content %}
+                    {% block content %}
                 {% endblock %}
 
 
-                    <!-- Core Scripts - Include with every page -->
-                    <script src = "{% static 'js/jquery/dist/jquery.min.js' %}"></script>
-                    <script src = "{% static 'css/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!--                    <script src = "{% static 'js/jquery/dist/jquery.min.js' %}"></script>
+                    <script src = "{% static 'css/bootstrap/dist/js/bootstrap.min.js' %}"></script>-->
         {% block javascript %}
         {% endblock %}
 
