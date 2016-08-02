@@ -24,7 +24,7 @@ def getPersonnelFromInst(institutions):
             personfield.append([str(per.id), str(per.firstname), str(per.lastname)])
     return personfield
 
-def save_protocol_links(pro_id, request):
+def save_fundedsite_links(fun_id, request):
     #delete and save new person fundedsite associations
     pis = request.POST.getlist('pis')
     fundedsite_pi_link.objects.filter(fundedsiteid=fun_id).delete()
@@ -149,7 +149,7 @@ def fundedsite_input(request):
             fundedsitem.save()
 
             #save fundedsite data into db
-            save_fundesite_links(fun_id, request)
+            save_fundedsite_links(fun_id, request)
         else:
             message = simplejson.dumps(fundedsitem.errors)
             success = False
