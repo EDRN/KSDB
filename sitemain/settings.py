@@ -91,8 +91,6 @@ STATIC_ROOT = os.path.join(ESIS_ROOT, 'static')
 #Login settings
 LOGIN_REDIRECT_URL = '/' # It means home view
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
 # Logging Settings
 LOGGING = {
     'version': 1,
@@ -110,7 +108,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'mysite.log',
+            'filename': 'ksdb.log',
             'formatter': 'verbose'
         },
     },

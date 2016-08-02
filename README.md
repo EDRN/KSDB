@@ -37,4 +37,4 @@ You can now visit the following URLS:
 
 Run the test suite:
 
-    python manage.py test
+    python manage.py test ksdb
