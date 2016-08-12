@@ -1,12 +1,13 @@
 # protocols.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import ekeutils
 import simplejson
 import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, protocol_sitecon_link, protocol_irbcon_link
+from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, ci_protocol_link, fundedsite_protocol_link, fundedsite
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -25,6 +26,20 @@ def save_protocol_links(pro_id, request):
         pi_protocol_linkm = pi_protocol_link(protocolid = pro_id, personid = per)
         pi_protocol_linkm.save()
 
+    #delete and save new person protocol associations
+    cilist = request.POST.getlist('cis')
+    ci_protocol_link.objects.filter(protocolid=pro_id).delete()
+    for per in cilist:
+        ci_protocol_linkm = ci_protocol_link(protocolid = pro_id, personid = per)
+        ci_protocol_linkm.save()
+
+    #delete and save new fundedsite protocol associations
+    fundedsite_protocol_link.objects.filter(protocolid=pro_id).delete()
+    fundedsitelist = request.POST.getlist('fundedsites')
+    for org in fundedsitelist:
+        fundedsite_protocol_linkm = fundedsite_protocol_link(protocolid = pro_id, fundedsiteid = org)
+        fundedsite_protocol_linkm.save()
+
     #delete and save new organ protocol associations
     organ_protocol_link.objects.filter(protocolid=pro_id).delete()
     organlist = request.POST.getlist('organs')
@@ -32,50 +47,43 @@ def save_protocol_links(pro_id, request):
         organ_protocol_linkm = organ_protocol_link(protocolid = pro_id, organid = org)
         organ_protocol_linkm.save()
 
-    #delete and save new site contact protocol associations
-    protocol_sitecon_link.objects.filter(protocolid=pro_id).delete()
-    siteconlist = request.POST.getlist('site_contact')
-    for site in siteconlist:
-        protocol_sitecon_linkm = protocol_sitecon_link(protocolid = pro_id, personid = site)
-        protocol_sitecon_linkm.save()
-
-    #delete and save new organ protocol associations
-    protocol_irbcon_link.objects.filter(protocolid=pro_id).delete()
-    irbconlist = request.POST.getlist('irb_contact')
-    for irb in irbconlist:
-        protocol_irbcon_linkm = protocol_irbcon_link(protocolid = pro_id, personid = irb)
-        protocol_irbcon_linkm.save()
-
 def gen_protocol_data(request):
 
-    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
-    organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
+    #personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
+    #organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
+    #fundedsitefield = [ [str(obj.id), str(obj.id)] for obj in list(fundedsite.objects.all()) ]
+    personfield = ekeutils.get_eke_list("person")
+    organfield = ekeutils.get_eke_list("organ")
+    fundedsitefield = ekeutils.get_eke_list("fundedsite")
     data = {"action" : "New" ,
                     "pis" : personfield ,
-                    "irb_contact" : personfield ,
-                    "site_contact" : personfield ,
+                    "cis" : personfield ,
                     "organs" : organfield ,
+                    "fundedsites" : fundedsitefield
             }
     if request.method == 'GET':
         protocolid = request.GET.get('id')
         if protocolid:
             #generate protocol info from db
             obj = protocol.objects.get(pk=int(protocolid))
-
             data = { "action" : "Edit",
                     "id" : obj.id,
                     "pis" : personfield ,
+                    "cis" : personfield ,
                     "organs" : organfield ,
+                    "fundedsites" : fundedsitefield ,
                     "title" : obj.title,
-                    "description" : obj.description,
+                    "shortname" : obj.shortname,
                     "organ_link_id" : [ opl.organid for opl in list(organ_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "pi_link_id" : [ ppl.personid for ppl in list(pi_protocol_link.objects.filter(protocolid=int(protocolid))) ],
+                    "ci_link_id" : [ ppl.personid for ppl in list(ci_protocol_link.objects.filter(protocolid=int(protocolid))) ],
+                    "fundedsite_link_id" : [ fun.fundedsiteid for fun in list(fundedsite_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "start_date" : str(obj.start_date),
-                    "irbcon_link_id" : [ pil.personid for pil in list(protocol_irbcon_link.objects.filter(protocolid=int(protocolid))) ],
-                    "sitecon_link_id" : [ psl.personid for psl in list(protocol_sitecon_link.objects.filter(protocolid=int(protocolid))) ],
                     "irb_approval" : obj.irb_approval,
-                    "irb_contact" : personfield ,
-                    "site_contact" : personfield ,
+                    "irb_contact" : obj.irb_contact ,
+                    "site_contact" : obj.site_contact ,
+                    "irb_contact_email" : obj.irb_contact_email ,
+                    "site_contact_email" : obj.site_contact_email ,
                     "irb_approval_num" : obj.irb_approval_num,
                     "hum_sub_train" : obj.hum_sub_train,
                     "abstract" : obj.abstract,
@@ -92,6 +100,7 @@ def delete_protocol(request):
             for pro_id in ids:
                 #delete person protocol associations
                 pi_protocol_link.objects.filter(protocolid=pro_id).delete()
+                ci_protocol_link.objects.filter(protocolid=pro_id).delete()
                 #delete organ protocol associations
                 organ_protocol_link.objects.filter(protocolid=pro_id).delete()
                 #delete site contact protocol associations

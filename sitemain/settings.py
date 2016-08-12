@@ -21,9 +21,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'ksdb',
     'django_nose',
     'tinymce',
+    'widget_tweaks',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,6 +92,12 @@ STATIC_ROOT = os.path.join(ESIS_ROOT, 'static')
 
 #Login settings
 LOGIN_REDIRECT_URL = '/' # It means home view
+
+#Graphing models
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 # Logging Settings
 LOGGING = {

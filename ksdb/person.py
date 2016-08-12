@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import person, degree, person_degree_link, fundedsite_staff_link, fundedsite_pi_link, publication_author_link, institution_personnel_link, pi_protocol_link, protocol_irbcon_link, protocol_sitecon_link
+from ksdb.models import person, degree, person_degree_link, fundedsite_staff_link, fundedsite_pi_link, publication_author_link, institution_personnel_link, pi_protocol_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -26,6 +26,7 @@ def save_person_links(per_id, request):
 
 def gen_person_data(request):
     degreefield = [ [str(obj.id), str(obj.title)] for obj in list(degree.objects.all()) ]
+    degreefield.sort(key=lambda x: x[1].lower())
     data = {"action" : "New",
             "degrees" : degreefield , }
     if request.method == 'GET':
@@ -40,6 +41,7 @@ def gen_person_data(request):
                     "degrees" : degreefield,
                     "email" : obj.email,
                     "telephone" : obj.telephone,
+                    "description" : obj.description,
                    }
     return data
 
@@ -51,10 +53,6 @@ def delete_person(request):
         ids = request.POST.get("id").split(",")
         if len(ids) > 0:
             for per_id in ids:
-                #delete site contact and protocol associations
-                protocol_sitecon_link.objects.filter(personid=per_id).delete()
-                #delete irb contact and protocol associations
-                protocol_irbcon_link.objects.filter(personid=per_id).delete()
                 #delete pi protocol associations
                 pi_protocol_link.objects.filter(personid=per_id).delete()
                 #delete institution person associations

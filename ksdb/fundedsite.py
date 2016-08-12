@@ -22,6 +22,7 @@ def getPersonnelFromInst(institutions):
         for ipl in institution_personnel_link.objects.filter(institutionid = ins):
             per = person.objects.get(id = ipl.personid)
             personfield.append([str(per.id), str(per.firstname), str(per.lastname)])
+    personfield.sort(key=lambda x: x[1].lower())
     return personfield
 
 def save_fundedsite_links(fun_id, request):
@@ -65,6 +66,9 @@ def gen_fundedsite_data(request):
     organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
     projectfield = [ [str(obj.id), str(obj.title)] for obj in list(project.objects.all()) ]
     institutionfield = [ [str(obj.id), str(obj.name)] for obj in list(institution.objects.all()) ]
+    organfield.sort(key=lambda x: x[1].lower())
+    projectfield.sort(key=lambda x: x[1].lower())
+    institutionfield.sort(key=lambda x: x[1].lower())
     data = {"action" : "New" ,
         "pis" : [] ,
         "staffs" : [] ,
@@ -91,6 +95,7 @@ def gen_fundedsite_data(request):
                     "organs" : organfield ,
                     "projects" : projectfield ,
                     "institutions" : institutionfield ,
+                    "status" : obj.status ,
                    }
     return data
 

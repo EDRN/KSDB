@@ -1,23 +1,21 @@
-{% extends 'base.html' %}
+{% extends request.GET.modal|yesno:'lib.html,base.html' %}
 {% block content %}
         <script>
-            function initpersonform() {
-                $.each({{degrees|safe}}, function(key, value) { 
-                    $('#degrees').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-            }
             function fillpersonform() {
                 $('#firstname').val("{{firstname}}");
                 $('#lastname').val("{{lastname}}");
                 $('#degrees').val({{degree_link_id}});
                 $('#email').val("{{email}}");
                 $('#telephone').val("{{telephone}}");
+                $('#description').html("{{description}}");
             }
             $(document).ready( function () {
-                initpersonform();
-                {% ifequal action "Edit" %}fillpersonform();{% endifequal %}
+                updateLists("degree", "degrees");
+                {% ifequal action "Edit" %}
+                    sleep(500).then(() => {
+                        fillpersonform();
+                    });
+                {% endifequal %}
         } );
         </script>
     <div class="container">
@@ -50,16 +48,23 @@
                   <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="telephone">Telephone</label>
-                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="Enter Phone Number">
+                <label for="telephone">Telephone (Please enter only numbers, no formatting)</label>
+                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="ex: 6197722098">
                 </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="degrees">Degrees</label>
+                <label for="degrees">Degrees <a data-toggle="modal" id="adddegree" data-target="#modal" onclick="startModal(this)" target="degrees" href="degree">(Add Degree)</a></label>
                 <select multiple size=6 class="form-control" id="degrees" name="degrees">
                 </select>
                 </fieldset>
+                </div>
+                <div class="col-md-12">
+                    <fieldset class="form-group">
+                    <label for="description">Personnel Description</label>
+                    <textarea class="form-control" name="description" id="description" rows="5"></textarea>
+                    <small class="text-muted">Describe your personnel.</small>
+                    </fieldset>
                 </div>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">

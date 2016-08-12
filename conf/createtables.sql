@@ -1,4 +1,3 @@
-    sudo -i -u postgres
 CREATE USER mab_mart WITH PASSWORD 'mab_mart';
 create database mabdb;
 
@@ -177,4 +176,28 @@ CREATE TABLE publication_author_link(
         publicationid int references publication(id),
         personid int references person(id),
         UNIQUE ( publicationid, personid ));
-exit
+
+
+'''Update 8-5-16'''
+alter table fundedsite add column status text;
+alter table person add column description text;
+alter table protocol add column shortname text;
+alter table protocol alter column site_contact type text;
+alter table protocol alter column irb_contact type text;
+alter table protocol add column irb_contact_email text;
+alter table protocol add column site_contact_email text;
+drop table protocol_irbcon_link;
+drop table protocol_sitecon_link;
+alter table protocol add column cis text;
+alter table protocol add column fundedsites text;
+CREATE TABLE fundedsite_protocol_link(
+    id serial NOT NULL,
+    protocolid int references protocol(id),
+    fundedsiteid int references fundedsite(id),
+    UNIQUE ( protocolid, fundedsiteid ));
+CREATE TABLE ci_protocol_link(
+        id serial NOT NULL,
+        protocolid int references protocol(id),
+        personid int references person(id),
+        UNIQUE ( protocolid, personid ));
+

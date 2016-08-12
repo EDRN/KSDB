@@ -26,6 +26,7 @@ def save_institution_links(ins_id, request):
 
 def gen_institution_data(request):
     personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
+    personfield.sort(key=lambda x: x[1].lower())
     data = {"action" : "New" ,
             "personnel" : personfield,
            }

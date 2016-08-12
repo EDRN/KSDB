@@ -3,8 +3,8 @@ from ksdb.models import *
 
 #test creations of models
 class ModelTests(TestCase):
-    def create_protocol(self, id=1, title="only a test", organs="lung", pis="tester", irb_approval="yes", hum_sub_train="yes", abstract="test abstract"):
-        return protocol.objects.create(id=id, title=title, organs=organs, pis=pis, irb_approval=irb_approval, hum_sub_train=hum_sub_train, abstract=abstract)
+    def create_protocol(self, id=1, title="only a test", organs="lung", pis="tester", shortname="testshort", irb_approval="yes", hum_sub_train="yes", abstract="test abstract"):
+        return protocol.objects.create(id=id, title=title, shortname=shortname, organs=organs, pis=pis, irb_approval=irb_approval, hum_sub_train=hum_sub_train, abstract=abstract)
 
     def create_project(self, id=1, title="only a test"):
         return project.objects.create(id=id, title=title)

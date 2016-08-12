@@ -1,0 +1,25 @@
+<div class="modal-dialog modal-lg" style="width: 90%;" role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="height:5%">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Chiudi</span>
+      </button>
+    </div>
+    <div class="modal-body" style="height:800px">
+      <iframe src='/ksdb/{{ request.GET.type }}input/?modal=true' width='100%' height='100%' onLoad="updateIFrame(this.contentWindow.location.href);"></iframe>
+    </div>
+  </div>
+</div>
+<script>
+  function updateIFrame(location){
+      if(location.indexOf("view") !== -1){
+          $('#modal').modal('hide');
+          var targets = "{{ request.GET.target }}".split(',');
+          for(var i = 0; i < targets.length; i++) {
+            updateLists("{{ request.GET.type }}", targets[i]);
+          }
+      }
+  }
+</script>
+

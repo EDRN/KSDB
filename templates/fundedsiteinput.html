@@ -1,6 +1,5 @@
-{% extends 'base.html' %}
+{% extends request.GET.modal|yesno:'lib.html,base.html' %}
 {% block content %}        
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script>
             function initInstPersonnel(pis, staffs) {
                 $('#pis').html("");
@@ -17,25 +16,6 @@
                 });
 
             }
-            function initfundedsiteform() {
-                $.each({{organs|safe}}, function(key, value) { 
-                    $('#organs').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-                $.each({{projects|safe}}, function(key, value) { 
-                    $('#projects').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-                $.each({{institutions|safe}}, function(key, value) { 
-                    $('#institutions').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-                initInstPersonnel({{pis|safe}}, {{staffs|safe}});
-            }
-
             function fillfundedsiteform() {
                     $('#pis').val({{pi_link_id}});
                     $('#staff').val({{staff_link_id}});
@@ -43,17 +23,24 @@
                     $('#projects').val({{project_link_id}});
                     $('#institutions').val({{institution_link_id}});
                     $('#description').val("{{description}}");
+                    $('#status').val("{{status}}");
             }
             $(document).ready( function () {
-                initfundedsiteform();
-                {% ifequal action "Edit" %}fillfundedsiteform();{% endifequal %}
+                updateLists("institution", "institutions");
+                updateLists("project", "projects");
+                updateLists("organ", "organs");
+                {% ifequal action "Edit" %}
+                    sleep(500).then(() => {
+                        fillfundedsiteform();
+                    });
+                {% endifequal %}
         } );
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Funded Site {{ id }}</H2>
+            <H2>{{ action }} Participating Site {{ id }}</H2>
             <p>
-                Please update the KSDB database with accurate fundedsite information.
+                Please update the KSDB database with accurate participating site information.
             </p>
             <br>
         </div>
@@ -63,17 +50,24 @@
                 {% csrf_token %}
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="institutions">Institution</label>
+                <label for="status">Status</label>
+                <select class="form-control" id="status" name="status">
+                    <option value="Not Funded">Not Funded</option>
+                    <option value="Funded">Funded</option>
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="institutions">Institution <a data-toggle="modal" id="addinstitution" data-target="#modal" onclick="startModal(this)" target="institutions" href="institution">(Add Institution)</a></label>
                 <select multiple class="form-control" size=7 id="institutions" name="institutions">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="projects">Projects</label>
+                <label for="projects">Projects  <a data-toggle="modal" id="addproject" data-target="#modal" onclick="startModal(this)" target="projects" href="project">(Add Project)</a></label>
                 <select multiple class="form-control" size=7 id="projects" name="projects">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="description">Funded Site Description</label>
+                <label for="description">Participating Site Description</label>
                 <textarea class="form-control" id="description" name="description" rows="6"></textarea>
                 </fieldset>
                 </div>
@@ -89,7 +83,7 @@
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="organs">Organs</label>
+                <label for="organs">Organs <a data-toggle="modal" id="addorgan" data-target="#modal" onclick="startModal(this)" target="organs" href="organ">(Add Organ)</a></label>
                 <select multiple class="form-control" size=7 id="organs" name="organs">
                 </select>
                 </fieldset>

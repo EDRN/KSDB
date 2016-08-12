@@ -1,53 +1,40 @@
-{% extends 'base.html' %}
+{% extends request.GET.modal|yesno:'lib.html,base.html' %}
+
 {% block content %}        
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
 
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script>
-            function initprotocolform() {
-                $.each({{pis|safe}}, function(key, value) { 
-                    $('#pis').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1]+" "+value[2])); 
-                });
-                $.each({{organs|safe}}, function(key, value) { 
-                    $('#organs').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-                $.each({{site_contact|safe}}, function(key, value) { 
-                    $('#site_contact').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-                $.each({{irb_contact|safe}}, function(key, value) { 
-                    $('#irb_contact').append($("<option></option>")
-                        .attr("value",value[0])
-                        .text(value[1])); 
-                });
-            }
             function fillprotocolform() {
                     $('#title').val("{{title}}");
-                    $('#description').val("{{description}}");
                     $('#organs').val({{organ_link_id}});
                     $('#pis').val({{pi_link_id}});
+                    $('#cis').val({{ci_link_id}});
+                    $('#fundedsites').val({{fundedsite_link_id}});
                     $('#start_date').val("{{start_date}}");
-                    $('#site_contact').val({{sitecon_link_id}});
+                    $('#site_contact').val("{{site_contact}}");
+                    $('#site_contact_email').val("{{site_contact_email}}");
                     $('input:radio[name=irb_approval]').filter('[value={{irb_approval}}]').prop('checked', true);
                     $('#irb_approval_num').val("{{irb_approval_num}}");
-                    $('#irb_contact').val({{irbcon_link_id}});
-                    $('#contact_email').val("{{contact_email}}");
+                    $('#irb_contact').val("{{irb_contact}}");
+                    $('#irb_contact_email').val("{{irb_contact_email}}");
                     $('input:radio[name=hum_sub_train]').filter('[value="{{hum_sub_train}}"]').prop('checked', true);
-                    $('#abstract').html("{{abstract}}");
+                    $('#abstract').val("{{abstract}}");
+                    $('#shortname').val("{{shortname}}");
             }
             $(document).ready( function () {
                 $('#protocolstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
-                initprotocolform();
-                {% ifequal action "Edit" %}fillprotocolform();{% endifequal %}
-                tinymce.init({ selector:'#abstract'});
-        } );
+                updateLists("person", "pis");
+                updateLists("person", "cis");
+                updateLists("organ", "organs");
+                updateLists("fundedsite", "fundedsites");
+                {% ifequal action "Edit" %}
+                    sleep(500).then(() => {
+                        fillprotocolform();
+                    });
+                {% endifequal %}
+        });
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
@@ -67,11 +54,6 @@
                 <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="description">Protocol Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                <small class="text-muted">Describe your protocol.</small>
-                </fieldset>
-                <fieldset class="form-group">
                   <label for="protocolstart">Start Date</label>
                   <div class='input-group date' id='protocolstart'>
                     <input type='text' class="form-control" id='start_date' name='start_date' />
@@ -81,21 +63,38 @@
                   </div>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="organs">Organs</label>
-                <select multiple class="form-control" size=10 id="organs" name="organs">
+                <label for="organs">Organs <a data-toggle="modal" id="addorgan" data-target="#modal" onclick="startModal(this)" target="organs" href="organ">(Add Organ)</a></label>
+                <select multiple class="form-control" size=13 id="organs" name="organs">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="pis">PIs</label>
+                <label for="pis">Lead Investigators <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis" href="person">(Add Person)</a></label>
                 <select multiple class="form-control" size=14 id="pis" name="pis">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="cis">Coordinating Investigator <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis" href="person">(Add Person)</a></label>
+                <select multiple class="form-control" size=14 id="cis" name="cis">
                 </select>
                 </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
+                <label for="shortname">Short Name</label>
+                <input type="text" class="form-control" name="shortname" id="shortname" placeholder="Enter Short Name">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="fundedsites">Participating Sites <a data-toggle="modal" id="addfundedsite" data-target="#modal" onclick="startModal(this)" target="fundedsites" href="fundedsite">(Add Site)</a></label>
+                <select multiple class="form-control" size=13 id="fundedsites" name="fundedsites">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
                   <label for="site_contact">Site Contact</label>
-                  <select multiple class="form-control" size=10 id="site_contact" name="site_contact">
-                  </select>
+                  <input type="text" class="form-control" id="site_contact" name="site_contact" placeholder="Enter Site Contact Name">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="site_contact_email">Site Contact Email</label>
+                  <input type="text" class="form-control" id="site_contact_email" name="site_contact_email" placeholder="Enter Site Contact Email">
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="irb_approval">IRB Approval</label>
@@ -123,9 +122,12 @@
                   <input type="text" class="form-control" id="irb_approval_num" name="irb_approval_num" placeholder="Enter Approval #">
                 </fieldset>
                 <fieldset class="form-group">
-                  <label for="irb_contact">IRB Contact</label>
-                  <select multiple class="form-control" size=10 id="irb_contact" name="irb_contact">
-                  </select>
+                  <label for="irb_contact">IRB Contact Name</label>
+                  <input type="text" class="form-control" id="irb_contact" name="irb_contact" placeholder="Enter IRB Contact Name">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="irb_contact_email">IRB Contact Email</label>
+                  <input type="text" class="form-control" id="irb_contact_email" name="irb_contact_email" placeholder="Enter IRB Contact Email">
                 </fieldset>
                 <fieldset class="form-group">
                   <label for="hum_sub_train">Human Subjects Training</label>
@@ -162,7 +164,6 @@
                 <input type="hidden" name="action" value="new">
                 {% endifequal %}
                 </div>
-            </form>
             </div>
             <div class="col-md-12">
             <fieldset class="form-group">
@@ -170,6 +171,7 @@
               <textarea class="form-control" id="abstract" name="abstract" rows="8"></textarea>
               <small class="text-muted">Enter abstract for this protocol.</small>
             </fieldset>
+            </form>
             <div class="col-md-12">
                 <font color="red"><center><div id="results"></div></center></font>
             </div>
@@ -185,12 +187,11 @@
 	<script>
         var submitButton = document.querySelector("#submit-protocol")
         var protocolform = $('#protocolinput');
-        //var removeButton = document.querySelector("#cancel-protocol")
             submitButton.addEventListener("click", function () {
                 $.ajax({
                 url : protocolform.attr('action'),
                 type : 'POST',
-                data : protocolform.serialize()+"&abstract="+encodeURIComponent(tinymce.get('abstract').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                data : protocolform.serialize(),
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);

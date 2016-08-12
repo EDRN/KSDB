@@ -12,26 +12,46 @@ from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 
+def setupTable(frame, objtype):
+    _KSDBhref = "/ksdb/"
+    for i in range(0,len(frame)):
+        objid = frame[i][0]
+        frame[i].insert(0, "<input type='checkbox' name='"+objtype+"' id='"+str(frame[i][0])+"'>")
+        for j in range(1, len(frame[i])):
+            frame[i][j] = "<a href='"+_KSDBhref+objtype+"input/?id="+str(objid)+"'>"+str(frame[i][j])+"</a>"
+
+    return frame
+
 @login_required(login_url="/login/")
 def view_service(request):
     personheaders = ["Select","Person ID", "First Name", "Last Name", "Phone"]
-    persontable = [ ["<input type='checkbox' name='person' id='"+str(obj.id)+"'>","<a href='/ksdb/personinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.firstname, obj.lastname, obj.telephone] for obj in list(person.objects.all()) ]
-    protocolheaders = ["Select","Protocol ID", "Title", "Description"]
-    protocoltable = [ ["<input type='checkbox' name='protocol' id='"+str(obj.id)+"'>","<a href='/ksdb/protocolinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.description] for obj in list(protocol.objects.all()) ]
+    persontable = [ [obj.id,obj.firstname, obj.lastname, obj.telephone] for obj in list(person.objects.all()) ]
+    protocolheaders = ["Select","Protocol ID", "Title", "Short Name"]
+    protocoltable = [ [obj.id,obj.title, obj.shortname] for obj in list(protocol.objects.all()) ]
     publicationheaders = ["Select","Publication ID", "Title", "Author", "Pubmed ID"]
-    publicationtable = [ ["<input type='checkbox' name='publication' id='"+str(obj.id)+"'>","<a href='/ksdb/publicationinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.authors, obj.pubmedid] for obj in list(publication.objects.all()) ]
-    fundedsiteheaders = ["Select","Funded Site ID", "Institutions", "Description"]
-    fundedsitetable = [ ["<input type='checkbox' name='fundedsite' id='"+str(obj.id)+"'>","<a href='/ksdb/fundedsiteinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.institutions, obj.description] for obj in list(fundedsite.objects.all()) ]
+    publicationtable = [ [obj.id,obj.title, obj.authors, obj.pubmedid] for obj in list(publication.objects.all()) ]
+    fundedsiteheaders = ["Select","Part. Site ID", "PIs", "Status", "Description"]
+    fundedsitetable = [ [obj.id,obj.pis, obj.status, obj.description] for obj in list(fundedsite.objects.all()) ]
     institutionheaders = ["Select","Institution ID", "Name", "Abbreviation"]
-    institutiontable = [ ["<input type='checkbox' name='institution' id='"+str(obj.id)+"'>","<a href='/ksdb/institutioninput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.name, obj.abbreviation] for obj in list(institution.objects.all()) ]
+    institutiontable = [ [obj.id,obj.name, obj.abbreviation] for obj in list(institution.objects.all()) ]
     projectheaders = ["Select","Project ID", "Title", "Abbreviation"]
-    projecttable = [ ["<input type='checkbox' name='project' id='"+str(obj.id)+"'>","<a href='/ksdb/projectinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title, obj.abbreviation] for obj in list(project.objects.all()) ]
+    projecttable = [ [obj.id,obj.title, obj.abbreviation] for obj in list(project.objects.all()) ]
 
     organheaders = ["Select","Organ ID", "Name"]
-    organtable = [ ["<input type='checkbox' name='organ' id='"+str(obj.id)+"'>","<a href='/ksdb/organinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.name] for obj in list(organ.objects.all()) ]
+    organtable = [ [obj.id,obj.name] for obj in list(organ.objects.all()) ]
 
     degreeheaders = ["Select","Degree ID", "Title"]
-    degreetable = [ ["<input type='checkbox' name='degree' id='"+str(obj.id)+"'>","<a href='/ksdb/degreeinput/?id="+str(obj.id)+"'>"+str(obj.id)+"</a>", obj.title] for obj in list(degree.objects.all()) ]
+    degreetable = [ [obj.id, obj.title] for obj in list(degree.objects.all()) ]
+
+    persontable = setupTable(persontable, "person")
+    protocoltable = setupTable(protocoltable, "protocol")
+    publicationtable = setupTable(publicationtable, "publication")
+    fundedsitetable = setupTable(fundedsitetable, "fundedsite")
+    institutiontable = setupTable(institutiontable, "institution")
+    projecttable = setupTable(projecttable, "project")
+    organtable = setupTable(organtable, "organ")
+    degreetable = setupTable(degreetable, "degree")
+
 
     # Render input page with the documents and the form
     return render(

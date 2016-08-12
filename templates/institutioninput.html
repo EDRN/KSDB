@@ -1,15 +1,7 @@
-{% extends 'base.html' %}
+{% extends request.GET.modal|yesno:'lib.html,base.html' %}
 {% block content %}
 
-        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script>
-            function initinstitutionform() {
-                $.each({{personnel|safe}}, function(key, value) { 
-                        $('#personnel').append($("<option></option>")
-                            .attr("value",value[0])
-                            .text(value[1]+" "+value[2])); 
-                    });
-            }
             function fillinstitutionform() {
                     $('#name').val("{{name}}");
                     $('#department').val("{{department}}");
@@ -19,9 +11,12 @@
                     $('#personnel').val({{person_link_id}});
             }
             $(document).ready( function () {
-                initinstitutionform();
-                {% ifequal action "Edit" %}fillinstitutionform();{% endifequal %}
-                tinymce.init({ selector:'#description'});
+                updateLists("person", "personnel");
+                {% ifequal action "Edit" %}
+                    sleep(500).then(() => {
+                        fillinstitutionform();
+                    });
+                {% endifequal %}
         } );
         </script>
     <div class="container">
@@ -57,7 +52,7 @@
                 </div>
                 <div class="col-md-6">
                     <fieldset class="form-group">
-                    <label for="personnel">Personnel</label>
+                    <label for="personnel">Personnel <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="personnel" href="person">(Add Person)</a></label>
                     <select multiple class="form-control" size='14' id="personnel" name="personnel">
                     </select>
                     </fieldset>
@@ -98,7 +93,7 @@
                 $.ajax({
                 url : institutionform.attr('action'),
                 type : 'POST',
-                data : institutionform.serialize()+"&description="+encodeURIComponent(tinymce.get('description').getContent().replace(/(?:\r\n|\r|\n)/g,"")),
+                data : institutionform.serialize(),
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);

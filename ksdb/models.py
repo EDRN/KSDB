@@ -6,35 +6,23 @@ from tinymce.models import HTMLField
 class protocol(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    shortname = models.CharField(max_length=128)
     organs = models.CharField(max_length=1000)
+    fundedsites = models.CharField(max_length=1000)
     pis = models.CharField(max_length=1000)
+    cis = models.CharField(max_length=1000)
     start_date = models.DateTimeField(blank=True, null=True)
     site_contact = models.CharField(max_length=500, blank=True, null=True)
+    site_contact_email = models.CharField(max_length=500, blank=True, null=True)
     irb_approval = models.CharField(max_length=128)
     irb_approval_num = models.CharField(max_length=128, blank=True, null=True)
     irb_contact = models.CharField(max_length=500, blank=True, null=True)
+    irb_contact_email = models.CharField(max_length=500, blank=True, null=True)
     hum_sub_train = models.CharField(max_length=128)
-    abstract = HTMLField()
+    abstract = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
         db_table = u'protocol'
-
-class protocol_sitecon_link(models.Model):
-    protocolid = models.IntegerField()
-    personid = models.IntegerField()
-
-    class Meta:
-        db_table = u'protocol_sitecon_link'
-        unique_together = (("protocolid", "personid"),)
-
-class protocol_irbcon_link(models.Model):
-    protocolid = models.IntegerField()
-    personid = models.IntegerField()
-
-    class Meta:
-        db_table = u'protocol_irbcon_link'
-        unique_together = (("protocolid", "personid"),)
 
 class pi_protocol_link(models.Model):
     protocolid = models.IntegerField()
@@ -42,6 +30,14 @@ class pi_protocol_link(models.Model):
 
     class Meta:
         db_table = u'pi_protocol_link'
+        unique_together = (("protocolid", "personid"),)
+
+class ci_protocol_link(models.Model):
+    protocolid = models.IntegerField()
+    personid = models.IntegerField()
+
+    class Meta:
+        db_table = u'ci_protocol_link'
         unique_together = (("protocolid", "personid"),)
 
 #Organ related models
@@ -67,9 +63,10 @@ class person(models.Model):
     id = models.IntegerField(primary_key=True)
     firstname = models.CharField(max_length=128)
     lastname = models.CharField(max_length=128)
-    degrees = models.IntegerField()
+    degrees = models.IntegerField(blank=True, null=True)
     email = models.CharField(max_length=128)
-    telephone = models.CharField(max_length=128, blank=True, null=True)
+    telephone = models.IntegerField(blank=True, null=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
         db_table = u'person'
@@ -91,7 +88,7 @@ class institution(models.Model):
     name = models.CharField(max_length=128)
     department = models.CharField(max_length=128, blank=True, null=True)
     abbreviation = models.CharField(max_length=128, blank=True, null=True)
-    url = models.CharField(max_length=500)
+    url = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     personnel = models.CharField(max_length=500)
 
@@ -130,6 +127,7 @@ class publication_author_link(models.Model):
 class fundedsite(models.Model):
     id = models.IntegerField(primary_key=True)
     pis = models.CharField(max_length=500)
+    status = models.CharField(max_length=500)
     organs = models.CharField(max_length=500, blank=True, null=True)
     staff = models.CharField(max_length=500, blank=True, null=True)
     projects = models.CharField(max_length=500)
@@ -178,6 +176,14 @@ class fundedsite_institution_link(models.Model):
     class Meta:
         db_table = u'fundedsite_institution_link'
         unique_together = (("fundedsiteid", "institutionid"),)
+
+class fundedsite_protocol_link(models.Model):
+    protocolid = models.IntegerField()
+    fundedsiteid = models.IntegerField()
+
+    class Meta:
+        db_table = u'fundedsite_protocol_link'
+        unique_together = (("protocolid", "fundedsiteid"),)
 
 #Degree related models
 class degree(models.Model):
