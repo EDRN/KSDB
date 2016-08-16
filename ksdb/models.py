@@ -65,7 +65,7 @@ class person(models.Model):
     lastname = models.CharField(max_length=128)
     degrees = models.IntegerField(blank=True, null=True)
     email = models.CharField(max_length=128)
-    telephone = models.IntegerField(blank=True, null=True)
+    telephone = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:

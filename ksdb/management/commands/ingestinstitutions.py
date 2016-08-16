@@ -12,7 +12,7 @@ import json
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    help = 'Ingest publications'
+    help = 'Closes the specified poll for voting'
     organurl = "https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/body-systems/@@rdf"
     _bodySystemTitle = URIRef("http://purl.org/dc/terms/title")
 
@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
                 if organm.is_valid():
                     organm.save()
-        print "Successfully imported organs from cancerdataexpo rdf."
+        print "Successfully imported organs from dmcc rdf."
 
     def _parseRDF(self, graph):
             statements = {}

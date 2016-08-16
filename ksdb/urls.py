@@ -2,7 +2,7 @@
 
 from django.conf.urls import url
 
-from ksdb import protocols, project, person, institution, publication, fundedsite, view, organ, degree, querypubmed, publishRDF, ModalView, ekeutils
+from ksdb import protocols, project, person, institution, publication, fundedsite, view, organ, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils
 from sitemain import settings
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^degreeinput/$', degree.degree_input, name='degreeinput'),
     url(r'^querypubmed/$', querypubmed.pubmed_query, name='querypubmed'),
     url(r'^publishrdf/$', publishRDF.publishrdf, name='publishrdf'),
+    url(r'^ingestrdf/$', ingestRDF.ingestrdf, name='ingestrdf'),
     url(r'^deleteprotocol/$', protocols.delete_protocol, name='deleteprotocol'),
     url(r'^deleteproject/$', project.delete_project, name='deleteproject'),
     url(r'^deleteinstitution/$', institution.delete_institution, name='deleteinstitution'),

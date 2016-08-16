@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="modal-body" style="height:800px">
-      <iframe src='/ksdb/{{ request.GET.type }}input/?modal=true' width='100%' height='100%' onLoad="updateIFrame(this.contentWindow.location.href);"></iframe>
+      <iframe src='/ksdb/{{ request.GET.type }}input/?modal=true' width='100%' height='100%' onLoad="updateIFrame(this.contentWindow.location.href);" frameborder="0"></iframe>
     </div>
   </div>
 </div>

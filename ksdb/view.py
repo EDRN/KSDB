@@ -18,6 +18,9 @@ def setupTable(frame, objtype):
         objid = frame[i][0]
         frame[i].insert(0, "<input type='checkbox' name='"+objtype+"' id='"+str(frame[i][0])+"'>")
         for j in range(1, len(frame[i])):
+            #ignore unicode characters
+            if isinstance(frame[i][j], basestring):
+                frame[i][j] = frame[i][j].encode('ascii', 'ignore')
             frame[i][j] = "<a href='"+_KSDBhref+objtype+"input/?id="+str(objid)+"'>"+str(frame[i][j])+"</a>"
 
     return frame
