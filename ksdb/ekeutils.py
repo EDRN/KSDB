@@ -3,6 +3,8 @@ from django.http import JsonResponse
 # Create your views here.
 from ksdb.models import protocol, organ, person, fundedsite, project, degree, institution
 
+_KSDBhref = "/ksdb/"
+
 def eke_api(request):
     if request.GET.get("action") == "getobjlist":
         objlist = get_eke_list(request.GET.get("eketype"))
@@ -33,3 +35,9 @@ def get_eke_list(eketype, filterby=None):
         field.sort(key=lambda x: x[1].lower())
 
     return field
+
+def clean_unicode_str(obj):
+    if isinstance(obj, basestring):
+        return obj.encode('ascii', 'ignore')
+    else:
+        return obj

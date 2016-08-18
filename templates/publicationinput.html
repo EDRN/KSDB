@@ -8,13 +8,12 @@
         <script>
             function fillpublicationform() {
                     $('#title').val("{{title}}");
-                    $('#authors').val({{author_link_id}});
+                    $('#authors').val("{{authors}}");
                     $('#journal').val("{{journal}}");
                     $('#pubyear').val("{{pubyear}}");
                     $('#pubmedid').val("{{pubmedid}}");
             }
             $(document).ready( function () {
-                updateLists("person", "authors");
                 {% ifequal action "Edit" %}
                     sleep(500).then(() => {
                         fillpublicationform();
@@ -43,9 +42,8 @@
                 <input type="text" class="form-control" name="title" id="title" placeholder="Enter Publication Title">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="authors">Authors <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="authors" href="person">(Add Person)</a></label>
-                <select multiple class="form-control" id="authors" name="authors">
-                </select>
+                <label for="authors">Authors</label>
+                <input type="text" class="form-control" name="authors" id="authors" placeholder="Enter Authors">
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="journal">Journal</label>

@@ -203,3 +203,4 @@ CREATE TABLE ci_protocol_link(
 '''Update 8-11-16'''
 
 alter table person alter column telephone type text;
+drop table publication_author_link;

@@ -14,14 +14,46 @@
                 // Change/remove current tab to active
                 ele.parent('li').addClass('active').siblings().removeClass('active');
             }
-            $('#protocol_table').dataTable();
-            $('#person_table').dataTable();
-            $('#project_table').dataTable();
-            $('#organ_table').dataTable();
-            $('#degree_table').dataTable();
-            $('#institution_table').dataTable();
-            $('#fundedsite_table').dataTable();
-            $('#publication_table').dataTable();
+            $('#protocol_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/protocolview/"
+            });
+            $('#person_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/personview/"
+            });
+            $('#project_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/projectview/"
+            });
+            $('#organ_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/organview/"
+            });
+            $('#degree_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/degreeview/"
+            });
+            $('#institution_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/institutionview/"
+            });
+            $('#fundedsite_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/fundedsiteview/"
+            });
+            $('#publication_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/publicationview/"
+            });
             $('.nav li a').on('click', function(e) {
                 changeTab($(this));
                 e.preventDefault();

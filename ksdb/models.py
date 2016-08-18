@@ -107,7 +107,7 @@ class institution_personnel_link(models.Model):
 class publication(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
-    authors = models.CharField(max_length=500)
+    authors = models.CharField(max_length=5000)
     journal = models.CharField(max_length=500)
     pubyear = models.IntegerField()
     pubmedid = models.CharField(max_length=128)

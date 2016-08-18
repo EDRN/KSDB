@@ -2,7 +2,7 @@
 
 from django.conf.urls import url
 
-from ksdb import protocols, project, person, institution, publication, fundedsite, view, organ, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils
+from ksdb import protocols, project, person, institution, publication, fundedsite, view, organ, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils, ksdbviews
 from sitemain import settings
 
 urlpatterns = [
@@ -28,4 +28,12 @@ urlpatterns = [
     url(r'^deletedegree/$', degree.delete_degree, name='deletedegree'),
     url(r'^modalview/$', ModalView.ModalView, name='modal-view'),
     url(r'^ekeapi/$', ekeutils.eke_api, name='eke-api'),
+    url(r'^personview/$', ksdbviews.PersonView.as_view(), name='personview'),
+    url(r'^publicationview/$', ksdbviews.PublicationView.as_view(), name='publicationview'),
+    url(r'^projectview/$', ksdbviews.ProjectView.as_view(), name='projectview'),
+    url(r'^institutionview/$', ksdbviews.InstitutionView.as_view(), name='institutionview'),
+    url(r'^fundedsiteview/$', ksdbviews.FundedSiteView.as_view(), name='fundedsiteview'),
+    url(r'^protocolview/$', ksdbviews.ProtocolView.as_view(), name='protocolview'),
+    url(r'^organview/$', ksdbviews.OrganView.as_view(), name='organview'),
+    url(r'^degreeview/$', ksdbviews.DegreeView.as_view(), name='degreeview'),
 ]
