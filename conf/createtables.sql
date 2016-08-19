@@ -1,5 +1,5 @@
-CREATE USER mab_mart WITH PASSWORD 'mab_mart';
-create database mabdb;
+CREATE USER edrn WITH PASSWORD 'edrn';
+create database ksdb;
 
 CREATE SEQUENCE input_file_id_seq START 1;
 CREATE TABLE ksdb_inputfile(id BIGSERIAL primary key, filepath text, folder int);
