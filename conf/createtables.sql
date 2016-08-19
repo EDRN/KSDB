@@ -200,7 +200,6 @@ CREATE TABLE ci_protocol_link(
         protocolid int references protocol(id),
         personid int references person(id),
         UNIQUE ( protocolid, personid ));
-'''Update 8-11-16'''
 
 alter table person alter column telephone type text;
 drop table publication_author_link;
