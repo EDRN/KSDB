@@ -202,4 +202,3 @@ CREATE TABLE ci_protocol_link(
         UNIQUE ( protocolid, personid ));
 
 alter table person alter column telephone type text;
-drop table publication_author_link;
