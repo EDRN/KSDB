@@ -1,6 +1,3 @@
-CREATE USER edrn WITH PASSWORD 'edrn';
-create database ksdb;
-
 CREATE SEQUENCE input_file_id_seq START 1;
 CREATE TABLE ksdb_inputfile(id BIGSERIAL primary key, filepath text, folder int);
 
@@ -116,16 +113,6 @@ CREATE TABLE person_degree_link(
         UNIQUE ( degreeid, personid ));
 
 
-CREATE TABLE protocol_sitecon_link(
-        id serial NOT NULL,
-        protocolid int references protocol(id),
-        personid int references person(id),
-        UNIQUE ( protocolid, personid ));
-CREATE TABLE protocol_irbcon_link(
-        id serial NOT NULL,
-        protocolid int references protocol(id),
-        personid int references person(id),
-        UNIQUE ( protocolid, personid ));
 CREATE TABLE organ_protocol_link(
     id serial NOT NULL,
     protocolid int references protocol(id),
@@ -186,8 +173,6 @@ alter table protocol alter column site_contact type text;
 alter table protocol alter column irb_contact type text;
 alter table protocol add column irb_contact_email text;
 alter table protocol add column site_contact_email text;
-drop table protocol_irbcon_link;
-drop table protocol_sitecon_link;
 alter table protocol add column cis text;
 alter table protocol add column fundedsites text;
 CREATE TABLE fundedsite_protocol_link(

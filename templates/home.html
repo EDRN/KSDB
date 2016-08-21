@@ -49,26 +49,5 @@ a>
                                         </ul></p>
         </div>
     </div>
-<table class="datatable">
-        <thead>
-            <th>id</th>
-            <th>firstname</th>
-            <th>lastname</th>
-            <th>telephone</th>
-            <th>email</th>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
-<script>
-$(document).ready(function() {
-    var oTable = $('.datatable').dataTable({
-        "processing": true,
-        "serverSide": true,
-        "ajax": "/ksdb/testview/"
-    });
-});
-</script>
 </div>
 {% endblock %}

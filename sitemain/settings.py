@@ -63,7 +63,7 @@ WSGI_APPLICATION = 'sitemain.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mabdb',                      
+        'NAME': 'ksdb',                      
         'USER': 'edrn',
         'PASSWORD': 'edrn',
         'HOST': 'localhost',
