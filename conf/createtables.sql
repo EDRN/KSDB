@@ -165,7 +165,7 @@ CREATE TABLE publication_author_link(
         UNIQUE ( publicationid, personid ));
 
 
-'''Update 8-5-16'''
+--Update 8-5-16
 alter table fundedsite add column status text;
 alter table person add column description text;
 alter table protocol add column shortname text;
