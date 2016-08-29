@@ -2,3 +2,4 @@ Release Notes - Early Detection of Cancer - Version KSDB 0.0.0 - 2016-08-18
 
 ** Improvement
     * [CA-1390] - Release initial KSDB into operations
+    * [CA-1390] - For release into operations, upgraded KSDB for python 3.5 from 2.7
