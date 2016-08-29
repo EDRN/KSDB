@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, protocol_sitecon_link, protocol_irbcon_link, pi_protocol_link, organ_protocol_link, person_degree_link, degree, project, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_project_link, fundedsite_institution_link, organ, IdSeq
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, project, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_project_link, fundedsite_institution_link, organ, IdSeq
 from ksdb.forms import PublicationForm
 
 #import settings
@@ -46,7 +46,7 @@ class Command(BaseCommand):
         if 'organ' in options['rdftype']:
             rdf = self.getorganrdf()
 
-        return rdf
+        return str(rdf)
 
     def getpublicationrdf(self):
         #obj.id, obj.title, obj.authors, obj.pubmedid
@@ -74,20 +74,12 @@ class Command(BaseCommand):
         for pro in list(protocol.objects.all()):
             proi = URIRef(self._protocol[str(pro.id)])
             self._graph.add( (proi, RDF.type, self._edrntype.Protocol) )
-            #sitecontact
-            for ppl in list(protocol_sitecon_link.objects.filter(protocolid=pro.id)):
-                self._graph.add( (proi, self._schema.sitecontact, URIRef(self._person[str(ppl.id)])) )
-            #irbcontact
-            for ppl in list(protocol_irbcon_link.objects.filter(protocolid=pro.id)):
-                self._graph.add( (proi, self._schema.irbcontact, URIRef(self._person[str(ppl.id)])) )
             #pis
             for ppl in list(pi_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.pi, URIRef(self._person[str(ppl.id)])) )
             #organs
             for org in list(organ_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.organ, URIRef(self._organ[str(org.organid)])) )
-            #description
-            self._graph.add( (proi, self._terms.description, Literal(pro.description)) )
             #title
             self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
             #startdate
@@ -100,6 +92,10 @@ class Command(BaseCommand):
             self._graph.add( (proi, self._schema.humanSubjectTraining, Literal(pro.hum_sub_train)) )
             #abstract
             self._graph.add( (proi, self._schema.abstract, Literal(pro.abstract)) )
+            #sitecontact
+            self._graph.add( (proi, self._schema.sitecontact, Literal(pro.site_contact)) )
+            #irbcontact
+            self._graph.add( (proi, self._schema.irbcontact, URIRef(pro.irb_contact)) )
             
         return  self._graph.serialize(format='xml')
 

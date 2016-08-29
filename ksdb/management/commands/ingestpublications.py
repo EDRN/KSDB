@@ -62,17 +62,17 @@ class Command(BaseCommand):
             pub_id = IdSeq.objects.raw("select sequence_name, nextval('publication_seq') from publication_seq")[0].nextval
             
             parameters["id"] = pub_id
-            parameters["title"] = title
-            parameters["authors"] = ", ".join(authors)
-            parameters["pubmedid"] = pmid
-            parameters["pubyear"] = year
-            parameters["journal"] = journal
+            parameters["title"] = title.encode('utf-8').strip()
+            parameters["authors"] = ", ".join(authors).encode('utf-8').strip()
+            parameters["pubmedid"] = pmid.encode('utf-8').strip()
+            parameters["pubyear"] = year.encode('utf-8').strip()
+            parameters["journal"] = journal.encode('utf-8').strip()
             
             publicationm = PublicationForm(parameters)
 
             if publicationm.is_valid():
                     publicationm.save()
-        print "Successfully imported publication from cancerdataexpo rdf."
+        print("Successfully imported publication from cancerdataexpo rdf.")
 
     def _parseRDF(self, graph):
             statements = {}

@@ -1,8 +1,7 @@
 # publishRDF.py
 from django.http import HttpResponse
 from django.core.management import call_command
-from StringIO import StringIO
-from sys import stdout, stderr
+from io import StringIO
 
 #import settings
 import logging
@@ -16,5 +15,10 @@ def publishrdf(request):
         call_command('publishrdfs', rdftype, stdout=rdf)
         rdf.seek(0)
         rdf_resp = rdf.read()
-
-        return HttpResponse(rdf_resp, content_type='text/xml')
+        rdf_resp = rdf_resp.strip()
+        if rdf_resp.startswith("b'"):
+            rdf_resp = rdf_resp[2:]
+        if rdf_resp.endswith("'"):
+            rdf_resp = rdf_resp[:-1]
+        rdf_resp = rdf_resp.replace("\\n", "\n")
+        return HttpResponse(rdf_resp.strip(), content_type='text/xml')

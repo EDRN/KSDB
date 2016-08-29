@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
                 if organm.is_valid():
                     organm.save()
-        print "Successfully imported organs from cancerdataexpo rdf."
+        print("Successfully imported organs from cancerdataexpo rdf.")
 
     def _parseRDF(self, graph):
             statements = {}

@@ -1,7 +1,7 @@
 # protocols.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-import ekeutils
+from ksdb import ekeutils
 import simplejson
 import copy
 
@@ -101,12 +101,9 @@ def delete_protocol(request):
                 #delete person protocol associations
                 pi_protocol_link.objects.filter(protocolid=pro_id).delete()
                 ci_protocol_link.objects.filter(protocolid=pro_id).delete()
+                fundedsite_protocol_link.objects.filter(protocolid=pro_id).delete()
                 #delete organ protocol associations
                 organ_protocol_link.objects.filter(protocolid=pro_id).delete()
-                #delete site contact protocol associations
-                protocol_sitecon_link.objects.filter(protocolid=pro_id).delete()
-                #delete organ protocol associations
-                protocol_irbcon_link.objects.filter(protocolid=pro_id).delete()
                 #delete protocol itself
                 protocol.objects.filter(id=pro_id).delete()
 

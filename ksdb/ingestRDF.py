@@ -1,7 +1,7 @@
 # ingestRDF.py
 from django.http import HttpResponse
 from django.core.management import call_command
-from StringIO import StringIO
+from io import StringIO
 from sys import stdout, stderr
 
 #import settings
@@ -19,4 +19,4 @@ def ingestrdf(request):
         elif rdftype == "person":
             call_command('ingestpersons')
 
-        return HttpResponse({"Success":True}, content_type='json')
+        return HttpResponse("Successful ingestion into KSDB. <br> <a href='/ksdb/view/?tabpage=rdf'>Back to KSDB</a>")

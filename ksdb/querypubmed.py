@@ -65,5 +65,4 @@ def pubmed_query(request):
         else:
             pubmed_resp['QueryArticleDate'] = "No article date found."
         pubmed_resp["Success"] = True
-        print pubmed_resp
     return JsonResponse(pubmed_resp)

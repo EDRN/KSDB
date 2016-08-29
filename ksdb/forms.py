@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm 
 from django import forms
-from models import protocol, person, project, institution, publication, fundedsite, organ, degree
+from ksdb.models import protocol, person, project, institution, publication, fundedsite, organ, degree
 
 
 class ProtocolForm(forms.ModelForm):

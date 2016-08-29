@@ -1,5 +1,6 @@
-from models import person, publication, project, institution, fundedsite, protocol, organ, degree
-from ekeutils import clean_unicode_str, _KSDBhref
+from django.db.models import Q
+from ksdb.models import person, publication, project, institution, fundedsite, protocol, organ, degree
+from ksdb.ekeutils import _KSDBhref
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 class PersonView(BaseDatatableView):
@@ -9,7 +10,7 @@ class PersonView(BaseDatatableView):
     # define the columns that will be returned
     columns = ['Select', 'id', 'firstname', 'lastname', 'telephone', 'email']
 
-    order_columns = ['id']
+    order_columns = ["id",'id', 'firstname', 'lastname', 'telephone', 'email']
     max_display_length = 500
 
     def render_column(self, row, column):
@@ -17,8 +18,18 @@ class PersonView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(PersonView, self).render_column(row, column))
+            obj = super(PersonView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+    def filter_queryset(self, qs):
+        search = self.request.GET.get(u'search[value]', None)
+        if search:
+            qs = qs.filter(Q(firstname__icontains=search) | 
+                           Q(id__icontains=search) | 
+                           Q(lastname__icontains=search) | 
+                           Q(telephone__icontains=search) |
+                           Q(email__icontains=search) )
+        return qs
+
 
 class PublicationView(BaseDatatableView):
     model = publication
@@ -34,7 +45,7 @@ class PublicationView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(PublicationView, self).render_column(row, column))
+            obj = super(PublicationView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 class ProjectView(BaseDatatableView):
@@ -51,7 +62,7 @@ class ProjectView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(ProjectView, self).render_column(row, column))
+            obj = super(ProjectView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 class InstitutionView(BaseDatatableView):
@@ -68,7 +79,7 @@ class InstitutionView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(InstitutionView, self).render_column(row, column))
+            obj = super(InstitutionView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 class FundedSiteView(BaseDatatableView):
@@ -85,7 +96,7 @@ class FundedSiteView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(FundedSiteView, self).render_column(row, column))
+            obj = super(FundedSiteView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 class ProtocolView(BaseDatatableView):
@@ -102,7 +113,7 @@ class ProtocolView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(ProtocolView, self).render_column(row, column))
+            obj = super(ProtocolView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 class OrganView(BaseDatatableView):
@@ -119,7 +130,7 @@ class OrganView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(OrganView, self).render_column(row, column))
+            obj = super(OrganView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 class DegreeView(BaseDatatableView):
@@ -136,7 +147,7 @@ class DegreeView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = clean_unicode_str(super(DegreeView, self).render_column(row, column))
+            obj = super(DegreeView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
 

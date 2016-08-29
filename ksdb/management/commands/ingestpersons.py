@@ -45,7 +45,7 @@ class Command(BaseCommand):
         parameters = {}
         deg_id = IdSeq.objects.raw("select sequence_name, nextval('degree_seq') from degree_seq")[0].nextval
         parameters["id"] = deg_id
-        parameters["title"] = degree
+        parameters["title"] = degree.encode('utf-8').strip()
 
         degreem = DegreeForm(parameters)
         if degreem.is_valid():
@@ -67,11 +67,11 @@ class Command(BaseCommand):
             per_id = None
 
             if len(firstname) > 0:
-                parameters["firstname"] = str(firstname[0].encode('ascii', 'ignore'))
+                parameters["firstname"] = firstname[0].encode('utf-8').strip()
             if len(lastname) > 0:
-                parameters["lastname"] = str(lastname[0].encode('ascii', 'ignore'))
+                parameters["lastname"] = lastname[0].encode('utf-8').strip()
             if len(email) > 0:
-                parameters["email"] = str(email[0].encode('ascii', 'ignore')).replace("mailto:","")
+                parameters["email"] = str(email[0].encode('utf-8').strip()).replace("mailto:","")
 
             existingpers = person.objects.filter(firstname=firstname, lastname=lastname)
             if len(list(existingpers)) > 0:
@@ -81,7 +81,7 @@ class Command(BaseCommand):
 
             if self._phoneURI in personStatements[per]:
                 if len(personStatements[per][self._phoneURI]) > 0:
-                    parameters["telephone"] = str(personStatements[per][self._phoneURI][0])
+                    parameters["telephone"] = personStatements[per][self._phoneURI][0].encode('utf-8').strip()
             degids = []
             if self._degree1URI in personStatements[per]:
                 if len(personStatements[per][self._degree1URI]) > 0:
@@ -104,13 +104,12 @@ class Command(BaseCommand):
             if personm.is_valid():
                 personm.save()
                 for degid in degids:
-                    logger.warn("OKOK")
                     logger.warn(per_id)
                     logger.warn(degid)
                     person_degree_linkm = person_degree_link(personid = per_id, degreeid = int(degid))
                     person_degree_linkm.save()
 
-        print "Successfully imported persons from cancerdataexpo rdf."
+        print("Successfully imported persons from cancerdataexpo rdf into KSDB.")
 
     def _parseRDF(self, graph):
             statements = {}

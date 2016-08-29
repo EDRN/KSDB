@@ -63,9 +63,9 @@ WSGI_APPLICATION = 'sitemain.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ksdb',                      
-        'USER': 'edrn',
-        'PASSWORD': 'edrn',
+        'NAME': '',                      
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '',                      
     }
