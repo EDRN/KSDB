@@ -32,7 +32,7 @@ sudo yum install postgresql94-server postgresql94-devel gcc openldap-devel
     sudo pip install -r conf/dependencies.cfg
 
 # Configure KSDB
-    modify sitemain/settings.py to update DATABASES parameter. Make sure you updated 'name' to ksdb, 'user' to edrn, and 'password' to edrn.
+    modify sitemain/settings.py to update DATABASES parameter. Make sure you updated 'name' to ksdb, 'user' to edrn, 'password' to edrn, and host to localhost.
     python manage.py migrate auth
     python manage.py migrate
     python manage.py createsuperuser (create the user you will be using to login)
