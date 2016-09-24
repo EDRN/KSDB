@@ -1,5 +1,17 @@
-Release Notes - Early Detection of Cancer - Version KSDB 0.0.0 - 2016-08-18
+Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-09-23
+
+** Improvement
+    * [CA-1414] - LDAP not working for KSDB
+
+Release Notes - Early Detection of Cancer - Version KSDB 0.0.1 - 2016-08-25
 
 ** Improvement
     * [CA-1390] - Release initial KSDB into operations
-    * [CA-1390] - For release into operations, upgraded KSDB for python 3.5 from 2.7
+    * [CA-1378] - Feedback of phase 1 changes for GSIS (In Description)
+
+Release Notes - Early Detection of Cancer - Version KSDB 0.0.0 - 2016-08-18
+
+** Improvement
+    * [CA-1390] - For release into operations, upgraded KSDB for pythonA 3.5 from 2.7
+    * [CA-1371] - setup GSIS general study information system
+

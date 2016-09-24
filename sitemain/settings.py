@@ -1,12 +1,38 @@
 # Build paths inside the mabproj like this: os.path.join(BASE_DIR, ...)
 import os
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+
+#LDAP Configurations
+# Baseline configuration.
+AUTH_LDAP_SERVER_URI = ""
+
+AUTH_LDAP_BIND_DN = "[AUTH_LDAP_BIND_DN]"
+AUTH_LDAP_BIND_PASSWORD = "[AUTH_LDAP_BIND_PASSWORD]"
+AUTH_LDAP_USER_SEARCH = LDAPSearch("[AUTH_LDAP_USER_SEARCH]",
+    ldap.SCOPE_ONELEVEL, '(uid=%(user)s)')
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("[AUTH_LDAP_GROUP_SEARCH]",
+    ldap.SCOPE_ONELEVEL, "(objectClass=groupOfUniqueNames)")
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
+
+# Cache group memberships for an hour to minimize LDAP traffic
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+#LDAP Configurations end
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '+0uxcvc6po5ko$)r!0f=t4l6@v*tfv4d*k9cki-==)$%*=)y-w'
+SECRET_KEY = '[SECRET_KEY]'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -21,11 +47,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',
     'ksdb',
     'django_nose',
     'tinymce',
-    'widget_tweaks',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,14 +84,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'sitemain.wsgi.application'
 
 # Database
-# Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
+        'ENGINE': '[ENGINE]',
+        'NAME': '[NAME]',
+        'USER': '[USER]',
+        'PASSWORD': '[PASSWORD]',
+        'HOST': '[HOST]',
         'PORT': '',
     }
 }
@@ -94,11 +117,7 @@ STATIC_ROOT = os.path.join(ESIS_ROOT, 'static')
 #Login settings
 LOGIN_REDIRECT_URL = '/' # It means home view
 
-#Graphing models
-GRAPH_MODELS = {
-  'all_applications': True,
-  'group_models': True,
-}
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Logging Settings
 LOGGING = {
@@ -117,7 +136,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'ksdb.log',
+            'filename': 'mysite.log',
             'formatter': 'verbose'
         },
     },
