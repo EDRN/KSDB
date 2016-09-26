@@ -43,6 +43,8 @@ pip3:
 
 # Configure KSDB
     modify sitemain/settings.py to update DATABASES parameter. Make sure you updated 'name' to ksdb, 'user' to edrn, 'password' to edrn, and host to localhost.
+    *You can use support/set_settings.py to automatically apply a local settings file to the template settings file. The script will write a settings.py in the same directory as the template settings file:
+    **Example: python support/set_settings.py ~/KSDB/settings.tumor.py sitemain/settings.py.in 
     python manage.py migrate auth
     python manage.py migrate
     python manage.py createsuperuser (create the user you will be using to login)
