@@ -10,12 +10,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Baseline configuration.
 AUTH_LDAP_SERVER_URI = ""
 
-AUTH_LDAP_BIND_DN = "uid=admin,ou=system"
-AUTH_LDAP_BIND_PASSWORD = "r.3>Wwj3FLTnFrHZ"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=edrn,dc=jpl,dc=nasa,dc=gov",
+AUTH_LDAP_BIND_DN = "[AUTH_LDAP_BIND_DN]"
+AUTH_LDAP_BIND_PASSWORD = "[AUTH_LDAP_BIND_PASSWORD]"
+AUTH_LDAP_USER_SEARCH = LDAPSearch("[AUTH_LDAP_USER_SEARCH]",
     ldap.SCOPE_ONELEVEL, '(uid=%(user)s)')
 
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch("dc=edrn,dc=jpl,dc=nasa,dc=gov",
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("[AUTH_LDAP_GROUP_SEARCH]",
     ldap.SCOPE_ONELEVEL, "(objectClass=groupOfUniqueNames)")
 AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
 
@@ -32,7 +32,7 @@ AUTHENTICATION_BACKENDS = (
 #LDAP Configurations end
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '+0uxcvc6po5ko$)r!0f=t4l6@v*tfv4d*k9cki-==)$%*=)y-w'
+SECRET_KEY = '[SECRET_KEY]'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'sitemain.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gsis',
-        'USER': 'edrn',
-        'PASSWORD': 'bihudVoag5',
-        'HOST': 'localhost',
+        'ENGINE': '[ENGINE]',
+        'NAME': '[NAME]',
+        'USER': '[USER]',
+        'PASSWORD': '[PASSWORD]',
+        'HOST': '[HOST]',
         'PORT': '',
     }
 }
