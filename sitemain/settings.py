@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'sitemain.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gsis',
+        'NAME': 'mabdb',
         'USER': 'edrn',
-        'PASSWORD': 'bihudVoag5',
+        'PASSWORD': 'edrn',
         'HOST': 'localhost',
         'PORT': '',
     }

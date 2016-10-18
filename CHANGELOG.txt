@@ -3,6 +3,7 @@ Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-09-23
 ** Bug and Improvement
     * [CA-1414] - LDAP not working for KSDB
     * [CA-1415] - Create deployment script for integrating local settings to settings template
+    * [CA-1372] - make ksdb pull local repo of javascript libraries and css instead of CDNs
 
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.1 - 2016-08-25
 
