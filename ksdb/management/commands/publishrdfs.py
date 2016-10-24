@@ -10,17 +10,17 @@ import json
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    _schema = Namespace("http://edrn.nci.nih.gov/rdf/schema.rdf#")
+    _schema = Namespace("http://mcl.jpl.nasa.gov/rdf/schema.rdf#")
     _terms = Namespace("http://purl.org/dc/terms/")
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
-    _edrntype = Namespace("http://edrn.nci.nih.gov/rdf/types.rdf#")
-    _publication = Namespace("http://edrn.nci.nih.gov/data/pubs/")
-    _protocol = Namespace("http://edrn.nci.nih.gov/data/protocols/")
-    _person = Namespace("http://edrn.nci.nih.gov/data/registered-person/")
-    _institution = Namespace("http://edrn.nci.nih.gov/data/institution/")
-    _project = Namespace("http://edrn.nci.nih.gov/data/project/")
-    _organ = Namespace("http://edrn.nci.nih.gov/data/body-systems/")
-    _fundedsite = Namespace("http://edrn.nci.nih.gov/data/sites/")
+    _mcltype = Namespace("http://mcl.jpl.nasa.gov/rdf/types.rdf#")
+    _publication = Namespace("http://mcl.jpl.nasa.gov/data/pubs/")
+    _protocol = Namespace("http://mcl.jpl.nasa.gov/data/protocols/")
+    _person = Namespace("http://mcl.jpl.nasa.gov/data/registered-person/")
+    _institution = Namespace("http://mcl.jpl.nasa.gov/data/institution/")
+    _project = Namespace("http://mcl.jpl.nasa.gov/data/project/")
+    _organ = Namespace("http://mcl.jpl.nasa.gov/data/body-systems/")
+    _fundedsite = Namespace("http://mcl.jpl.nasa.gov/data/sites/")
     _email = Namespace("mailto:")
 
     _graph = None
@@ -53,7 +53,7 @@ class Command(BaseCommand):
 
         for pub in list(publication.objects.all()):
             pubi = URIRef(self._publication[str(pub.id)])
-            self._graph.add( (pubi, RDF.type, self._edrntype.Publication) )
+            self._graph.add( (pubi, RDF.type, self._mcltype.Publication) )
             for ppl in list(publication_author_link.objects.filter(publicationid=pub.id)):
                 per = person.objects.filter(id=ppl.personid)
                 if len(per) > 0:
@@ -73,7 +73,7 @@ class Command(BaseCommand):
     def getprotocolrdf(self):
         for pro in list(protocol.objects.all()):
             proi = URIRef(self._protocol[str(pro.id)])
-            self._graph.add( (proi, RDF.type, self._edrntype.Protocol) )
+            self._graph.add( (proi, RDF.type, self._mcltype.Protocol) )
             #pis
             for ppl in list(pi_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.pi, URIRef(self._person[str(ppl.id)])) )
@@ -102,7 +102,7 @@ class Command(BaseCommand):
     def getpersonrdf(self):
         for per in list(person.objects.all()):
             peri = URIRef(self._person[str(per.id)])
-            self._graph.add( (peri, RDF.type, self._edrntype.Person) )
+            self._graph.add( (peri, RDF.type, self._mcltype.Person) )
             #lastname
             self._graph.add( (peri, self._faof.surname, Literal(per.lastname)) )
             #firstname
@@ -124,7 +124,7 @@ class Command(BaseCommand):
     def getprojectrdf(self):
         for pro in list(project.objects.all()):
             proi = URIRef(self._project[str(pro.id)])
-            self._graph.add( (proi, RDF.type, self._edrntype.Project) )
+            self._graph.add( (proi, RDF.type, self._mcltype.Project) )
             #title
             self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
             #abbreviation
@@ -137,9 +137,9 @@ class Command(BaseCommand):
     def getinstitutionrdf(self):
         for ins in list(institution.objects.all()):
             insi = URIRef(self._institution[str(ins.id)])
-            self._graph.add( (insi, RDF.type, self._edrntype.Institution) )
+            self._graph.add( (insi, RDF.type, self._mcltype.Institution) )
             #name
-            self._graph.add( (insi, self._terms.name, Literal(ins.name)) )
+            self._graph.add( (insi, self._terms.title, Literal(ins.name)) )
             #abbreviation
             self._graph.add( (insi, self._schema.abbreviatedName, Literal(ins.abbreviation)) )
             #description
@@ -157,7 +157,7 @@ class Command(BaseCommand):
     def getfundedsiterdf(self):
         for fun in list(fundedsite.objects.all()):
             funi = URIRef(self._fundedsite[str(fun.id)])
-            self._graph.add( (funi, RDF.type, self._edrntype.FundedSite) )
+            self._graph.add( (funi, RDF.type, self._mcltype.FundedSite) )
             #description
             self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
             #staff
@@ -181,9 +181,9 @@ class Command(BaseCommand):
     def getorganrdf(self):
         for org in list(organ.objects.all()):
             orgi = URIRef(self._organ[str(org.id)])
-            self._graph.add( (orgi, RDF.type, self._edrntype.Organ) )
+            self._graph.add( (orgi, RDF.type, self._mcltype.Organ) )
             #name
-            self._graph.add( (orgi, self._terms.name, Literal(org.name)) )
+            self._graph.add( (orgi, self._terms.title, Literal(org.name)) )
             #description
             self._graph.add( (orgi, self._terms.description, Literal(org.description)) )
 
