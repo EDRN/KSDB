@@ -28,6 +28,3 @@ function startModal(link){
         modal.html(response);
     });
 }
-function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}

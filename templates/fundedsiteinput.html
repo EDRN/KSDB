@@ -30,9 +30,10 @@
                 updateLists("project", "projects");
                 updateLists("organ", "organs");
                 {% ifequal action "Edit" %}
-                    sleep(500).then(() => {
-                        fillfundedsiteform();
-                    });
+                    //sleep(500).then(() => {
+                    //    fillfundedsiteform();
+                    //});
+                    setInterval(fillfundedsiteform, 500);
                 {% endifequal %}
         } );
         </script>

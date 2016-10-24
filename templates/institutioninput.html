@@ -13,9 +13,10 @@
             $(document).ready( function () {
                 updateLists("person", "personnel");
                 {% ifequal action "Edit" %}
-                    sleep(500).then(() => {
-                        fillinstitutionform();
-                    });
+                    //sleep(500).then(() => {
+                    //    fillinstitutionform();
+                    //});
+                    setInterval(fillinstitutionform, 500);
                 {% endifequal %}
         } );
         </script>

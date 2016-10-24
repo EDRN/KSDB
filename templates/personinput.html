@@ -12,9 +12,10 @@
             $(document).ready( function () {
                 updateLists("degree", "degrees");
                 {% ifequal action "Edit" %}
-                    sleep(500).then(() => {
-                        fillpersonform();
-                    });
+                    //sleep(500).then(() => {
+                    //    fillpersonform();
+                    //});
+                    setInterval(fillpersonform, 500);
                 {% endifequal %}
         } );
         </script>
