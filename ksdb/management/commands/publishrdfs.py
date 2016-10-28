@@ -62,7 +62,7 @@ class Command(BaseCommand):
             self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
             self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
             self._graph.add( (pubi, self._terms.pmid, Literal(pub.pubmedid)) )
-            self._graph.add( (pubi, self._schema.year, Literal(pub.pubdate)) )
+            self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
             #missing pubURL
             #missing year from date
             #missing volume

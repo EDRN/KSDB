@@ -179,7 +179,7 @@
             <div class="col-md-12">
                 <center>
                 <button type="button" class="btn btn-success" id="submit-protocol" type="button" >Add</button>
-                <button type="button" class="btn btn-danger" id="cancel-protocol" onClick="window.location = '/ksdb/view?tabpage=protocol';" type="button" >Cancel</button>
+                <button type="button" class="btn btn-danger" id="cancel-protocol" onClick="window.location = '/ksdb/view/?tabpage=protocol';" type="button" >Cancel</button>
                 </center>
             </div>
             </div>
@@ -196,7 +196,7 @@
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);
-                      window.location = '/ksdb/view?tabpage=protocol';
+                      window.location = '/ksdb/view/?tabpage=protocol';
                     }else{
                         $('span.label-danger').remove();
                         jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {

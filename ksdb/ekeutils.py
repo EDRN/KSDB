@@ -35,3 +35,10 @@ def get_eke_list(eketype, filterby=None):
         field.sort(key=lambda x: x[1].lower())
 
     return field
+
+def getPersonNameByID(perid):
+    try:
+        per = person.objects.get(id = perid)
+        return str(per.lastname)+" "+str(per.firstname)
+    except:
+        return None

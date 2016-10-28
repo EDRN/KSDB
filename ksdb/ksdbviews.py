@@ -1,6 +1,6 @@
 from django.db.models import Q
 from ksdb.models import person, publication, project, institution, fundedsite, protocol, organ, degree
-from ksdb.ekeutils import _KSDBhref
+from ksdb.ekeutils import _KSDBhref, getPersonNameByID
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 class PersonView(BaseDatatableView):
@@ -123,6 +123,16 @@ class FundedSiteView(BaseDatatableView):
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
             obj = super(FundedSiteView, self).render_column(row, column)
+            if column == 'pis':
+                pis = []
+                print(str(obj))
+                for per in str(obj).split(","):
+                    perid = getPersonNameByID(per)
+                    if perid:
+                        pis.append(perid)
+                print("OKOK")
+                print(pis)
+                obj = ",".join(pis)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)

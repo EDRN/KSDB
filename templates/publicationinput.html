@@ -81,7 +81,7 @@
             <div class="col-md-12">
             <center>
             <button type="button" class="btn btn-success" id="submit-publication" type="button" >Add</button>
-            <button type="button" class="btn btn-danger" id="cancel-publication" onClick="window.location = '/ksdb/view?tabpage=publication';" type="button" >Cancel</button>
+            <button type="button" class="btn btn-danger" id="cancel-publication" onClick="window.location = '/ksdb/view/?tabpage=publication';" type="button" >Cancel</button>
             </center>
         </div>
     </div>
@@ -98,7 +98,7 @@
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);
-                        window.location = '/ksdb/view?tabpage=publication';
+                        window.location = '/ksdb/view/?tabpage=publication';
                     }else{
                         $('span.label-danger').remove();
                         jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {

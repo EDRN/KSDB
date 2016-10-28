@@ -76,7 +76,7 @@
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);
-                      window.location = '/ksdb/view?tabpage='+obj;
+                      window.location = '/ksdb/view/?tabpage='+obj;
                     }else{
                       alert("Delete failed because:"+response.Message);
                     }
