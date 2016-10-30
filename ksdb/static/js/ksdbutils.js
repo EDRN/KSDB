@@ -8,7 +8,7 @@ function updateselectobjs(objtype, objs) {
 }
 function updateLists(type, ele) {
     $.ajax({
-        url : "/ksdb/ekeapi?action=getobjlist&eketype="+type,
+        url : "/ksdb/ekeapi/?action=getobjlist&eketype="+type,
         type : 'GET',
         success : function (response) {
             updateselectobjs(ele,response.objlist);

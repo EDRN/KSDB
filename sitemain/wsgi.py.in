@@ -7,20 +7,14 @@ For more information on this file, see
 https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 """
 
-import os, sys
-
-sys.stderr.write('\n'.join(sys.path))
-
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#
-# # add the project path into the sys.path
-# sys.path.append(BASE_DIR)
-#
-# # add the virtualenv site-packages path to the sys.path
-# sys.path.append('/home/vagrant/django1.9/lib/python2.7/site-packages')
+import sys
+sys.path.append('/usr/local/edrn/ksdb/current/ksdb')
+sys.path.append('/usr/local/edrn/ksdb/current/')
+sys.path.append('/usr/local/edrn/ksdb/python3.5/lib/python3.5/site-packages')
+import os
 
 from django.core.wsgi import get_wsgi_application
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sitemain.settings")
+os.environ['HTTPS'] = "on"
 
 application = get_wsgi_application()
