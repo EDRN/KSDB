@@ -16,12 +16,16 @@
                 });
 
             }
+            function initfundedsiteinst() {
+                    $('#institutions').val({{institution_link_id}});
+                    var event = new Event('change');
+                    document.getElementById("institutions").dispatchEvent(event);
+            }
             function fillfundedsiteform() {
                     $('#pis').val({{pi_link_id}});
                     $('#staff').val({{staff_link_id}});
                     $('#organs').val({{organ_link_id}});
                     $('#projects').val({{project_link_id}});
-                    $('#institutions').val({{institution_link_id}});
                     $('#description').val("{{description}}");
                     $('#status').val("{{status}}");
             }
@@ -30,10 +34,8 @@
                 updateLists("project", "projects");
                 updateLists("organ", "organs");
                 {% ifequal action "Edit" %}
-                    //sleep(500).then(() => {
-                    //    fillfundedsiteform();
-                    //});
-                    setInterval(fillfundedsiteform, 500);
+                    setTimeout(initfundedsiteinst(), 500);
+                    setTimeout(fillfundedsiteform, 1000);
                 {% endifequal %}
         } );
         </script>

@@ -15,10 +15,7 @@
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}
-                    //sleep(500).then(() => {
-                    //    fillpublicationform();
-                    //});
-                    setInterval(fillpublicationform, 500);
+                    setTimeout(fillpublicationform, 500);
                 {% endifequal %}
         } );
         </script>
