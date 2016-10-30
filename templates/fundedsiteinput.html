@@ -34,7 +34,7 @@
                 updateLists("project", "projects");
                 updateLists("organ", "organs");
                 {% ifequal action "Edit" %}
-                    setTimeout(initfundedsiteinst(), 500);
+                    setTimeout(initfundedsiteinst, 500);
                     setTimeout(fillfundedsiteform, 1000);
                 {% endifequal %}
         } );
