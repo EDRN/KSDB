@@ -27,7 +27,7 @@ def setupTable(frame, objtype):
         newframe.append(frameline)
     return newframe
 
-@login_required(login_url="/login/")
+@login_required(login_url="/ksdb/login/")
 def view_service(request):
     personheaders = ["Select","Person ID", "First Name", "Last Name", "Phone", "Email"]
     protocolheaders = ["Select","Protocol ID", "Title", "Short Name"]

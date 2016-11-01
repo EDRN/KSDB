@@ -54,7 +54,7 @@ def delete_project(request):
 
     return JsonResponse({'Success':success,
                                 'Message':message})
-@login_required(login_url="/login/")
+@login_required(login_url="/ksdb/login/")
 def project_input(request):
     if request.method == 'POST':
 
