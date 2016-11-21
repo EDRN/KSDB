@@ -5,6 +5,7 @@ from ksdb.models import publication, publication_author_link, person, protocol, 
 from ksdb.forms import PublicationForm
 
 #import settings
+from sitemain import settings
 import logging
 import json
 import re
@@ -12,17 +13,19 @@ import re
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    _schema = Namespace("http://mcl.jpl.nasa.gov/rdf/schema.rdf#")
+    _baseurl = settings.SITE_URL
+    _schema = Namespace("http://mcl.pl.nasa.gov/rdf/schema.rdf#")
     _terms = Namespace("http://purl.org/dc/terms/")
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
     _mcltype = Namespace("http://mcl.jpl.nasa.gov/rdf/types.rdf#")
-    _publication = Namespace("http://mcl.jpl.nasa.gov/data/pubs/")
-    _protocol = Namespace("http://mcl.jpl.nasa.gov/data/protocols/")
-    _person = Namespace("http://mcl.jpl.nasa.gov/data/registered-person/")
-    _institution = Namespace("http://mcl.jpl.nasa.gov/data/institution/")
-    _project = Namespace("http://mcl.jpl.nasa.gov/data/project/")
-    _organ = Namespace("http://mcl.jpl.nasa.gov/data/body-systems/")
-    _fundedsite = Namespace("http://mcl.jpl.nasa.gov/data/sites/")
+    _publication = Namespace(_baseurl+"ksdb/publicationinput/?id=")
+    _protocol = Namespace(_baseurl+"ksdb/protocolinput/?id=")
+    _person = Namespace(_baseurl+"ksdb/personinput/?id=")
+    _degree = Namespace(_baseurl+"ksdb/degreeinput/?id=")
+    _institution = Namespace(_baseurl+"ksdb/institutioninput/?id=")
+    _project = Namespace(_baseurl+"ksdb/projectinput/?id=")
+    _organ = Namespace(_baseurl+"ksdb/organinput/?id=")
+    _fundedsite = Namespace(_baseurl+"ksdb/fundedsiteinput/?id=")
     _email = Namespace("mailto:")
 
     _graph = None
@@ -47,6 +50,8 @@ class Command(BaseCommand):
             rdf = self.getpersonrdf()
         if 'organ' in options['rdftype']:
             rdf = self.getorganrdf()
+        if 'degree' in options['rdftype']:
+            rdf = self.getdegreerdf()
 
         return str(rdf)
 
@@ -122,6 +127,17 @@ class Command(BaseCommand):
                 if len(degi) > 0:
                     self._graph.add( (peri, self._schema["degree"+str(degind)], Literal(degi[0].title)) )
                 degind += 1
+
+        return  self._graph.serialize(format='xml')
+
+    def getdegreerdf(self):
+        for deg in list(degree.objects.all()):
+            degi = URIRef(self._degree[str(deg.id)])
+            self._graph.add( (degi, RDF.type, self._mcltype.Degree) )
+            #title
+            self._graph.add( (degi, self._terms.title, Literal(deg.title)) )
+            #description
+            self._graph.add( (degi, self._terms.description, Literal(deg.description)) )
 
         return  self._graph.serialize(format='xml')
 
