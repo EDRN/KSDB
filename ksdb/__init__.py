@@ -1,2 +1,2 @@
-ENTREZ_TOOL           = 'edrn-portal'
-ENTREZ_EMAIL          = 'sean.kelly@nih.gov'
+ENTREZ_TOOL           = 'knowledge-system-database'
+ENTREZ_EMAIL          = 'david.liu@jpl.nasa.gov'

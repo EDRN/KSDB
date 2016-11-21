@@ -12,6 +12,7 @@ Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
     * [CA-1427] - Creating publications by PubMedID gives an error message
     * [CA-1425] - Degree RDF missing
     * [CA-1424] - KSDB RDF subject URIs should be resolvable
+    * [CA-1426] - KSDB needs its own Entrez API key
 
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.1 - 2016-08-25
 
