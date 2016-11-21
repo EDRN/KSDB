@@ -7,6 +7,8 @@ from ksdb.forms import PublicationForm
 #import settings
 import logging
 import json
+import re
+
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
@@ -49,22 +51,24 @@ class Command(BaseCommand):
         return str(rdf)
 
     def getpublicationrdf(self):
-        #obj.id, obj.title, obj.authors, obj.pubmedid
 
         for pub in list(publication.objects.all()):
             pubi = URIRef(self._publication[str(pub.id)])
             self._graph.add( (pubi, RDF.type, self._mcltype.Publication) )
-            for ppl in list(publication_author_link.objects.filter(publicationid=pub.id)):
-                per = person.objects.filter(id=ppl.personid)
-                if len(per) > 0:
-                    name = per[0].firstname+" "+per[0].lastname
-                    self._graph.add( (pubi, self._terms.author, Literal(name)) )
+            #currently not linking authors to internal people database yet, displaying author as text
+            #for ppl in list(publication_author_link.objects.filter(publicationid=pub.id)):
+            #    per = person.objects.filter(id=ppl.personid)
+            #    if len(per) > 0:
+            #        name = per[0].firstname+" "+per[0].lastname
+            #        self._graph.add( (pubi, self._terms.author, Literal(name)) )
+            for pplname in re.split(', | and ',pub.authors):
+                pplname = pplname.strip()
+                if pplname != '':
+                    self._graph.add( (pubi, self._terms.author, Literal(pplname)) )
             self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
             self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
             self._graph.add( (pubi, self._terms.pmid, Literal(pub.pubmedid)) )
             self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
-            #missing pubURL
-            #missing year from date
             #missing volume
             #self._graph.add( (pubi, _schema.pubURL, URIRef("http://cebp.aacrjournals.org/")) )
 

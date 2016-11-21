@@ -7,6 +7,8 @@ Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
     * [CA-1418] - KSDB having javascript issues with Safari
     * [CA-1419] - Display name instead of ids in ksdb main view page
     * [CA-1420] - KSDB JS functions fail in Safari - duplicate
+    * [CA-1429] - When editing an existing item, the button should read "Edit", "OK", or "Submit"; not "Add"
+    * [CA-1428] - Publication RDF gives ProgrammingError
 
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.1 - 2016-08-25
 

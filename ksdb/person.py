@@ -58,7 +58,7 @@ def delete_person(request):
                 #delete institution person associations
                 institution_personnel_link.objects.filter(personid=per_id).delete()
                 #delete publication author associations
-                publication_author_link.objects.filter(personid=per_id).delete()
+                #publication_author_link.objects.filter(personid=per_id).delete()
                 #delete funded site pi associations
                 fundedsite_pi_link.objects.filter(personid=per_id).delete()
                 #delete fundedsite staff associations

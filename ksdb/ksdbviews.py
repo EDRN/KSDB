@@ -125,13 +125,10 @@ class FundedSiteView(BaseDatatableView):
             obj = super(FundedSiteView, self).render_column(row, column)
             if column == 'pis':
                 pis = []
-                print(str(obj))
                 for per in str(obj).split(","):
                     perid = getPersonNameByID(per)
                     if perid:
                         pis.append(perid)
-                print("OKOK")
-                print(pis)
                 obj = ",".join(pis)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
     def filter_queryset(self, qs):
