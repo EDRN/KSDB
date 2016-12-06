@@ -1,6 +1,11 @@
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
 
 ** Bug and Improvement
+    * [CA-1442] - Setup Autocomplete when adding members to Institutions
+    * [CA-1443] - Pubmed Query not working
+    * [CA-1444] - List names instead of IDs for participating site list
+    * [CA-1445] - Setup Autocomplete for adding people to protocols
+    * [CA-1446] - KSDB Cosmetics touchup
     * [CA-1414] - LDAP not working for KSDB
     * [CA-1415] - Create deployment script for integrating local settings to settings template
     * [CA-1372] - make ksdb pull local repo of javascript libraries and css instead of CDNs

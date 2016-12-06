@@ -21,14 +21,12 @@ def save_institution_links(ins_id, request):
     personnel = request.POST.getlist('personnel')
     institution_personnel_link.objects.filter(institutionid=ins_id).delete()
     for per in personnel:
-        institution_personnel_linkm = institution_personnel_link(institutionid = ins_id, personid = per)
+        per_split = per.split(":")
+        institution_personnel_linkm = institution_personnel_link(institutionid = ins_id, personid = per_split[0])
         institution_personnel_linkm.save()
 
 def gen_institution_data(request):
-    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
-    personfield.sort(key=lambda x: x[1].lower())
     data = {"action" : "New" ,
-            "personnel" : personfield,
            }
     if request.method == 'GET':
         institutionid = request.GET.get('id')
@@ -40,8 +38,7 @@ def gen_institution_data(request):
                     "department" : obj.department,
                     "abbreviation" : obj.abbreviation,
                     "url" : obj.url,
-                    "person_link_id": [ ipl.personid for ipl in list(institution_personnel_link.objects.filter(institutionid=int(institutionid))) ],
-                    "personnel" : personfield,
+                    "person_link_id": ",".join([ str(ipl.personid)+":"+person.objects.filter(id=ipl.personid)[0].firstname+" "+person.objects.filter(id=ipl.personid)[0].lastname for ipl in list(institution_personnel_link.objects.filter(institutionid=int(institutionid))) ]),
                     "description" : obj.description,
                    }
     return data

@@ -8,10 +8,17 @@
                     $('#abbreviation').val("{{abbreviation}}".split(","));
                     $('#url').val("{{url}}");
                     $('#description').html("{{description}}");
-                    $('#personnel').val({{person_link_id}});
+                    var person_array = "{{person_link_id}}".split(',');
+                    for(var i = 0; i < person_array.length; i++) {
+                        person_array[i] = person_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(person_array[i] != ""){
+                            var $option = $('<option value="'+person_array[i]+'" selected></option>');
+                            $('#personnel').append($option);
+                        }
+                    }
             }
             $(document).ready( function () {
-                updateLists("person", "personnel");
+                setAutocompleteList('personnel','person');
                 {% ifequal action "Edit" %}
                     setTimeout(fillinstitutionform, 500);
                 {% endifequal %}
@@ -19,7 +26,7 @@
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Institution {{ id }}</H2>
+            <H2>{{ action }} Institution: {{ name }}</H2>
             <p>
                 Please update the KSDB database with accurate institution information.
             </p>

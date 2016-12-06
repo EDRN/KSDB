@@ -94,6 +94,7 @@ def gen_fundedsite_data(request):
                     "staffs" : personfield ,
                     "organs" : organfield ,
                     "projects" : projectfield ,
+                    "name" : obj.name ,
                     "institutions" : institutionfield ,
                     "status" : obj.status ,
                    }

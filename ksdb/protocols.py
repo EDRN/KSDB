@@ -23,14 +23,16 @@ def save_protocol_links(pro_id, request):
     pilist = request.POST.getlist('pis')
     pi_protocol_link.objects.filter(protocolid=pro_id).delete()
     for per in pilist:
-        pi_protocol_linkm = pi_protocol_link(protocolid = pro_id, personid = per)
+        per_split = per.split(":")
+        pi_protocol_linkm = pi_protocol_link(protocolid = pro_id, personid = per_split[0])
         pi_protocol_linkm.save()
 
     #delete and save new person protocol associations
     cilist = request.POST.getlist('cis')
     ci_protocol_link.objects.filter(protocolid=pro_id).delete()
     for per in cilist:
-        ci_protocol_linkm = ci_protocol_link(protocolid = pro_id, personid = per)
+        per_split = per.split(":")
+        ci_protocol_linkm = ci_protocol_link(protocolid = pro_id, personid = per_split[0])
         ci_protocol_linkm.save()
 
     #delete and save new fundedsite protocol associations
@@ -49,9 +51,6 @@ def save_protocol_links(pro_id, request):
 
 def gen_protocol_data(request):
 
-    #personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
-    #organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
-    #fundedsitefield = [ [str(obj.id), str(obj.id)] for obj in list(fundedsite.objects.all()) ]
     personfield = ekeutils.get_eke_list("person")
     organfield = ekeutils.get_eke_list("organ")
     fundedsitefield = ekeutils.get_eke_list("fundedsite")
@@ -75,8 +74,8 @@ def gen_protocol_data(request):
                     "title" : obj.title,
                     "shortname" : obj.shortname,
                     "organ_link_id" : [ opl.organid for opl in list(organ_protocol_link.objects.filter(protocolid=int(protocolid))) ],
-                    "pi_link_id" : [ ppl.personid for ppl in list(pi_protocol_link.objects.filter(protocolid=int(protocolid))) ],
-                    "ci_link_id" : [ ppl.personid for ppl in list(ci_protocol_link.objects.filter(protocolid=int(protocolid))) ],
+                    "pi_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(pi_protocol_link.objects.filter(protocolid=int(protocolid))) ]),
+                    "ci_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(ci_protocol_link.objects.filter(protocolid=int(protocolid))) ]),
                     "fundedsite_link_id" : [ fun.fundedsiteid for fun in list(fundedsite_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "start_date" : str(obj.start_date),
                     "irb_approval" : obj.irb_approval,

@@ -187,3 +187,6 @@ CREATE TABLE ci_protocol_link(
         UNIQUE ( protocolid, personid ));
 
 alter table person alter column telephone type text;
+
+--Update 12-5-16
+alter table fundedsite add column name text;

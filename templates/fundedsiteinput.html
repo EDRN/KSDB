@@ -24,15 +24,17 @@
             function fillfundedsiteform() {
                     $('#pis').val({{pi_link_id}});
                     $('#staff').val({{staff_link_id}});
-                    $('#organs').val({{organ_link_id}});
+                    $('#organs').select2().val({{organ_link_id}}).trigger("change");
                     $('#projects').val({{project_link_id}});
                     $('#description').val("{{description}}");
                     $('#status').val("{{status}}");
+                    $('#name').val("{{name}}");
             }
             $(document).ready( function () {
                 updateLists("institution", "institutions");
                 updateLists("project", "projects");
                 updateLists("organ", "organs");
+                $('#organs').select2();
                 {% ifequal action "Edit" %}
                     setTimeout(initfundedsiteinst, 500);
                     setTimeout(fillfundedsiteform, 1000);
@@ -41,7 +43,7 @@
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Participating Site {{ id }}</H2>
+            <H2>{{ action }} Participating Site: {{ name }}</H2>
             <p>
                 Please update the KSDB database with accurate participating site information.
             </p>
@@ -52,6 +54,10 @@
             <form id="fundedsiteinput" action="/ksdb/fundedsiteinput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="col-md-6">
+                <fieldset class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Participating Site Name"> 
+                </fieldset>
                 <fieldset class="form-group">
                 <label for="status">Status</label>
                 <select class="form-control" id="status" name="status">

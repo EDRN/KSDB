@@ -18,6 +18,32 @@ function updateLists(type, ele) {
         }
     });
 }
+function setAutocompleteList(id, type){
+    $('#'+id).select2({
+        minimumInputLength: 1,
+        ajax: {
+            url : "/ksdb/ekeapi/?action=getobjlist&eketype="+type,
+            type : 'GET',
+            dataType: 'json',
+            data: function (params) {
+              return {
+                filter: params.term, // search term
+                page: params.page
+              };
+            },
+            processResults: function (data, page) {
+              return {
+                results: data.objlist,
+              };
+            },
+        },templateResult: function (option) {
+            return option.id;
+        },
+        templateSelection: function (option) {
+            return option.id;
+        }
+    });
+}
 function startModal(link){
     var modal = $('#modal');
     $.ajax({
@@ -27,4 +53,12 @@ function startModal(link){
     }).done(function(response) {
         modal.html(response);
     });
+}
+function getTodayDate(){
+    var d = new Date();
+    var month = d.getMonth();
+    var day = d.getDate();
+    var year = d.getFullYear();
+
+    return new Date(year, month, day, 00, 00);
 }

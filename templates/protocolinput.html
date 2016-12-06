@@ -8,9 +8,7 @@
         <script>
             function fillprotocolform() {
                     $('#title').val("{{title}}");
-                    $('#organs').val({{organ_link_id}});
-                    $('#pis').val({{pi_link_id}});
-                    $('#cis').val({{ci_link_id}});
+                    $('#organs').select2().val({{organ_link_id}}).trigger("change");
                     $('#fundedsites').val({{fundedsite_link_id}});
                     $('#start_date').val("{{start_date}}");
                     $('#site_contact').val("{{site_contact}}");
@@ -22,13 +20,31 @@
                     $('input:radio[name=hum_sub_train]').filter('[value="{{hum_sub_train}}"]').prop('checked', true);
                     $('#abstract').val("{{abstract}}");
                     $('#shortname').val("{{shortname}}");
+                    var pis_array = "{{pi_link_id}}".split(',');
+                    for(var i = 0; i < pis_array.length; i++) {
+                        pis_array[i] = pis_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(pis_array[i] != ""){
+                            var $option = $('<option value="'+pis_array[i]+'" selected></option>');
+                            $('#pis').append($option);
+                        }
+                    }
+                    var cis_array = "{{ci_link_id}}".split(',');
+                    for(var i = 0; i < cis_array.length; i++) {
+                        cis_array[i] = cis_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(cis_array[i] != ""){
+                            var $option = $('<option value="'+cis_array[i]+'" selected></option>');
+                            $('#cis').append($option);
+                        }
+                    }
             }
             $(document).ready( function () {
                 $('#protocolstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
-                updateLists("person", "pis");
-                updateLists("person", "cis");
+                $('#protocolstart').data('DateTimePicker').date(getTodayDate());
                 updateLists("organ", "organs");
                 updateLists("fundedsite", "fundedsites");
+                setAutocompleteList('pis','person');
+                setAutocompleteList('cis','person');
+                $('#organs').select2();
                 {% ifequal action "Edit" %}
                     setTimeout(fillprotocolform, 500);
                 {% endifequal %}
@@ -36,7 +52,7 @@
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Protocol {{ id }}</H2>
+            <H2>{{ action }} Protocol: {{ title }}</H2>
             <p>
                 Please update the KSDB database with accurate protocol information.
             </p>
@@ -75,16 +91,13 @@
                 <select multiple class="form-control" size=14 id="cis" name="cis">
                 </select>
                 </fieldset>
-                </div>
-                <div class="col-md-6">
                 <fieldset class="form-group">
-                <label for="shortname">Short Name</label>
-                <input type="text" class="form-control" name="shortname" id="shortname" placeholder="Enter Short Name">
+                  <label for="irb_contact">IRB Contact Name</label>
+                  <input type="text" class="form-control" id="irb_contact" name="irb_contact" placeholder="Enter IRB Contact Name">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="fundedsites">Participating Sites <a data-toggle="modal" id="addfundedsite" data-target="#modal" onclick="startModal(this)" target="fundedsites" href="fundedsite">(Add Site)</a></label>
-                <select multiple class="form-control" size=13 id="fundedsites" name="fundedsites">
-                </select>
+                  <label for="irb_contact_email">IRB Contact Email</label>
+                  <input type="text" class="form-control" id="irb_contact_email" name="irb_contact_email" placeholder="Enter IRB Contact Email">
                 </fieldset>
                 <fieldset class="form-group">
                   <label for="site_contact">Site Contact</label>
@@ -93,6 +106,17 @@
                 <fieldset class="form-group">
                   <label for="site_contact_email">Site Contact Email</label>
                   <input type="text" class="form-control" id="site_contact_email" name="site_contact_email" placeholder="Enter Site Contact Email">
+                </fieldset>
+                </div>
+                <div class="col-md-6">
+                <fieldset class="form-group">
+                <label for="shortname">Short Name</label>
+                <input type="text" class="form-control" name="shortname" id="shortname" placeholder="Enter Short Name">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="fundedsites">Participating Sites <a data-toggle="modal" id="addfundedsite" data-target="#modal" onclick="startModal(this)" target="fundedsites" href="fundedsite">(Add Site)</a></label>
+                <select multiple class="form-control" size=14 id="fundedsites" name="fundedsites">
+                </select>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="irb_approval">IRB Approval</label>
@@ -118,14 +142,6 @@
                 <fieldset class="form-group">
                   <label for="irb_approval_num">Approval #</label>
                   <input type="text" class="form-control" id="irb_approval_num" name="irb_approval_num" placeholder="Enter Approval #">
-                </fieldset>
-                <fieldset class="form-group">
-                  <label for="irb_contact">IRB Contact Name</label>
-                  <input type="text" class="form-control" id="irb_contact" name="irb_contact" placeholder="Enter IRB Contact Name">
-                </fieldset>
-                <fieldset class="form-group">
-                  <label for="irb_contact_email">IRB Contact Email</label>
-                  <input type="text" class="form-control" id="irb_contact_email" name="irb_contact_email" placeholder="Enter IRB Contact Email">
                 </fieldset>
                 <fieldset class="form-group">
                   <label for="hum_sub_train">Human Subjects Training</label>

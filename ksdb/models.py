@@ -7,10 +7,10 @@ class protocol(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
     shortname = models.CharField(max_length=128)
-    organs = models.CharField(max_length=1000)
+    organs = models.CharField(max_length=1000, blank=True, null=True)
     fundedsites = models.CharField(max_length=1000)
     pis = models.CharField(max_length=1000)
-    cis = models.CharField(max_length=1000)
+    cis = models.CharField(max_length=1000, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
     site_contact = models.CharField(max_length=500, blank=True, null=True)
     site_contact_email = models.CharField(max_length=500, blank=True, null=True)
@@ -126,6 +126,7 @@ class publication_author_link(models.Model):
 #Fundedsite related models
 class fundedsite(models.Model):
     id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=500)
     pis = models.CharField(max_length=500)
     status = models.CharField(max_length=500)
     organs = models.CharField(max_length=500, blank=True, null=True)
