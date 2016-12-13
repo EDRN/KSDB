@@ -3,7 +3,7 @@ from Bio import Entrez
 
 # Allow external command processing
 from django.http import JsonResponse
-from ksdb import ENTREZ_EMAIL
+from ksdb import ENTREZ_EMAIL, ENTREZ_TOOL
 
 #import settings
 import logging
@@ -14,6 +14,7 @@ def pubmed_query(request):
     if request.method == 'GET':
         pubmed_id = request.GET.get('pubmed_id')
         Entrez.email = ENTREZ_EMAIL
+        Entrez.tool = ENTREZ_TOOL
         handle = Entrez.efetch(db='pubmed',retmode='xml',rettype='medline',id=pubmed_id)
         records = Entrez.read(handle)
         handle.close()
