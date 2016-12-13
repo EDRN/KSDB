@@ -83,6 +83,16 @@ def publication_input(request):
             publicationi = publication.objects.get(id=pub_id)
             publicationm = PublicationForm(parameters or None, instance=publicationi)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    publication.objects.get(pubmedid=parameters['pubmedid'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"pubmedid":["This pubmed id has already been registered."]}'})
+                except publication.DoesNotExist:
+                    pass
+                except publication.MultipleObjectsReturned:
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"pubmedid":["This pubmed id has already been registered."]}'})        
             pub_id = IdSeq.objects.raw("select sequence_name, nextval('publication_seq') from publication_seq")[0].nextval
             parameters["id"] = pub_id
             publicationm = PublicationForm(parameters)

@@ -55,7 +55,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         g = rdflib.Graph()
         result = g.parse(self.personurl)
-
+        imported_count = 0
         personStatements = self._parseRDF(g)
         for per in personStatements:
             if self._firstnameURI not in personStatements[per] or self._lastnameURI not in personStatements[per] or self._mboxURI not in personStatements[per]:
@@ -108,8 +108,9 @@ class Command(BaseCommand):
                     logger.warn(degid)
                     person_degree_linkm = person_degree_link(personid = per_id, degreeid = int(degid))
                     person_degree_linkm.save()
+                imported_count += 1
 
-        print("Successfully imported persons from cancerdataexpo rdf into KSDB.")
+        logger.info("Successfully imported {} persons from cancerdataexpo rdf into KSDB.".format(imported_count))
 
     def _parseRDF(self, graph):
             statements = {}

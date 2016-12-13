@@ -112,9 +112,9 @@ class FundedSiteView(BaseDatatableView):
     model = fundedsite
     objtype = "fundedsite"
     # define the columns that will be returned
-    columns = ['Select', 'id', 'pis', 'status', 'description']
+    columns = ['Select', 'id', 'name', 'pis', 'status', 'description']
 
-    order_columns = ['id', 'id', 'pis', 'status', 'description']
+    order_columns = ['id', 'id', 'name', 'pis', 'status', 'description']
     max_display_length = 500
 
     def render_column(self, row, column):
@@ -136,6 +136,7 @@ class FundedSiteView(BaseDatatableView):
         if search:
             qs = qs.filter(Q(pis__icontains=search) |
                            Q(id__icontains=search) |
+                           Q(name__icontains=search) |
                            Q(status__icontains=search) |
                            Q(description__icontains=search))
         return qs

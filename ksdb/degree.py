@@ -67,6 +67,16 @@ def degree_input(request):
             degreei = degree.objects.get(id=org_id)
             degreem = DegreeForm(parameters or None, instance=degreei)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    degree.objects.get(title=parameters['title'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"title":["This degree has already been registered."]}'})
+                except degree.DoesNotExist:
+                    pass
+                except degree.MultipleObjectsReturned:
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"title":["This degree has already been registered."]}'})
             org_id = IdSeq.objects.raw("select sequence_name, nextval('degree_seq') from degree_seq")[0].nextval
             parameters["id"] = org_id
             degreem = DegreeForm(parameters)

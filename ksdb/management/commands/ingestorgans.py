@@ -19,21 +19,33 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         g = rdflib.Graph()
         result = g.parse(self.organurl)
-
+        imported_count = 0
         organStatements = self._parseRDF(g)
         for body in organStatements:
             for title in organStatements[body][self._bodySystemTitle]:
-                parameters = {}
-                org_id = IdSeq.objects.raw("select sequence_name, nextval('organ_seq') from organ_seq")[0].nextval
-                parameters["id"] = org_id
-                parameters["name"] = title
-                parameters["description"] = ""
-                organm = OrganForm(parameters)
+                if not self._exists(title):
+                    parameters = {}
+                    org_id = IdSeq.objects.raw("select sequence_name, nextval('organ_seq') from organ_seq")[0].nextval
+                    parameters["id"] = org_id
+                    parameters["name"] = title
+                    parameters["description"] = ""
+                    organm = OrganForm(parameters)
 
-                if organm.is_valid():
-                    organm.save()
-        print("Successfully imported organs from cancerdataexpo rdf.")
-
+                    if organm.is_valid():
+                        organm.save()
+                        imported_count += 1
+        logger.info("Successfully imported {} organs from cancerdataexpo rdf.".format(imported_count))
+    def _exists(self, name):
+        #returns true if no object exist, returns false if one or more object exist
+        exist = True
+        try:
+            organ.objects.get(name=name)
+        except organ.DoesNotExist:
+            exist = False
+            pass
+        except organ.MultipleObjectsReturned:
+            pass
+        return exist
     def _parseRDF(self, graph):
             statements = {}
             for s, p, o in graph:

@@ -130,6 +130,17 @@ def protocol_input(request):
             protocoli = protocol.objects.get(id=pro_id)
             protocolm = ProtocolForm(parameters or None, instance=protocoli)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    protocol.objects.get(title=parameters['title'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"title":["There is already a protocol with the same title."]}'})
+                except protocol.DoesNotExist:
+                    pass
+                except protocol.MultipleObjectsReturned:
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"title":["There is already a protocol with the same title."]}'})
+
             pro_id = IdSeq.objects.raw("select sequence_name, nextval('protocol_seq') from protocol_seq")[0].nextval
             parameters["id"] = pro_id
             protocolm = ProtocolForm(parameters)

@@ -10,8 +10,9 @@ from ksdb.models import project, fundedsite_project_link
 
 # Allow external command processing
 from django.http import JsonResponse
-from ksdb.forms import ProjectForm
 
+from ksdb.forms import ProjectForm
+from django.forms import ValidationError
 #import settings
 import logging
 logger = logging.getLogger(__name__)
@@ -70,6 +71,13 @@ def project_input(request):
             projecti = project.objects.get(id=pro_id)
             projectm = ProjectForm(parameters or None, instance=projecti)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    project.objects.get(title=parameters['title'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"title":["There is already a project with the same title."]}'})
+                except project.DoesNotExist:
+                    pass
             pro_id = IdSeq.objects.raw("select sequence_name, nextval('project_seq') from project_seq")[0].nextval
             parameters["id"] = pro_id
             projectm = ProjectForm(parameters)

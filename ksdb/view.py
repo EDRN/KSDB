@@ -32,7 +32,7 @@ def view_service(request):
     personheaders = ["Select","Person ID", "First Name", "Last Name", "Phone", "Email"]
     protocolheaders = ["Select","Protocol ID", "Title", "Short Name"]
     publicationheaders = ["Select","Publication ID", "Title", "Author", "Pubmed ID", "Year"]
-    fundedsiteheaders = ["Select","Part. Site ID", "PIs", "Status", "Description"]
+    fundedsiteheaders = ["Select","Part. Site ID", "Name", "PIs", "Status", "Description"]
     institutionheaders = ["Select","Institution ID", "Name", "Abbreviation"]
     projectheaders = ["Select","Project ID", "Title", "Abbreviation"]
     organheaders = ["Select","Organ ID", "Name"]

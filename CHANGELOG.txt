@@ -18,6 +18,7 @@ Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
     * [CA-1425] - Degree RDF missing
     * [CA-1424] - KSDB RDF subject URIs should be resolvable
     * [CA-1426] - KSDB needs its own Entrez API key
+    * [CA-1448] - Display warning when registering duplicate. Also ensure rdf ingestion checks for duplicates.
 
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.1 - 2016-08-25
 

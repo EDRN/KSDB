@@ -82,6 +82,13 @@ def institution_input(request):
             institutioni = institution.objects.get(id=ins_id)
             institutionm = InstitutionForm(parameters or None, instance=institutioni)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    institution.objects.get(name=parameters['name'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"name":["There is already a institution with the same name."]}'})
+                except institution.DoesNotExist:
+                    pass
             ins_id = IdSeq.objects.raw("select sequence_name, nextval('institution_seq') from institution_seq")[0].nextval
             parameters["id"] = ins_id
             institutionm = InstitutionForm(parameters)

@@ -12,6 +12,7 @@
                     $('#journal').val("{{journal}}");
                     $('#pubyear').val("{{pubyear}}");
                     $('#pubmedid').val("{{pubmedid}}");
+                    $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}
@@ -50,6 +51,11 @@
                 <fieldset class="form-group">
                   <label for="pubyear">Publication Year</label>
                   <input type='number' class="form-control" id='pubyear' name='pubyear' />
+                </fieldset>
+                <fieldset>
+                    <div class="checkbox">
+                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    </div>
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
@@ -91,7 +97,7 @@
                 $.ajax({
                 url : publicationform.attr('action'),
                 type : 'POST',
-                data : publicationform.serialize(),
+                data : publicationform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);

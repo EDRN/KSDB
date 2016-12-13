@@ -36,6 +36,7 @@
                             $('#cis').append($option);
                         }
                     }
+                    $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
                 $('#protocolstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
@@ -188,6 +189,11 @@
             </form>
             <div class="col-md-12">
                 <font color="red"><center><div id="results"></div></center></font>
+                <fieldset>
+                    <div class="checkbox">
+                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    </div>
+                </fieldset>
             </div>
             <div class="col-md-12">
                 <center>
@@ -205,7 +211,7 @@
                 $.ajax({
                 url : protocolform.attr('action'),
                 type : 'POST',
-                data : protocolform.serialize(),
+                data : protocolform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);

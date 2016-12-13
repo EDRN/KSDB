@@ -8,6 +8,7 @@
                 $('#email').val("{{email}}");
                 $('#telephone').val("{{telephone}}");
                 $('#description').html("{{description}}");
+                $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
                 updateLists("degree", "degrees");
@@ -63,6 +64,11 @@
                     <textarea class="form-control" name="description" id="description" rows="5"></textarea>
                     <small class="text-muted">Describe your personnel.</small>
                     </fieldset>
+                    <fieldset>
+                    <div class="checkbox">
+                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    </div>
+                    </fieldset>
                 </div>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
@@ -94,7 +100,7 @@
                 $.ajax({
                 url : personform.attr('action'),
                 type : 'POST',
-                data : personform.serialize(),
+                data : personform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);

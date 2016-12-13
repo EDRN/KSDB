@@ -29,6 +29,7 @@
                     $('#description').val("{{description}}");
                     $('#status').val("{{status}}");
                     $('#name').val("{{name}}");
+                    $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
                 updateLists("institution", "institutions");
@@ -96,6 +97,10 @@
                 <select multiple class="form-control" size=7 id="organs" name="organs">
                 </select>
                 </fieldset>
+                <div class="checkbox">
+                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    </div>
+                </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="fundedsiteid" value="{{id}}">
@@ -125,7 +130,7 @@
             $.ajax({
                 url : fundedsiteform.attr('action'),
                 type : 'POST',
-                data : fundedsiteform.serialize(),
+                data : fundedsiteform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);

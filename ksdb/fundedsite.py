@@ -146,6 +146,13 @@ def fundedsite_input(request):
             fundedsitei = fundedsite.objects.get(id=fun_id)
             fundedsitem = FundedsiteForm(parameters or None, instance=fundedsitei)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    fundedsite.objects.get(name=parameters['name'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"name":["There is already a participating site with the same name."]}'})
+                except fundedsite.DoesNotExist:
+                    pass
             fun_id = IdSeq.objects.raw("select sequence_name, nextval('fundedsite_seq') from fundedsite_seq")[0].nextval
             parameters["id"] = fun_id
             fundedsitem = FundedsiteForm(parameters)

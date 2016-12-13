@@ -91,6 +91,17 @@ def person_input(request):
             personi = person.objects.get(id=per_id)
             personm = PersonForm(parameters or None, instance=personi)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    person.objects.get(firstname=parameters['firstname'], lastname=parameters['lastname'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"firstname":["There is already a person with the same first and last name."],"lastname":["There is already a person with the same first and last name."]}'})
+                except person.DoesNotExist:
+                    pass
+                except person.MultipleObjectsReturned:
+                    return JsonResponse({'Success':False,
+                        'Message':'{"firstname":["There is already a person with the same first and last name."],"lastname":["There is already a person with the same first and last name."]}'})
+
             per_id = IdSeq.objects.raw("select sequence_name, nextval('person_seq') from person_seq")[0].nextval
             parameters["id"] = per_id
             personm = PersonForm(parameters)

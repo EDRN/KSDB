@@ -4,6 +4,7 @@
             function fillorganform() {
                     $('#name').val("{{name}}");
                     $('#description').html("{{description}}");
+                    $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}fillorganform();{% endifequal %}
@@ -28,6 +29,11 @@
                 <label for="description">Organ Description</label>
                 <textarea class="form-control" name="description" id="description" rows="5"></textarea>
                 <small class="text-muted">Describe your organ.</small>
+                </fieldset>
+                <fieldset>
+                    <div class="checkbox">
+                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    </div>
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
@@ -59,7 +65,7 @@
                 $.ajax({
                 url : organform.attr('action'),
                 type : 'POST',
-                data : organform.serialize(),
+                data : organform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);

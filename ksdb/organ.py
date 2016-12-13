@@ -69,6 +69,16 @@ def organ_input(request):
             organi = organ.objects.get(id=org_id)
             organm = OrganForm(parameters or None, instance=organi)
         else:
+            if (request.POST.get('duplicate') == 'false'):
+                try:
+                    organ.objects.get(name=parameters['name'])
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"name":["This organ name has already been registered."]}'})
+                except organ.DoesNotExist:
+                    pass
+                except organ.MultipleObjectsReturned:
+                    return JsonResponse({'Success':False,
+                                        'Message':'{"name":["This organ name has already been registered."]}'})
             org_id = IdSeq.objects.raw("select sequence_name, nextval('organ_seq') from organ_seq")[0].nextval
             parameters["id"] = org_id
             organm = OrganForm(parameters)
