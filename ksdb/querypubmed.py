@@ -20,14 +20,17 @@ def pubmed_query(request):
         handle.close()
 
         pubmed_resp = {}
-        if len(records) == 0:
+        if 'PubmedArticle' not in records:
             return JsonResponse({"Success":False, "Message":"No pubmed entries found."})
-        if 'MedlineCitation' not in records[0]:
+        if len(records['PubmedArticle']) == 0:
             return JsonResponse({"Success":False, "Message":"No pubmed entries found."})
-        if 'Article' not in records[0]['MedlineCitation']:
+        record = records['PubmedArticle'][0]
+        if 'MedlineCitation' not in record:
+            return JsonResponse({"Success":False, "Message":"No pubmed entries found."})
+        if 'Article' not in record['MedlineCitation']:
             return JsonResponse({"Success":False, "Message":"No pubmed entries found."})
 
-        article = records[0]['MedlineCitation']['Article']
+        article = record['MedlineCitation']['Article']
 
         if 'AuthorList' in article:
             authors = []
