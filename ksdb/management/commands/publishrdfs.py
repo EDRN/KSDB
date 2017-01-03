@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     _baseurl = settings.SITE_URL
-    _schema = Namespace("http://mcl.pl.nasa.gov/rdf/schema.rdf#")
+    _schema = Namespace("https://mcl.jpl.nasa.gov/rdf/schema.rdf#")
     _terms = Namespace("http://purl.org/dc/terms/")
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
-    _mcltype = Namespace("http://mcl.jpl.nasa.gov/rdf/types.rdf#")
+    _mcltype = Namespace("https://mcl.jpl.nasa.gov/rdf/types.rdf#")
     _publication = Namespace(_baseurl+"ksdb/publicationinput/?id=")
     _protocol = Namespace(_baseurl+"ksdb/protocolinput/?id=")
     _person = Namespace(_baseurl+"ksdb/personinput/?id=")
