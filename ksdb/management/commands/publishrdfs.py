@@ -178,6 +178,8 @@ class Command(BaseCommand):
         for fun in list(fundedsite.objects.all()):
             funi = URIRef(self._fundedsite[str(fun.id)])
             self._graph.add( (funi, RDF.type, self._mcltype.FundedSite) )
+            #name
+            self._graph.add( (funi, self._terms.title, Literal(fun.name)) )
             #description
             self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
             #staff
