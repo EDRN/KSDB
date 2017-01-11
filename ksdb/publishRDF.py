@@ -21,4 +21,4 @@ def publishrdf(request):
         if rdf_resp.endswith("'"):
             rdf_resp = rdf_resp[:-1]
         rdf_resp = rdf_resp.replace("\\n", "\n")
-        return HttpResponse(rdf_resp.strip(), content_type='text/xml')
+        return HttpResponse(rdf_resp.strip(), content_type='application/rdf+xml')
