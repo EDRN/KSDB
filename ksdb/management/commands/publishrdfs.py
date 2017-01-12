@@ -104,7 +104,7 @@ class Command(BaseCommand):
             #sitecontact
             self._graph.add( (proi, self._schema.sitecontact, Literal(pro.site_contact)) )
             #irbcontact
-            self._graph.add( (proi, self._schema.irbcontact, URIRef(pro.irb_contact)) )
+            self._graph.add( (proi, self._schema.irbcontact, URIRef(self._email[pro.irb_contact])) )
             
         return  self._graph.serialize(format='xml')
 

@@ -13,11 +13,11 @@ class protocol(models.Model):
     cis = models.CharField(max_length=1000, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
     site_contact = models.CharField(max_length=500, blank=True, null=True)
-    site_contact_email = models.CharField(max_length=500, blank=True, null=True)
+    site_contact_email = models.EmailField(max_length=500, blank=True, null=True)
     irb_approval = models.CharField(max_length=128)
     irb_approval_num = models.CharField(max_length=128, blank=True, null=True)
     irb_contact = models.CharField(max_length=500, blank=True, null=True)
-    irb_contact_email = models.CharField(max_length=500, blank=True, null=True)
+    irb_contact_email = models.EmailField(max_length=500, blank=True, null=True)
     hum_sub_train = models.CharField(max_length=128)
     abstract = models.CharField(max_length=500, blank=True, null=True)
 
@@ -64,7 +64,7 @@ class person(models.Model):
     firstname = models.CharField(max_length=128)
     lastname = models.CharField(max_length=128)
     degrees = models.IntegerField(blank=True, null=True)
-    email = models.CharField(max_length=128)
+    email = models.EmailField(max_length=128)
     telephone = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
 
