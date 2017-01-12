@@ -1,7 +1,9 @@
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
 
 ** Bug and Improvement
-    * [CA=1464] - Content-type header should be application/rdf+xml
+    * [CA-1468] - KSDB RDF publication uses incorrect namespace for pmid
+    * [CA-1465] - KSDB Person RDF incorrect predicate for degrees
+    * [CA-1464] - Content-type header should be application/rdf+xml
     * [CA-1455] - Publication namespace using the wrong URI
     * [CA-1456] - Organ RDF Urls refer to edrn-dev
     * [CA-1442] - Setup Autocomplete when adding members to Institutions

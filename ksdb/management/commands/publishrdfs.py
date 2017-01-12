@@ -72,7 +72,7 @@ class Command(BaseCommand):
                     self._graph.add( (pubi, self._terms.author, Literal(pplname)) )
             self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
             self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
-            self._graph.add( (pubi, self._terms.pmid, Literal(pub.pubmedid)) )
+            self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
             self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
             #missing volume
             #self._graph.add( (pubi, _schema.pubURL, URIRef("http://cebp.aacrjournals.org/")) )
@@ -121,12 +121,8 @@ class Command(BaseCommand):
             #phone
             self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
             #degree
-            degind = 1
             for deg in list(person_degree_link.objects.filter(personid=per.id)):
-                degi = degree.objects.filter(id=deg.degreeid)
-                if len(degi) > 0:
-                    self._graph.add( (peri, self._schema["degree"+str(degind)], Literal(degi[0].title)) )
-                degind += 1
+                self._graph.add( (peri, self._schema.degree, URIRef(self._degree[str(deg.degreeid)]) ))
 
         return  self._graph.serialize(format='xml')
 
