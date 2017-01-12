@@ -88,7 +88,7 @@ class institution(models.Model):
     name = models.CharField(max_length=128)
     department = models.CharField(max_length=128, blank=True, null=True)
     abbreviation = models.CharField(max_length=128, blank=True, null=True)
-    url = models.CharField(max_length=500, blank=True, null=True)
+    url = models.URLField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     personnel = models.CharField(max_length=500)
 
