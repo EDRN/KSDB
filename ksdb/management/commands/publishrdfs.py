@@ -69,7 +69,7 @@ class Command(BaseCommand):
             for pplname in re.split(', | and ',pub.authors):
                 pplname = pplname.strip()
                 if pplname != '':
-                    self._graph.add( (pubi, self._terms.author, Literal(pplname)) )
+                    self._graph.add( (pubi, self._schema.author, Literal(pplname)) )
             self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
             self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
             self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
@@ -100,7 +100,7 @@ class Command(BaseCommand):
             #human subject training
             self._graph.add( (proi, self._schema.humanSubjectTraining, Literal(pro.hum_sub_train)) )
             #abstract
-            self._graph.add( (proi, self._schema.abstract, Literal(pro.abstract)) )
+            self._graph.add( (proi, self._terms.abstract, Literal(pro.abstract)) )
             #sitecontact
             self._graph.add( (proi, self._schema.sitecontact, Literal(pro.site_contact)) )
             #irbcontact
@@ -166,7 +166,7 @@ class Command(BaseCommand):
             self._graph.add( (insi, self._faof.homepage, URIRef(ins.url)) )
             #personnel member
             for ppl in list(institution_personnel_link.objects.filter(institutionid=ins.id)):
-                self._graph.add( (insi, self._schema.member, URIRef(self._person[str(ppl.personid)])) )
+                self._graph.add( (insi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
 
         return  self._graph.serialize(format='xml')
 
