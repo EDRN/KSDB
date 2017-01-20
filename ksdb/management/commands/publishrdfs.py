@@ -161,7 +161,7 @@ class Command(BaseCommand):
             #description
             self._graph.add( (insi, self._terms.description, Literal(ins.description)) )
             #department
-            self._graph.add( (insi, self._terms.department, Literal(ins.department)) )
+            self._graph.add( (insi, self._schema.department, Literal(ins.department)) )
             #url
             self._graph.add( (insi, self._faof.homepage, URIRef(ins.url)) )
             #personnel member
