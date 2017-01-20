@@ -163,7 +163,7 @@ class Command(BaseCommand):
             #department
             self._graph.add( (insi, self._terms.department, Literal(ins.department)) )
             #url
-            self._graph.add( (insi, self._faof.homepage, Literal(ins.url)) )
+            self._graph.add( (insi, self._faof.homepage, URIRef(ins.url)) )
             #personnel member
             for ppl in list(institution_personnel_link.objects.filter(institutionid=ins.id)):
                 self._graph.add( (insi, self._schema.member, URIRef(self._person[str(ppl.personid)])) )
