@@ -1,6 +1,7 @@
 Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
 
 ** Bug and Improvement
+    * [CA-1432] - KSDB list of modifications
     * [CA-1466] - KSDB institution RDF uses unknown predicate for URL
     * [CA-1467] - KSDB protocol RDF using relative URIs
     * [CA-1468] - KSDB RDF publication uses incorrect namespace for pmid

@@ -59,3 +59,10 @@ def getPersonNameByID(perid):
         return str(per.lastname)+" "+str(per.firstname)
     except:
         return None
+
+def getProjectTitleByID(proid):
+    try:
+        pro = project.objects.get(id = proid)
+        return str(pro.title)
+    except:
+        return None

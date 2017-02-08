@@ -1,6 +1,6 @@
 from django.db.models import Q
 from ksdb.models import person, publication, project, institution, fundedsite, protocol, organ, degree
-from ksdb.ekeutils import _KSDBhref, getPersonNameByID
+from ksdb.ekeutils import _KSDBhref, getPersonNameByID, getProjectTitleByID
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 class PersonView(BaseDatatableView):
@@ -112,9 +112,9 @@ class FundedSiteView(BaseDatatableView):
     model = fundedsite
     objtype = "fundedsite"
     # define the columns that will be returned
-    columns = ['Select', 'id', 'name', 'pis', 'status', 'description']
+    columns = ['Select', 'id', 'name', 'projects', 'pis', 'status', 'description']
 
-    order_columns = ['id', 'id', 'name', 'pis', 'status', 'description']
+    order_columns = ['id', 'id', 'name', 'projects', 'pis', 'status', 'description']
     max_display_length = 500
 
     def render_column(self, row, column):
@@ -130,12 +130,20 @@ class FundedSiteView(BaseDatatableView):
                     if perid:
                         pis.append(perid)
                 obj = ",".join(pis)
+            if column == 'projects':
+                projects = []
+                for pro in str(obj).split(","):
+                    proid = getProjectTitleByID(pro)
+                    if proid:
+                        projects.append(proid)
+                obj = ",".join(projects)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
             qs = qs.filter(Q(pis__icontains=search) |
                            Q(id__icontains=search) |
+                           Q(projects__icontains=search) |
                            Q(name__icontains=search) |
                            Q(status__icontains=search) |
                            Q(description__icontains=search))

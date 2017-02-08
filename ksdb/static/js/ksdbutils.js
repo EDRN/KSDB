@@ -1,9 +1,21 @@
 function updateselectobjs(objtype, objs) {
+    var selected = $('#'+objtype).val();
     $('#'+objtype).html("");
-    $.each(objs, function(key, value) { 
-        $('#'+objtype).append($("<option></option>")
-            .attr("value",value[0])
-            .text(value[1])); 
+    $.each(objs, function(key, value) {
+        addedflag = 0;
+        $.each(selected, function(selkey, selvalue) {
+            if(value.join(":")  == selvalue){
+                $('#'+objtype).append($("<option selected></option>")
+                .attr("value",value.join(":"))
+                .text(value[1]));
+                addedflag = 1;
+            }
+        });
+        if (addedflag == 0){
+            $('#'+objtype).append($("<option></option>")
+                .attr("value",value[0])
+                .text(value[1]));
+        }
     });
 }
 function updateLists(type, ele) {

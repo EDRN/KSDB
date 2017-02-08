@@ -64,7 +64,7 @@ class person(models.Model):
     firstname = models.CharField(max_length=128)
     lastname = models.CharField(max_length=128)
     degrees = models.IntegerField(blank=True, null=True)
-    email = models.EmailField(max_length=128)
+    email = models.EmailField(max_length=128, blank=True, null=True)
     telephone = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
 
@@ -90,7 +90,7 @@ class institution(models.Model):
     abbreviation = models.CharField(max_length=128, blank=True, null=True)
     url = models.URLField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    personnel = models.CharField(max_length=500)
+    personnel = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
         db_table = u'institution'

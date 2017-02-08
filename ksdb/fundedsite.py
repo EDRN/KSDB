@@ -143,6 +143,10 @@ def fundedsite_input(request):
             fun_id = int(request.POST.get('fundedsiteid'))
             message = "You have successfull edited fundedsite "+str(fun_id)+"."
             parameters["id"] = fun_id
+            projects = request.POST.getlist('projects')
+            parameters['projects'] = ", ".join(projects)
+            pis = request.POST.getlist('pis')
+            parameters['pis'] = ", ".join(pis)
             fundedsitei = fundedsite.objects.get(id=fun_id)
             fundedsitem = FundedsiteForm(parameters or None, instance=fundedsitei)
         else:
