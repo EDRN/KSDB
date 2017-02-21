@@ -213,7 +213,7 @@ CREATE TABLE protocol_publication_link(
         publicationid int references publication(id),
         protocolid int references protocol(id),
         UNIQUE ( publicationid, protocolid ));
-alter table protocol add column data_custodian text;
+alter table protocol add column data_custodians text;
 CREATE TABLE protocol_custodian_link(
         id serial NOT NULL,
         personid int references person(id),
@@ -228,7 +228,7 @@ CREATE TABLE collabgroup(
         programs text,
         PRIMARY KEY( id )
     );
-CREATE SEQUENCE collabgroup_seq START 1;
+CREATE SEQUENCE group_seq START 1;
 
 CREATE TABLE group_member_link(
         id serial NOT NULL,
