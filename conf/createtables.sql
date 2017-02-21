@@ -42,7 +42,7 @@ CREATE TABLE person(
        PRIMARY KEY( id )
     );
 
-CREATE TABLE project(
+CREATE TABLE program(
         id serial NOT NULL,
         title text,
         abbreviation text,
@@ -51,7 +51,7 @@ CREATE TABLE project(
     );
 
 
-CREATE SEQUENCE project_seq START 1;
+CREATE SEQUENCE program_seq START 1;
 
 
 CREATE TABLE institution(
@@ -74,7 +74,7 @@ CREATE TABLE fundedsite(
         description text,
         organs text,
         pis text,
-        projects text,
+        programs text,
         institutions text,
         staff text,
         PRIMARY KEY( id )
@@ -147,11 +147,11 @@ CREATE TABLE fundedsite_staff_link(
         personid int references person(id),
         UNIQUE ( fundedsiteid, personid ));
 
-CREATE TABLE fundedsite_project_link(
+CREATE TABLE fundedsite_program_link(
         id serial NOT NULL,
         fundedsiteid int references fundedsite(id),
-        projectid int references project(id),
-        UNIQUE ( fundedsiteid, projectid ));
+        programid int references program(id),
+        UNIQUE ( fundedsiteid, programid ));
 
 CREATE TABLE fundedsite_institution_link(
         id serial NOT NULL,
@@ -190,3 +190,68 @@ alter table person alter column telephone type text;
 
 --Update 12-5-16
 alter table fundedsite add column name text;
+
+
+--Update 2-17-17
+CREATE SEQUENCE program_seq START 3;
+alter table fundedsite_project_link rename to fundedsite_program_link;
+alter table project rename to program;
+alter table fundedsite rename column projects to programs;
+alter table fundedsite_program_link rename column projectid to programid;
+
+alter table fundedsite add column contacts text;
+CREATE TABLE con_fundedsite_link(
+        id serial NOT NULL,
+        fundedsiteid int references fundedsite(id),
+        personid int references person(id),
+        UNIQUE ( fundedsiteid, personid ));
+alter table fundedsite add column funding_date_start timestamp;
+alter table fundedsite add column funding_date_finish timestamp;
+alter table protocol add column publications text;
+CREATE TABLE protocol_publication_link(
+        id serial NOT NULL,
+        publicationid int references publication(id),
+        protocolid int references protocol(id),
+        UNIQUE ( publicationid, protocolid ));
+alter table protocol add column data_custodian text;
+CREATE TABLE protocol_custodian_link(
+        id serial NOT NULL,
+        personid int references person(id),
+        protocolid int references protocol(id),
+        UNIQUE ( personid, protocolid ));
+
+CREATE TABLE collabgroup(
+        id serial NOT NULL,
+        name text,
+        description text,
+        members text,
+        programs text,
+        PRIMARY KEY( id )
+    );
+CREATE SEQUENCE collabgroup_seq START 1;
+
+CREATE TABLE group_member_link(
+        id serial NOT NULL,
+        groupid int references collabgroup(id),
+        personid int references person(id),
+        UNIQUE ( groupid, personid ));
+
+CREATE TABLE group_program_link(
+        id serial NOT NULL,
+        groupid int references collabgroup(id),
+        programid int references program(id),
+        UNIQUE ( groupid, programid ));
+
+CREATE TABLE disease(
+        id int,
+        icd10 text,
+        description text,
+        PRIMARY KEY( id ));
+CREATE SEQUENCE disease_seq START 1;
+
+CREATE TABLE disease_protocol_link(
+        id serial NOT NULL,
+        diseaseid int references disease(id),
+        protocolid int references protocol(id),
+        UNIQUE ( diseaseid, protocolid ));
+

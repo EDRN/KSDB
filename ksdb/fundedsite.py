@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import fundedsite, fundedsite_pi_link, fundedsite_staff_link, fundedsite_organ_link, fundedsite_institution_link, fundedsite_project_link, person, organ, project, institution,institution_personnel_link
+from ksdb.models import fundedsite, fundedsite_pi_link, con_fundedsite_link, fundedsite_staff_link, fundedsite_organ_link, fundedsite_institution_link, fundedsite_program_link, person, organ, program, institution,institution_personnel_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -33,6 +33,13 @@ def save_fundedsite_links(fun_id, request):
         fundedsite_pi_linkm = fundedsite_pi_link(fundedsiteid = fun_id, personid = per)
         fundedsite_pi_linkm.save()
 
+    #delete and save new contact fundedsite associations
+    contacts = request.POST.getlist('contacts')
+    con_fundedsite_link.objects.filter(fundedsiteid=fun_id).delete()
+    for per in contacts:
+        per_split = per.split(":")
+        con_fundedsite_linkm = con_fundedsite_link(fundedsiteid = fun_id, personid = per_split[0])
+        con_fundedsite_linkm.save()
 
     #delete and save new person fundedsite associations
     staffs = request.POST.getlist('staff')
@@ -48,12 +55,12 @@ def save_fundedsite_links(fun_id, request):
         fundedsite_organ_linkm = fundedsite_organ_link(fundedsiteid = fun_id, organid = org)
         fundedsite_organ_linkm.save()
 
-    #delete and save new project fundedsite associations
-    projects = request.POST.getlist('projects')
-    fundedsite_project_link.objects.filter(fundedsiteid=fun_id).delete()
-    for pro in projects:
-        fundedsite_project_linkm = fundedsite_project_link(fundedsiteid = fun_id, projectid = pro)
-        fundedsite_project_linkm.save()
+    #delete and save new program fundedsite associations
+    programs = request.POST.getlist('programs')
+    fundedsite_program_link.objects.filter(fundedsiteid=fun_id).delete()
+    for pro in programs:
+        fundedsite_program_linkm = fundedsite_program_link(fundedsiteid = fun_id, programid = pro)
+        fundedsite_program_linkm.save()
 
     #delete and save new institution fundedsite associations
     institutions = request.POST.getlist('institutions')
@@ -64,16 +71,17 @@ def save_fundedsite_links(fun_id, request):
 
 def gen_fundedsite_data(request):
     organfield = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
-    projectfield = [ [str(obj.id), str(obj.title)] for obj in list(project.objects.all()) ]
+    programfield = [ [str(obj.id), str(obj.title)] for obj in list(program.objects.all()) ]
     institutionfield = [ [str(obj.id), str(obj.name)] for obj in list(institution.objects.all()) ]
     organfield.sort(key=lambda x: x[1].lower())
-    projectfield.sort(key=lambda x: x[1].lower())
+    programfield.sort(key=lambda x: x[1].lower())
     institutionfield.sort(key=lambda x: x[1].lower())
     data = {"action" : "New" ,
         "pis" : [] ,
+        "contacts" : [] ,
         "staffs" : [] ,
         "organs" : organfield ,
-        "projects" : projectfield ,
+        "programs" : programfield ,
         "institutions" : institutionfield ,
        }
     if request.method == 'GET':
@@ -86,15 +94,19 @@ def gen_fundedsite_data(request):
                     "id" : obj.id,
                     "description" : obj.description,
                     "pi_link_id" : [ fpl.personid for fpl in list(fundedsite_pi_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
+                    "contact_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(con_fundedsite_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]),
                     "staff_link_id" : [ fsl.personid for fsl in list(fundedsite_staff_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "organ_link_id" : [ fol.organid for fol in list(fundedsite_organ_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
-                    "project_link_id" : [ fpl.projectid for fpl in list(fundedsite_project_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
+                    "program_link_id" : [ fpl.programid for fpl in list(fundedsite_program_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "institution_link_id" : institutionids,
                     "pis" : personfield ,
+                    "contacts" : personfield ,
                     "staffs" : personfield ,
                     "organs" : organfield ,
-                    "projects" : projectfield ,
+                    "programs" : programfield ,
                     "name" : obj.name ,
+                    "funding_date_start" : str(obj.funding_date_start),
+                    "funding_date_finish" : str(obj.funding_date_finish),
                     "institutions" : institutionfield ,
                     "status" : obj.status ,
                    }
@@ -110,12 +122,14 @@ def delete_fundedsite(request):
             for fun_id in ids:
                 #delete pi fundedsite associations
                 fundedsite_pi_link.objects.filter(fundedsiteid=fun_id).delete()
+                #delete contact fundedsite associations
+                con_fundedsite_link.objects.filter(fundedsiteid=fun_id).delete()
                 #delete staff fundedsite associations
                 fundedsite_staff_link.objects.filter(fundedsiteid=fun_id).delete()
-                #delete organ contact fundedsite associations
+                #delete organ fundedsite associations
                 fundedsite_organ_link.objects.filter(fundedsiteid=fun_id).delete()
-                #delete project fundedsite associations
-                fundedsite_project_link.objects.filter(fundedsiteid=fun_id).delete()
+                #delete program fundedsite associations
+                fundedsite_program_link.objects.filter(fundedsiteid=fun_id).delete()
                 #delete institution fundedsite associations
                 fundedsite_institution_link.objects.filter(fundedsiteid=fun_id).delete()
                 #delete fundedsite itself
@@ -143,10 +157,12 @@ def fundedsite_input(request):
             fun_id = int(request.POST.get('fundedsiteid'))
             message = "You have successfull edited fundedsite "+str(fun_id)+"."
             parameters["id"] = fun_id
-            projects = request.POST.getlist('projects')
-            parameters['projects'] = ", ".join(projects)
+            programs = request.POST.getlist('programs')
+            parameters['programs'] = ", ".join(programs)
             pis = request.POST.getlist('pis')
             parameters['pis'] = ", ".join(pis)
+            contacts = request.POST.getlist('contacts')
+            parameters['contacts'] = ", ".join(contacts)
             fundedsitei = fundedsite.objects.get(id=fun_id)
             fundedsitem = FundedsiteForm(parameters or None, instance=fundedsitei)
         else:

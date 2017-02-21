@@ -3,29 +3,29 @@
 {% block content %}
 <!DOCTYPE html>
         <script>
-            function fillprojectform() {
+            function fillprogramform() {
                     $('#title').val("{{title}}");
                     $('#abbreviation').val("{{abbreviation}}");
                     $('#description').html("{{description}}");
                     $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
-                {% ifequal action "Edit" %}fillprojectform();{% endifequal %}
+                {% ifequal action "Edit" %}fillprogramform();{% endifequal %}
         } );
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Project: {{title}}</H2>
+            <H2>{{ action }} Program: {{title}}</H2>
             <p>
-                Please update the KSDB database with accurate project information.
+                Please update the KSDB database with accurate program information.
             </p>
             <br>
         </div>
         <div class="col-md-12">
-            <form id="projectinput" action="/ksdb/projectinput/" method="post" enctype="multipart/form-data">
+            <form id="programinput" action="/ksdb/programinput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <fieldset class="form-group">
-                <label for="title">Project Title</label>
+                <label for="title">Program Title</label>
                 <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title">
                 </fieldset>
                 <fieldset class="form-group">
@@ -33,9 +33,9 @@
                 <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Abbreviation">
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="description">Project Description</label>
+                <label for="description">Program Description</label>
                 <textarea class="form-control" name="description" id="description" rows="5"></textarea>
-                <small class="text-muted">Describe your project.</small>
+                <small class="text-muted">Describe your program.</small>
                 </fieldset>
                 <fieldset>
                     <div class="checkbox">
@@ -44,7 +44,7 @@
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
-                <input type="hidden" name="projectid" value="{{id}}">
+                <input type="hidden" name="programid" value="{{id}}">
                 {% endifequal %}
                 {% ifequal action "New" %}
                 <input type="hidden" name="action" value="new">
@@ -56,8 +56,8 @@
             </div>
             <div class="col-md-12">
                 <center>
-                <button type="button" class="btn btn-success" id="submit-project" type="button" >{{ action }}</button>
-                <button type="button" class="btn btn-danger" onClick="window.location = '/ksdb/view/?tabpage=project';" id="cancel-project" type="button" >Cancel</button>
+                <button type="button" class="btn btn-success" id="submit-program" type="button" >{{ action }}</button>
+                <button type="button" class="btn btn-danger" onClick="window.location = '/ksdb/view/?tabpage=program';" id="cancel-program" type="button" >Cancel</button>
                 </center>
             </div>
             </div>
@@ -65,18 +65,17 @@
     </div>
 
     <script>
-        var submitButton = document.querySelector("#submit-project")
-        var projectform = $('#projectinput');
-        //var removeButton = document.querySelector("#cancel-project")
+        var submitButton = document.querySelector("#submit-program")
+        var programform = $('#programinput');
             submitButton.addEventListener("click", function () {
                 $.ajax({
-                url : projectform.attr('action'),
+                url : programform.attr('action'),
                 type : 'POST',
-                data : projectform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
+                data : programform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                       alert(response.Message);
-                      window.location = '/ksdb/view/?tabpage=project';
+                      window.location = '/ksdb/view/?tabpage=program';
                     }else{
                         $('span.label-danger').remove();
                         jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {

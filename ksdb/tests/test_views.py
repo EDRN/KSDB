@@ -113,3 +113,5 @@ class ViewTests(TestCase):
         self.assertIn('Organs', resp.content)
         self.assertIn('Degrees', resp.content)
         self.assertIn('KSDB RDFs', resp.content)
+        self.assertIn('Diseases', resp.content)
+        self.assertIn('Collaborative Groups', resp.content)

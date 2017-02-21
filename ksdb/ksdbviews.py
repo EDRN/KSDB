@@ -1,6 +1,6 @@
 from django.db.models import Q
-from ksdb.models import person, publication, project, institution, fundedsite, protocol, organ, degree
-from ksdb.ekeutils import _KSDBhref, getPersonNameByID, getProjectTitleByID
+from ksdb.models import person, publication, program, institution, fundedsite, protocol, organ, degree, group, disease
+from ksdb.ekeutils import _KSDBhref, getPersonNameByID, getProgramTitleByID
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 class PersonView(BaseDatatableView):
@@ -57,9 +57,9 @@ class PublicationView(BaseDatatableView):
                            Q(pubyear__icontains=search) )
         return qs
 
-class ProjectView(BaseDatatableView):
-    model = project
-    objtype = "project"
+class ProgramView(BaseDatatableView):
+    model = program
+    objtype = "program"
     # define the columns that will be returned
     columns = ['Select', 'id', 'title', 'abbreviation']
 
@@ -71,7 +71,7 @@ class ProjectView(BaseDatatableView):
         if column == 'Select':
             return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
         else:
-            obj = super(ProjectView, self).render_column(row, column)
+            obj = super(ProgramView, self).render_column(row, column)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
 
     def filter_queryset(self, qs):
@@ -108,13 +108,54 @@ class InstitutionView(BaseDatatableView):
         return qs
 
 
+class GroupView(BaseDatatableView):
+    model = group
+    objtype = "group"
+    # define the columns that will be returned
+    columns = ['Select', 'id', 'name', 'programs', 'members']
+
+    order_columns = ['id', 'id', 'name', 'programs', 'members']
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # We want to render user as a custom column
+        if column == 'Select':
+            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+        else:
+            obj = super(GroupView, self).render_column(row, column)
+            if column == 'members':
+                members = []
+                for per in str(obj).split(","):
+                    perid = getPersonNameByID(per)
+                    if perid:
+                        members.append(perid)
+                obj = ",".join(members)
+            if column == 'programs':
+                programs = []
+                for pro in str(obj).split(","):
+                    proid = getProgramTitleByID(pro)
+                    if proid:
+                        programs.append(proid)
+                obj = ",".join(programs)
+            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get(u'search[value]', None)
+        if search:
+            qs = qs.filter(Q(members__icontains=search) |
+                           Q(id__icontains=search) |
+                           Q(programs__icontains=search) |
+                           Q(name__icontains=search) |
+                           Q(description__icontains=search))
+        return qs
+
 class FundedSiteView(BaseDatatableView):
     model = fundedsite
     objtype = "fundedsite"
     # define the columns that will be returned
-    columns = ['Select', 'id', 'name', 'projects', 'pis', 'status', 'description']
+    columns = ['Select', 'id', 'name', 'programs', 'pis', 'status', 'description']
 
-    order_columns = ['id', 'id', 'name', 'projects', 'pis', 'status', 'description']
+    order_columns = ['id', 'id', 'name', 'programs', 'pis', 'status', 'description']
     max_display_length = 500
 
     def render_column(self, row, column):
@@ -130,20 +171,20 @@ class FundedSiteView(BaseDatatableView):
                     if perid:
                         pis.append(perid)
                 obj = ",".join(pis)
-            if column == 'projects':
-                projects = []
+            if column == 'programs':
+                programs = []
                 for pro in str(obj).split(","):
-                    proid = getProjectTitleByID(pro)
+                    proid = getProgramTitleByID(pro)
                     if proid:
-                        projects.append(proid)
-                obj = ",".join(projects)
+                        programs.append(proid)
+                obj = ",".join(programs)
             return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
             qs = qs.filter(Q(pis__icontains=search) |
                            Q(id__icontains=search) |
-                           Q(projects__icontains=search) |
+                           Q(programs__icontains=search) |
                            Q(name__icontains=search) |
                            Q(status__icontains=search) |
                            Q(description__icontains=search))
@@ -171,6 +212,29 @@ class ProtocolView(BaseDatatableView):
             qs = qs.filter(Q(title__icontains=search) |
                            Q(id__icontains=search) |
                            Q(shortname__icontains=search))
+        return qs
+
+class DiseaseView(BaseDatatableView):
+    model = disease
+    objtype = "disease"
+    # define the columns that will be returned
+    columns = ['Select', 'id', 'icd10']
+
+    order_columns = ['id', 'id', 'icd10']
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # We want to render user as a custom column
+        if column == 'Select':
+            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+        else:
+            obj = super(DiseaseView, self).render_column(row, column)
+            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+    def filter_queryset(self, qs):
+        search = self.request.GET.get(u'search[value]', None)
+        if search:
+            qs = qs.filter(Q(icd10__icontains=search) |
+                           Q(id__icontains=search))
         return qs
 
 class OrganView(BaseDatatableView):

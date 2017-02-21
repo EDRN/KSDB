@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, project, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_project_link, fundedsite_institution_link, organ, IdSeq
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq
 from ksdb.forms import PublicationForm
 
 #import settings
@@ -23,7 +23,7 @@ class Command(BaseCommand):
     _person = Namespace(_baseurl+"ksdb/personinput/?id=")
     _degree = Namespace(_baseurl+"ksdb/degreeinput/?id=")
     _institution = Namespace(_baseurl+"ksdb/institutioninput/?id=")
-    _project = Namespace(_baseurl+"ksdb/projectinput/?id=")
+    _program = Namespace(_baseurl+"ksdb/programinput/?id=")
     _organ = Namespace(_baseurl+"ksdb/organinput/?id=")
     _fundedsite = Namespace(_baseurl+"ksdb/fundedsiteinput/?id=")
     _email = Namespace("mailto:")
@@ -40,8 +40,8 @@ class Command(BaseCommand):
             rdf = self.getpublicationrdf()
         if 'protocol' in options['rdftype']:
             rdf = self.getprotocolrdf()
-        if 'project' in options['rdftype']:
-            rdf = self.getprojectrdf()
+        if 'program' in options['rdftype']:
+            rdf = self.getprogramrdf()
         if 'institution' in options['rdftype']:
             rdf = self.getinstitutionrdf()
         if 'fundedsite' in options['rdftype']:
@@ -86,9 +86,15 @@ class Command(BaseCommand):
             #pis
             for ppl in list(pi_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.pi, URIRef(self._person[str(ppl.id)])) )
+            #custodian
+            for ppl in list(protocol_custodian_link.objects.filter(protocolid=pro.id)):
+                self._graph.add( (proi, self._schema.custodian, URIRef(self._person[str(ppl.id)])) )
             #organs
             for org in list(organ_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.organ, URIRef(self._organ[str(org.organid)])) )
+            #publications
+            for pub in list(protocol_publication_link.objects.filter(protocolid=pro.id)):
+                self._graph.add( (proi, self._schema.publication, URIRef(self._publication[str(pub.publicationid)])) )
             #title
             self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
             #startdate
@@ -137,10 +143,10 @@ class Command(BaseCommand):
 
         return  self._graph.serialize(format='xml')
 
-    def getprojectrdf(self):
-        for pro in list(project.objects.all()):
-            proi = URIRef(self._project[str(pro.id)])
-            self._graph.add( (proi, RDF.type, self._mcltype.Project) )
+    def getprogramrdf(self):
+        for pro in list(program.objects.all()):
+            proi = URIRef(self._program[str(pro.id)])
+            self._graph.add( (proi, RDF.type, self._mcltype.Program) )
             #title
             self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
             #abbreviation
@@ -178,18 +184,25 @@ class Command(BaseCommand):
             self._graph.add( (funi, self._terms.title, Literal(fun.name)) )
             #description
             self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
+            #funding start date
+            self._graph.add( (funi, self._schema.fundingStartDate, Literal(fun.funding_date_start)) )
+            #funding finish date
+            self._graph.add( (funi, self._schema.fundingFinishDate, Literal(fun.funding_date_finish)) )
             #staff
             for ppl in list(fundedsite_staff_link.objects.filter(fundedsiteid=fun.id)):
                 self._graph.add( (funi, self._schema.staff, URIRef(self._person[str(ppl.personid)])) )
             #pis
             for ppl in list(fundedsite_pi_link.objects.filter(fundedsiteid=fun.id)):
                 self._graph.add( (funi, self._schema.pi, URIRef(self._person[str(ppl.personid)])) )
+            #contacts
+            for ppl in list(con_fundedsite_link.objects.filter(fundedsiteid=fun.id)):
+                self._graph.add( (funi, self._schema.contact, URIRef(self._person[str(ppl.personid)])) )
             #organs
             for org in list(fundedsite_organ_link.objects.filter(fundedsiteid=fun.id)):
                 self._graph.add( (funi, self._schema.organ, URIRef(self._organ[str(org.organid)])) )
-            #projects
-            for pro in list(fundedsite_project_link.objects.filter(fundedsiteid=fun.id)):
-                self._graph.add( (funi, self._schema.project, URIRef(self._project[str(pro.projectid)])) )
+            #programs
+            for pro in list(fundedsite_program_link.objects.filter(fundedsiteid=fun.id)):
+                self._graph.add( (funi, self._schema.program, URIRef(self._program[str(pro.programid)])) )
             #institutuions
             for ins in list(fundedsite_institution_link.objects.filter(fundedsiteid=fun.id)):
                 self._graph.add( (funi, self._schema.institution, URIRef(self._institution[str(ins.institutionid)])) )

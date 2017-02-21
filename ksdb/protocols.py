@@ -7,7 +7,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, ci_protocol_link, fundedsite_protocol_link, fundedsite
+from ksdb.models import protocol, organ, organ_protocol_link, protocol_custodian_link, protocol_publication_link, person, pi_protocol_link, ci_protocol_link, fundedsite_protocol_link, fundedsite
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -26,6 +26,22 @@ def save_protocol_links(pro_id, request):
         per_split = per.split(":")
         pi_protocol_linkm = pi_protocol_link(protocolid = pro_id, personid = per_split[0])
         pi_protocol_linkm.save()
+
+    #delete and save new custodian protocol associations
+    cuslist = request.POST.getlist('cus')
+    protocol_custodian_link.objects.filter(protocolid=pro_id).delete()
+    for cus in cuslist:
+        cus_split = cus.split(":")
+        protocol_custodian_linkm = protocol_custodian_link(protocolid = pro_id, personid = cus_split[0])
+        protocol_custodian_linkm.save()
+
+    #delete and save new publication protocol associations
+    publist = request.POST.getlist('publications')
+    protocol_publication_link.objects.filter(protocolid=pro_id).delete()
+    for pub in publist:
+        pub_split = pub.split(":")
+        protocol_publication_linkm = protocol_publication_link(protocolid = pro_id, publicationid = pub)
+        protocol_publication_linkm.save()
 
     #delete and save new person protocol associations
     cilist = request.POST.getlist('cis')
@@ -52,11 +68,14 @@ def save_protocol_links(pro_id, request):
 def gen_protocol_data(request):
 
     personfield = ekeutils.get_eke_list("person")
+    publicationfield = ekeutils.get_eke_list("publication")
     organfield = ekeutils.get_eke_list("organ")
     fundedsitefield = ekeutils.get_eke_list("fundedsite")
     data = {"action" : "New" ,
                     "pis" : personfield ,
                     "cis" : personfield ,
+                    "custodians" : personfield ,
+                    "publications" : publicationfield ,
                     "organs" : organfield ,
                     "fundedsites" : fundedsitefield
             }
@@ -68,6 +87,8 @@ def gen_protocol_data(request):
             data = { "action" : "Edit",
                     "id" : obj.id,
                     "pis" : personfield ,
+                    "custodians" : personfield ,
+                    "publications" : publicationfield ,
                     "cis" : personfield ,
                     "organs" : organfield ,
                     "fundedsites" : fundedsitefield ,
@@ -76,7 +97,9 @@ def gen_protocol_data(request):
                     "organ_link_id" : [ opl.organid for opl in list(organ_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "pi_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(pi_protocol_link.objects.filter(protocolid=int(protocolid))) ]),
                     "ci_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(ci_protocol_link.objects.filter(protocolid=int(protocolid))) ]),
+                    "cus_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(protocol_custodian_link.objects.filter(protocolid=int(protocolid))) ]),
                     "fundedsite_link_id" : [ fun.fundedsiteid for fun in list(fundedsite_protocol_link.objects.filter(protocolid=int(protocolid))) ],
+                    "pub_link_id" : [ ppl.publicationid for ppl in list(protocol_publication_link.objects.filter(protocolid=int(protocolid))) ],
                     "start_date" : str(obj.start_date),
                     "irb_approval" : obj.irb_approval,
                     "irb_contact" : obj.irb_contact ,
@@ -100,9 +123,13 @@ def delete_protocol(request):
                 #delete person protocol associations
                 pi_protocol_link.objects.filter(protocolid=pro_id).delete()
                 ci_protocol_link.objects.filter(protocolid=pro_id).delete()
+                protocol_custodian_link.objects.filter(protocolid=pro_id).delete()
+
                 fundedsite_protocol_link.objects.filter(protocolid=pro_id).delete()
                 #delete organ protocol associations
                 organ_protocol_link.objects.filter(protocolid=pro_id).delete()
+                #delete publication protocol associations
+                protocol_publication_link.objects.filter(protocolid=pro_id).delete()
                 #delete protocol itself
                 protocol.objects.filter(id=pro_id).delete()
 

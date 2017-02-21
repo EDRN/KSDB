@@ -6,24 +6,24 @@ import copy, simplejson
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import project, fundedsite_project_link
+from ksdb.models import program, fundedsite_program_link
 
 # Allow external command processing
 from django.http import JsonResponse
 
-from ksdb.forms import ProjectForm
+from ksdb.forms import ProgramForm
 from django.forms import ValidationError
 #import settings
 import logging
 logger = logging.getLogger(__name__)
 
-def gen_project_data(request):
+def gen_program_data(request):
     data = {"action" : "New" ,
            }
     if request.method == 'GET':
-        projectid = request.GET.get('id')
-        if projectid:
-            obj = project.objects.get(pk=int(projectid))
+        programid = request.GET.get('id')
+        if programid:
+            obj = program.objects.get(pk=int(programid))
             data = { "action" : "Edit",
                     "id" : obj.id,
                     "title" : obj.title,
@@ -32,7 +32,7 @@ def gen_project_data(request):
                    }
     return data
 
-def delete_project(request):
+def delete_program(request):
     message = None
     success = False
 
@@ -40,62 +40,62 @@ def delete_project(request):
         ids = request.POST.get("id").split(",")
         if len(ids) > 0:
             for pro_id in ids:
-                #delete person project associations
-                fundedsite_project_link.objects.filter(projectid=pro_id).delete()
-                #delete project itself
-                project.objects.filter(id=pro_id).delete()
+                #delete person program associations
+                fundedsite_program_link.objects.filter(programid=pro_id).delete()
+                #delete program itself
+                program.objects.filter(id=pro_id).delete()
 
-            message = "Successfully deleted project id(s): "+request.POST.get("id")
+            message = "Successfully deleted program id(s): "+request.POST.get("id")
             success = True
         else:
             success = False
-            message = "No projects selected, please select project for deletion."
+            message = "No programs selected, please select program for deletion."
     else:
         message = "Not a post method, has to be post in order to delete object."
 
     return JsonResponse({'Success':success,
                                 'Message':message})
 @login_required(login_url="/ksdb/login/")
-def project_input(request):
+def program_input(request):
     if request.method == 'POST':
 
         pro_id = None
-        message = "You have successfully added a project."
+        message = "You have successfully added a program."
         success = True
         parameters = copy.copy(request.POST)
 
         if request.POST.get('action') == "edit":
-            pro_id = int(request.POST.get('projectid'))
-            message = "You have successfull edited project "+str(pro_id)+"."
+            pro_id = int(request.POST.get('programid'))
+            message = "You have successfull edited program "+str(pro_id)+"."
             parameters["id"] = pro_id
-            projecti = project.objects.get(id=pro_id)
-            projectm = ProjectForm(parameters or None, instance=projecti)
+            programi = program.objects.get(id=pro_id)
+            programm = ProgramForm(parameters or None, instance=programi)
         else:
             if (request.POST.get('duplicate') == 'false'):
                 try:
-                    project.objects.get(title=parameters['title'])
+                    program.objects.get(title=parameters['title'])
                     return JsonResponse({'Success':False,
-                                        'Message':'{"title":["There is already a project with the same title."]}'})
-                except project.DoesNotExist:
+                                        'Message':'{"title":["There is already a program with the same title."]}'})
+                except program.DoesNotExist:
                     pass
-            pro_id = IdSeq.objects.raw("select sequence_name, nextval('project_seq') from project_seq")[0].nextval
+            pro_id = IdSeq.objects.raw("select sequence_name, nextval('program_seq') from program_seq")[0].nextval
             parameters["id"] = pro_id
-            projectm = ProjectForm(parameters)
+            programm = ProgramForm(parameters)
         
-        if projectm.is_valid():
-            projectm.save()
+        if programm.is_valid():
+            programm.save()
         else:
-            message = simplejson.dumps(projectm.errors)
+            message = simplejson.dumps(programm.errors)
             success = False
         return JsonResponse({'Success':success,
                              'Message':message})
 
     #generate protocol data from db
-    data = gen_project_data(request)
+    data = gen_program_data(request)
 
     # Render input page with the documents and the form
     return render_to_response(
-        'projectinput.html',
+        'programinput.html',
         data,
         context_instance=RequestContext(request)
     )

@@ -1,0 +1,120 @@
+{% extends request.GET.modal|yesno:'lib.html,base.html' %}
+{% block content %}        
+        <script>
+            function fillgroupform() {
+                    $('#members').val({{pi_link_id}});
+                    $('#programs').val({{program_link_id}});
+                    $('#description').val("{{description}}");
+                    $('#name').val("{{name}}");
+                    $('#duplicate').attr('disabled',true);
+
+                    var members_array = "{{member_link_id}}".split(',');
+                    for(var i = 0; i < members_array.length; i++) {
+                        members_array[i] = members_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(members_array[i] != ""){
+                            var $option = $('<option value="'+members_array[i]+'" selected></option>');
+                            $('#members').append($option);
+                        }
+                    }
+            }
+            $(document).ready( function () {
+                updateLists("program", "programs");
+                setAutocompleteList('members','person');
+                {% ifequal action "Edit" %}
+                    setTimeout(fillgroupform, 1000);
+                {% endifequal %}
+        } );
+        </script>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>{{ action }} Collaborative Group: {{ name }}</H2>
+            <p>
+                Please update the KSDB database with accurate participating site information.
+            </p>
+            <br>
+        </div>
+        <div class="col-md-12">
+            <form id="groupinput" action="/ksdb/groupinput/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Collaborative Group Name"> 
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="programs">Programs  <a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
+                <select multiple class="form-control" size=7 id="programs" name="programs">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="members">Members</label>
+                <select multiple class="form-control" size=7 id="members" name="members">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="6"></textarea>
+                </fieldset>
+                <div class="checkbox">
+                  <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                </div>
+                {% ifequal action "Edit" %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="groupid" value="{{id}}">
+                {% endifequal %}
+                {% ifequal action "New" %}
+                <input type="hidden" name="action" value="new">
+                {% endifequal %}
+            </form>
+            </div>
+                <font color="red"><center><div id="results"></div></center></font>
+            <div class="col-md-12">
+            <center>
+            <button type="button" class="btn btn-success" id="submit-group" type="button" >{{ action }}</button>
+            <button type="button" class="btn btn-danger" id="cancel-group" onClick="window.location = '/ksdb/view/?tabpage=group';" type="button" >Cancel</button>
+            </center>
+            </div>
+    </div>
+
+	<script>
+        var submitButton = document.querySelector("#submit-group");
+        var groupform = $('#groupinput');
+        submitButton.addEventListener("click", function () {
+            $.ajax({
+                url : groupform.attr('action'),
+                type : 'POST',
+                data : groupform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
+                success : function (response) {
+                    if(response.Success){
+                        alert(response.Message);
+                        window.location = '/ksdb/view/?tabpage=group';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+        $('#institutions').change(function () {
+            $.ajax({
+                url : groupform.attr('action'),
+                type : 'POST',
+                data : groupform.serialize()+"&instchange=1",
+                success : function (response) {
+                    initInstPersonnel(response.Personnel, response.Personnel);
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+	</script>
+{% endblock %}

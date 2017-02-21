@@ -9,6 +9,7 @@
             function fillprotocolform() {
                     $('#title').val("{{title}}");
                     $('#organs').select2().val({{organ_link_id}}).trigger("change");
+                    $('#publications').select2().val({{pub_link_id}}).trigger("change");
                     $('#fundedsites').val({{fundedsite_link_id}});
                     $('#start_date').val("{{start_date}}");
                     $('#site_contact').val("{{site_contact}}");
@@ -36,16 +37,35 @@
                             $('#cis').append($option);
                         }
                     }
+                    var cus_array = "{{cus_link_id}}".split(',');
+                    for(var i = 0; i < cus_array.length; i++) {
+                        cus_array[i] = cus_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(cus_array[i] != ""){
+                            var $option = $('<option value="'+cus_array[i]+'" selected></option>');
+                            $('#cus').append($option);
+                        }
+                    }
+                    //var pub_array = "{{pub_link_id}}".split(',');
+                    //for(var i = 0; i < pub_array.length; i++) {
+                    //    pub_array[i] = pub_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                    //    if(pub_array[i] != ""){
+                    //        var $option = $('<option value="'+pub_array[i]+'" selected></option>');
+                    //        $('#publications').append($option);
+                    //    }
+                    //}
                     $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
                 $('#protocolstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
                 $('#protocolstart').data('DateTimePicker').date(getTodayDate());
                 updateLists("organ", "organs");
+                updateLists("publication", "publications");
                 updateLists("fundedsite", "fundedsites");
                 setAutocompleteList('pis','person');
                 setAutocompleteList('cis','person');
+                setAutocompleteList('cus','person');
                 $('#organs').select2();
+                $('#publications').select2();
                 {% ifequal action "Edit" %}
                     setTimeout(fillprotocolform, 500);
                 {% endifequal %}
@@ -83,12 +103,12 @@
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="pis">Lead Investigators <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis" href="person">(Add Person)</a></label>
+                <label for="pis">Lead Investigators <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis,cus" href="person">(Add Person)</a></label>
                 <select multiple class="form-control" size=14 id="pis" name="pis">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="cis">Coordinating Investigator <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis" href="person">(Add Person)</a></label>
+                <label for="cis">Coordinating Investigator <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis,cus" href="person">(Add Person)</a></label>
                 <select multiple class="form-control" size=14 id="cis" name="cis">
                 </select>
                 </fieldset>
@@ -108,6 +128,11 @@
                   <label for="site_contact_email">Site Contact Email</label>
                   <input type="text" class="form-control" id="site_contact_email" name="site_contact_email" placeholder="Enter Site Contact Email">
                 </fieldset>
+                <fieldset class="form-group">
+                <label for="cus">Custodian <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis,cus" href="person">(Add Person)</a></label>
+                <select multiple class="form-control" size=13 id="cus" name="cus">
+                </select>
+                </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
@@ -116,7 +141,7 @@
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="fundedsites">Participating Sites <a data-toggle="modal" id="addfundedsite" data-target="#modal" onclick="startModal(this)" target="fundedsites" href="fundedsite">(Add Site)</a></label>
-                <select multiple class="form-control" size=14 id="fundedsites" name="fundedsites">
+                <select multiple class="form-control" size=10 id="fundedsites" name="fundedsites">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
@@ -170,6 +195,11 @@
                             Unknown
                         </label>
                     </div>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="publications">Publications</label>
+                <select multiple class="form-control" size=13 id="publications" name="publications">
+                </select>
                 </fieldset>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">

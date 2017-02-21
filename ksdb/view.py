@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 import requests
 
 # Create your views here.
-from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, project, institution, fundedsite, publication, degree
+from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, program, institution, fundedsite, publication, degree
 
 #import settings
 from django.conf import settings
@@ -32,10 +32,12 @@ def view_service(request):
     personheaders = ["Select","Person ID", "First Name", "Last Name", "Phone", "Email"]
     protocolheaders = ["Select","Protocol ID", "Title", "Short Name"]
     publicationheaders = ["Select","Publication ID", "Title", "Author", "Pubmed ID", "Year"]
-    fundedsiteheaders = ["Select","Part. Site ID", "Name", "Project", "PIs", "Status", "Description"]
+    fundedsiteheaders = ["Select","Part. Site ID", "Name", "Program", "PIs", "Status", "Description"]
+    groupheaders = ["Select", "Name", "Program", "Members"]
     institutionheaders = ["Select","Institution ID", "Name", "Abbreviation"]
-    projectheaders = ["Select","Project ID", "Title", "Abbreviation"]
+    programheaders = ["Select","Program ID", "Title", "Abbreviation"]
     organheaders = ["Select","Organ ID", "Name"]
+    diseaseheaders = ["Select","Disease ID", "ICD10 Name"]
     degreeheaders = ["Select","Degree ID", "Title"]
 
     # Render input page with the documents and the form
@@ -47,9 +49,11 @@ def view_service(request):
             'publicationheaders': publicationheaders,
             'fundedsiteheaders': fundedsiteheaders,
             'institutionheaders': institutionheaders,
-            'projectheaders': projectheaders,
+            'programheaders': programheaders,
             'organheaders': organheaders,
             'degreeheaders': degreeheaders,
+            'diseaseheaders': diseaseheaders,
+            'groupheaders': groupheaders,
         }
     )
 

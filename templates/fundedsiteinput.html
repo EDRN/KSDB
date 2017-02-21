@@ -1,7 +1,11 @@
 {% extends request.GET.modal|yesno:'lib.html,base.html' %}
 {% block content %}        
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <script>
-            function initInstPersonnel(pis, staffs) {
+            function initInstPersonnel(pis, staffs, contacts) {
                 $('#pis').html("");
                 $.each(pis, function(key, value) { 
                     $('#pis').append($("<option></option>")
@@ -14,7 +18,6 @@
                         .attr("value",value[0])
                         .text(value[1]+" "+value[2])); 
                 });
-
             }
             function initfundedsiteinst() {
                     $('#institutions').val({{institution_link_id}});
@@ -25,16 +28,32 @@
                     $('#pis').val({{pi_link_id}});
                     $('#staff').val({{staff_link_id}});
                     $('#organs').select2().val({{organ_link_id}}).trigger("change");
-                    $('#projects').val({{project_link_id}});
+                    $('#programs').val({{program_link_id}});
                     $('#description').val("{{description}}");
                     $('#status').val("{{status}}");
                     $('#name').val("{{name}}");
                     $('#duplicate').attr('disabled',true);
+                    $('#funding_date_start').val("{{funding_date_start}}");
+                    $('#funding_date_finish').val("{{funding_date_finish}}");
+
+                    var contacts_array = "{{contact_link_id}}".split(',');
+                    for(var i = 0; i < contacts_array.length; i++) {
+                        contacts_array[i] = contacts_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(contacts_array[i] != ""){
+                            var $option = $('<option value="'+contacts_array[i]+'" selected></option>');
+                            $('#contacts').append($option);
+                        }
+                    }
             }
             $(document).ready( function () {
+                $('#fundingstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+                $('#fundingstart').data('DateTimePicker').date(getTodayDate());
+                $('#fundingfinish').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+                $('#fundingfinish').data('DateTimePicker').date(getTodayDate());
                 updateLists("institution", "institutions");
-                updateLists("project", "projects");
+                updateLists("program", "programs");
                 updateLists("organ", "organs");
+                setAutocompleteList('contacts','person');
                 $('#organs').select2();
                 {% ifequal action "Edit" %}
                     setTimeout(initfundedsiteinst, 500);
@@ -72,8 +91,8 @@
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
-                <label for="projects">Projects  <a data-toggle="modal" id="addproject" data-target="#modal" onclick="startModal(this)" target="projects" href="project">(Add Project)</a></label>
-                <select multiple class="form-control" size=7 id="projects" name="projects">
+                <label for="programs">Programs  <a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
+                <select multiple class="form-control" size=7 id="programs" name="programs">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
@@ -96,6 +115,29 @@
                 <label for="organs">Organs <a data-toggle="modal" id="addorgan" data-target="#modal" onclick="startModal(this)" target="organs" href="organ">(Add Organ)</a></label>
                 <select multiple class="form-control" size=7 id="organs" name="organs">
                 </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="contacts">Contacts</label>
+                <select multiple class="form-control" size=7 id="contacts" name="contacts">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="fundingstart">Funding Start Date</label>
+                  <div class='input-group date' id='fundingstart'>
+                    <input type='text' class="form-control" id='funding_date_start' name='funding_date_start' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="fundingfinish">Start Date</label>
+                  <div class='input-group date' id='fundingfinish'>
+                    <input type='text' class="form-control" id='funding_date_finish' name='funding_date_finish' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
                 </fieldset>
                 <div class="checkbox">
                       <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>

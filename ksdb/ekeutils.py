@@ -2,7 +2,7 @@
 from django.http import JsonResponse
 # Create your views here.
 from django.db.models import Q
-from ksdb.models import protocol, organ, person, fundedsite, project, degree, institution
+from ksdb.models import protocol, organ, person, fundedsite, program, degree, institution, publication
 
 _KSDBhref = "/ksdb/"
 
@@ -44,11 +44,14 @@ def get_eke_list(eketype, filterby=None):
     elif eketype == "degree":
         field = [ [str(obj.id), str(obj.title)] for obj in list(degree.objects.all()) ]
         field.sort(key=lambda x: x[1].lower()) 
-    elif eketype == "project":
-        field = [ [str(obj.id), str(obj.title)] for obj in list(project.objects.all()) ]
+    elif eketype == "program":
+        field = [ [str(obj.id), str(obj.title)] for obj in list(program.objects.all()) ]
         field.sort(key=lambda x: x[1].lower())
     elif eketype == "protocol":
         field = [ [str(obj.id), str(obj.title)] for obj in list(protocol.objects.all()) ]
+        field.sort(key=lambda x: x[1].lower())
+    elif eketype == "publication":
+        field = [ [str(obj.id), str(obj.title)] for obj in list(publication.objects.all()) ]
         field.sort(key=lambda x: x[1].lower())
 
     return field
@@ -60,9 +63,9 @@ def getPersonNameByID(perid):
     except:
         return None
 
-def getProjectTitleByID(proid):
+def getProgramTitleByID(proid):
     try:
-        pro = project.objects.get(id = proid)
+        pro = program.objects.get(id = proid)
         return str(pro.title)
     except:
         return None

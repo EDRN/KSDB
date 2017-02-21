@@ -24,15 +24,25 @@
                 "serverSide": true,
                 "ajax": "/ksdb/personview/"
             });
-            $('#project_table').dataTable({
+            $('#program_table').dataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/ksdb/projectview/"
+                "ajax": "/ksdb/programview/"
+            });
+            $('#group_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/groupview/"
             });
             $('#organ_table').dataTable({
                 "processing": true,
                 "serverSide": true,
                 "ajax": "/ksdb/organview/"
+            });
+            $('#disease_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/diseaseview/"
             });
             $('#degree_table').dataTable({
                 "processing": true,
@@ -58,7 +68,7 @@
                 changeTab($(this));
                 e.preventDefault();
             });
-            changeTab($('#projecttab'));
+            changeTab($('#programtab'));
             {% if request.GET.tabpage %}
                 changeTab($('#'+{{request.GET.tabpage}}.getAttribute("id")+"tab"));
             {% endif %}
@@ -93,7 +103,7 @@
         <div class="col-md-12 text-center">
                     <H2>Welcome to KSDB!</H2>
                     <p>
-                        Knowledge System DB: The goal of this system is to maintain generalized project information to be used for any bioinformatics knowledge system that the JPL Informatics Center supports. For example, EDRN or MCL.
+                        Knowledge System DB: The goal of this system is to maintain generalized program information to be used for any bioinformatics knowledge system that the JPL Informatics Center supports. For example, EDRN or MCL.
                     </p>
                     <br>
                 </div>
@@ -101,11 +111,13 @@
 
         <div class="col-12 col-sm-12 col-lg-12">
             <ul class="nav nav-tabs" id="myTab">
-                <li class="active"><a id="projecttab" href="#project">Projects</a>
+                <li class="active"><a id="programtab" href="#program">Programs</a>
                 </li>
                 <li><a id="institutiontab" href="#institution">Institutions</a>
                 </li>
                 <li><a id="fundedsitetab" href="#fundedsite">Participating Sites</a>
+                </li>
+                <li><a id="grouptab" href="#group">Collaborative Group</a>
                 </li>
                 <li><a id="persontab" href="#person">Personnel</a>
                 </li>
@@ -114,6 +126,8 @@
                 <li><a id="publicationtab" href="#publication">Publications</a>
                 </li>
                 <li><a id="organtab" href="#organ">Organs</a>
+                </li>
+                <li><a id="diseasetab" href="#disease">Diseases</a>
                 </li>
                 <li><a id="degreetab" href="#degree">Degrees</a>
                 </li>
@@ -127,8 +141,8 @@
                 <div class="tab-pane" id="protocol">
                     {% include "protocolview.html" %} 
                 </div>
-                <div class="tab-pane active" id="project">
-                    {% include "projectview.html" %} 
+                <div class="tab-pane active" id="program">
+                    {% include "programview.html" %} 
                 </div>
                 <div class="tab-pane" id="person">
                     {% include "personview.html" %} 
@@ -136,11 +150,17 @@
                 <div class="tab-pane" id="institution">
                     {% include "institutionview.html" %} 
                 </div>
+                <div class="tab-pane" id="group">
+                    {% include "groupview.html" %} 
+                </div>
                 <div class="tab-pane" id="fundedsite">
                     {% include "fundedsiteview.html" %} 
                 </div>
                 <div class="tab-pane" id="publication">
                     {% include "publicationview.html" %} 
+                </div>
+                <div class="tab-pane" id="disease">
+                    {% include "diseaseview.html" %} 
                 </div>
                 <div class="tab-pane" id="organ">
                     {% include "organview.html" %} 

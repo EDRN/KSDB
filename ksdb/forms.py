@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm 
 from django import forms
-from ksdb.models import protocol, person, project, institution, publication, fundedsite, organ, degree
+from ksdb.models import protocol, person, program, institution, publication, fundedsite, organ, degree, group, disease
 
 
 class ProtocolForm(forms.ModelForm):
@@ -14,9 +14,9 @@ class PersonForm(forms.ModelForm):
         model = person
         fields = '__all__'
 
-class ProjectForm(forms.ModelForm):
+class ProgramForm(forms.ModelForm):
     class Meta:
-        model = project
+        model = program
         fields = '__all__'
 
 class InstitutionForm(forms.ModelForm):
@@ -42,6 +42,16 @@ class DegreeForm(forms.ModelForm):
 class OrganForm(forms.ModelForm):
     class Meta:
         model = organ
+        fields = '__all__'
+
+class DiseaseForm(forms.ModelForm):
+    class Meta:
+        model = disease
+        fields = '__all__'
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = group
         fields = '__all__'
 
 class LoginForm(AuthenticationForm):
