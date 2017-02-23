@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link
 from ksdb.forms import PublicationForm
 
 #import settings
@@ -24,7 +24,9 @@ class Command(BaseCommand):
     _degree = Namespace(_baseurl+"ksdb/degreeinput/?id=")
     _institution = Namespace(_baseurl+"ksdb/institutioninput/?id=")
     _program = Namespace(_baseurl+"ksdb/programinput/?id=")
+    _group = Namespace(_baseurl+"ksdb/groupinput/?id=")
     _organ = Namespace(_baseurl+"ksdb/organinput/?id=")
+    _disease = Namespace(_baseurl+"ksdb/diseaseinput/?id=")
     _fundedsite = Namespace(_baseurl+"ksdb/fundedsiteinput/?id=")
     _email = Namespace("mailto:")
 
@@ -44,12 +46,16 @@ class Command(BaseCommand):
             rdf = self.getprogramrdf()
         if 'institution' in options['rdftype']:
             rdf = self.getinstitutionrdf()
+        if 'group' in options['rdftype']:
+            rdf = self.getgrouprdf()
         if 'fundedsite' in options['rdftype']:
             rdf = self.getfundedsiterdf()
         if 'person' in options['rdftype']:
             rdf = self.getpersonrdf()
         if 'organ' in options['rdftype']:
             rdf = self.getorganrdf()
+        if 'disease' in options['rdftype']:
+            rdf = self.getdiseaserdf()
         if 'degree' in options['rdftype']:
             rdf = self.getdegreerdf()
 
@@ -156,6 +162,20 @@ class Command(BaseCommand):
 
         return  self._graph.serialize(format='xml')
 
+    def getgrouprdf(self):
+        for grp in list(group.objects.all()):
+            grpi = URIRef(self._group[str(grp.id)])
+            self._graph.add( (grpi, RDF.type, self._mcltype.Group) )
+            #name
+            self._graph.add( (grpi, self._terms.title, Literal(grp.name)) )
+            #description
+            self._graph.add( (grpi, self._terms.description, Literal(grp.description)) )
+            #group member
+            for ppl in list(group_member_link.objects.filter(groupid=grp.id)):
+                self._graph.add( (grpi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
+
+        return  self._graph.serialize(format='xml')
+
     def getinstitutionrdf(self):
         for ins in list(institution.objects.all()):
             insi = URIRef(self._institution[str(ins.id)])
@@ -217,5 +237,16 @@ class Command(BaseCommand):
             self._graph.add( (orgi, self._terms.title, Literal(org.name)) )
             #description
             self._graph.add( (orgi, self._terms.description, Literal(org.description)) )
+
+        return  self._graph.serialize(format='xml')
+
+    def getdiseaserdf(self):
+        for dis in list(disease.objects.all()):
+            disi = URIRef(self._disease[str(dis.id)])
+            self._graph.add( (disi, RDF.type, self._mcltype.Disease) )
+            #name
+            self._graph.add( (disi, self._terms.title, Literal(dis.icd10)) )
+            #description
+            self._graph.add( (disi, self._terms.description, Literal(dis.description)) )
 
         return  self._graph.serialize(format='xml')
