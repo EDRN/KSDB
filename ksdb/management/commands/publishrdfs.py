@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link
 from ksdb.forms import PublicationForm
 
 #import settings
@@ -32,26 +32,32 @@ class Command(BaseCommand):
 
     _graph = None
 
+
     def add_arguments(self, parser):
-        parser.add_argument('rdftype', nargs='*', type=str)
+        parser.add_argument('rdftype', nargs=1, type=str)
+        parser.add_argument('filterby', nargs=1, type=str)
+        parser.add_argument('filterval', nargs=1, type=str)
 
     def handle(self, *args, **options):
         rdf = None
         self._graph = Graph()
+        filterobj = None
+        if options['filterby'][0] == "program":
+            filterobj = program
         if 'publication' in options['rdftype']:
-            rdf = self.getpublicationrdf()
+            rdf = self.getpublicationrdf(filterobj, options['filterval'])
         if 'protocol' in options['rdftype']:
-            rdf = self.getprotocolrdf()
+            rdf = self.getprotocolrdf(filterobj, options['filterval'])
         if 'program' in options['rdftype']:
             rdf = self.getprogramrdf()
         if 'institution' in options['rdftype']:
-            rdf = self.getinstitutionrdf()
+            rdf = self.getinstitutionrdf(filterobj, options['filterval'])
         if 'group' in options['rdftype']:
-            rdf = self.getgrouprdf()
+            rdf = self.getgrouprdf(filterobj, options['filterval'])
         if 'fundedsite' in options['rdftype']:
-            rdf = self.getfundedsiterdf()
+            rdf = self.getfundedsiterdf(filterobj, options['filterval'])
         if 'person' in options['rdftype']:
-            rdf = self.getpersonrdf()
+            rdf = self.getpersonrdf(filterobj, options['filterval'])
         if 'organ' in options['rdftype']:
             rdf = self.getorganrdf()
         if 'disease' in options['rdftype']:
@@ -61,32 +67,47 @@ class Command(BaseCommand):
 
         return str(rdf)
 
-    def getpublicationrdf(self):
-
-        for pub in list(publication.objects.all()):
-            pubi = URIRef(self._publication[str(pub.id)])
-            self._graph.add( (pubi, RDF.type, self._mcltype.Publication) )
-            #currently not linking authors to internal people database yet, displaying author as text
-            #for ppl in list(publication_author_link.objects.filter(publicationid=pub.id)):
-            #    per = person.objects.filter(id=ppl.personid)
-            #    if len(per) > 0:
-            #        name = per[0].firstname+" "+per[0].lastname
-            #        self._graph.add( (pubi, self._terms.author, Literal(name)) )
-            for pplname in re.split(', | and ',pub.authors):
-                pplname = pplname.strip()
-                if pplname != '':
-                    self._graph.add( (pubi, self._schema.author, Literal(pplname)) )
-            self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
-            self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
-            self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
-            self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
-            #missing volume
-            #self._graph.add( (pubi, _schema.pubURL, URIRef("http://cebp.aacrjournals.org/")) )
+    def getpublicationrdf(self, filterobj, filterval):
+        pubs = None
+        if filterobj is program:
+            fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
+            fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            ppl = protocol_publication_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
+            pubs = publication.objects.filter(id__in = [obj.publicationid for obj in ppl])
+        else:
+            pubs = publication.objects.all()
+        if pubs:
+            for pub in pubs:
+                pubi = URIRef(self._publication[str(pub.id)])
+                self._graph.add( (pubi, RDF.type, self._mcltype.Publication) )
+                #currently not linking authors to internal people database yet, displaying author as text
+                #for ppl in list(publication_author_link.objects.filter(publicationid=pub.id)):
+                #    per = person.objects.filter(id=ppl.personid)
+                #    if len(per) > 0:
+                #        name = per[0].firstname+" "+per[0].lastname
+                #        self._graph.add( (pubi, self._terms.author, Literal(name)) )
+                for pplname in re.split(', | and ',pub.authors):
+                    pplname = pplname.strip()
+                    if pplname != '':
+                        self._graph.add( (pubi, self._schema.author, Literal(pplname)) )
+                self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
+                self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
+                self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
+                self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
+                #missing volume
+                #self._graph.add( (pubi, _schema.pubURL, URIRef("http://cebp.aacrjournals.org/")) )
 
         return  self._graph.serialize(format='xml')
 
-    def getprotocolrdf(self):
-        for pro in list(protocol.objects.all()):
+    def getprotocolrdf(self, filterobj, filterval):
+        prots = None
+        if filterobj is program:
+            fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
+            fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            prots = protocol.objects.filter(id__in = [obj.protocolid for obj in fpr])
+        else:
+            prots = protocol.objects.all()
+        for pro in prots:
             proi = URIRef(self._protocol[str(pro.id)])
             self._graph.add( (proi, RDF.type, self._mcltype.Protocol) )
             #pis
@@ -101,6 +122,9 @@ class Command(BaseCommand):
             #publications
             for pub in list(protocol_publication_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.publication, URIRef(self._publication[str(pub.publicationid)])) )
+            #participating sites
+            for site in list(fundedsite_protocol_link.objects.filter(protocolid=pro.id)):
+                self._graph.add( (proi, self._schema.site, URIRef(self._fundedsite[str(site.fundedsiteid)])) )
             #title
             self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
             #startdate
@@ -120,8 +144,31 @@ class Command(BaseCommand):
             
         return  self._graph.serialize(format='xml')
 
-    def getpersonrdf(self):
-        for per in list(person.objects.all()):
+    def getpersonrdf(self, filterobj, filterval):
+        pers = None
+        if filterobj is program:
+            fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
+            gpl = group_program_link.objects.filter(programid__in = filterval)
+            fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+
+            #all persons associated with protocols
+            pipl = pi_protocol_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
+            prcl = protocol_custodian_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
+            cipl = ci_protocol_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
+
+            #all persons associated with participating sites
+            cfl = con_fundedsite_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            fpil = fundedsite_pi_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            fsl = fundedsite_staff_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            
+            #all persons associated with collaborative groups
+            gml = group_member_link.objects.filter(groupid__in = [obj.groupid for obj in gpl])
+        
+            #combine all persons
+            pers = person.objects.filter(id__in = set([obj.personid for obj in list(pipl)+list(prcl)+list(cipl)+list(cfl)+list(fpil)+list(fsl)+list(gml)]))
+        else:
+            pers = person.objects.all()
+        for per in pers:
             peri = URIRef(self._person[str(per.id)])
             self._graph.add( (peri, RDF.type, self._mcltype.Person) )
             #lastname
@@ -162,8 +209,15 @@ class Command(BaseCommand):
 
         return  self._graph.serialize(format='xml')
 
-    def getgrouprdf(self):
-        for grp in list(group.objects.all()):
+    def getgrouprdf(self, filterobj, filterval):
+        grps = None
+        if filterobj is program:
+            gpl = group_program_link.objects.filter(programid__in = filterval)
+
+            grps = group.objects.filter(id__in = [obj.groupid for obj in gpl])
+        else:
+            grps = group.objects.all()
+        for grp in grps:
             grpi = URIRef(self._group[str(grp.id)])
             self._graph.add( (grpi, RDF.type, self._mcltype.Group) )
             #name
@@ -176,8 +230,15 @@ class Command(BaseCommand):
 
         return  self._graph.serialize(format='xml')
 
-    def getinstitutionrdf(self):
-        for ins in list(institution.objects.all()):
+    def getinstitutionrdf(self, filterobj, filterval):
+        ints = None
+        if filterobj is program:
+            fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
+            fil = fundedsite_institution_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            ints = institution.objects.filter(id__in = [obj.institutionid for obj in fil])
+        else:
+            ints = institution.objects.all()
+        for ins in ints:
             insi = URIRef(self._institution[str(ins.id)])
             self._graph.add( (insi, RDF.type, self._mcltype.Institution) )
             #name
@@ -196,8 +257,14 @@ class Command(BaseCommand):
 
         return  self._graph.serialize(format='xml')
 
-    def getfundedsiterdf(self):
-        for fun in list(fundedsite.objects.all()):
+    def getfundedsiterdf(self, filterobj, filterval):
+        funs = None
+        if filterobj is program:
+            fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
+            funs = fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in fpl])
+        else:
+            funs = fundedsite.objects.all()
+        for fun in funs:
             funi = URIRef(self._fundedsite[str(fun.id)])
             self._graph.add( (funi, RDF.type, self._mcltype.FundedSite) )
             #name

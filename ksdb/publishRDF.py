@@ -11,8 +11,10 @@ logger = logging.getLogger(__name__)
 def publishrdf(request):
     if request.method == 'GET':
         rdftype = request.GET.get('rdftype')
+        filterby = request.GET.get('filterby')
+        filterval = request.GET.get('filterval')
         rdf = StringIO()
-        call_command('publishrdfs', rdftype, stdout=rdf)
+        call_command('publishrdfs', rdftype, filterby, filterval, stdout=rdf)
         rdf.seek(0)
         rdf_resp = rdf.read()
         rdf_resp = rdf_resp.strip()
