@@ -241,7 +241,7 @@ class group(models.Model):
     name = models.CharField(max_length=500)
     members = models.CharField(max_length=500)
     programs = models.CharField(max_length=500)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
 
     class Meta:
         db_table = u'collabgroup'
