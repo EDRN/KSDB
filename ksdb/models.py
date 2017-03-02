@@ -152,7 +152,7 @@ class fundedsite(models.Model):
     programs = models.CharField(max_length=500)
     institutions = models.CharField(max_length=500)
     description = models.CharField(max_length=500, blank=True, null=True)
-    contacts = models.CharField(max_length=500)
+    contacts = models.CharField(max_length=500,blank=True, null=True)
     funding_date_start = models.DateTimeField(blank=True, null=True)
     funding_date_finish = models.DateTimeField(blank=True, null=True)
 
