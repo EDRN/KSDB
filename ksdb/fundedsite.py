@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import fundedsite, fundedsite_pi_link, con_fundedsite_link, fundedsite_staff_link, fundedsite_organ_link, fundedsite_institution_link, fundedsite_program_link, person, organ, program, institution,institution_personnel_link
+from ksdb.models import fundedsite, fundedsite_pi_link, con_fundedsite_link, fundedsite_staff_link, fundedsite_organ_link, fundedsite_institution_link, fundedsite_program_link, person, organ, program, institution,institution_personnel_link, fundedsite_protocol_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -132,6 +132,8 @@ def delete_fundedsite(request):
                 fundedsite_program_link.objects.filter(fundedsiteid=fun_id).delete()
                 #delete institution fundedsite associations
                 fundedsite_institution_link.objects.filter(fundedsiteid=fun_id).delete()
+                #delete protocol fundedsite associations
+                fundedsite_protocol_link.objects.filter(fundedsiteid=fun_id).delete()
                 #delete fundedsite itself
                 fundedsite.objects.filter(id=fun_id).delete()
 
