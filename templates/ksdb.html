@@ -14,56 +14,6 @@
                 // Change/remove current tab to active
                 ele.parent('li').addClass('active').siblings().removeClass('active');
             }
-            $('#protocol_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/protocolview/"
-            });
-            $('#person_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/personview/"
-            });
-            $('#program_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/programview/"
-            });
-            $('#group_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/groupview/"
-            });
-            $('#organ_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/organview/"
-            });
-            $('#disease_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/diseaseview/"
-            });
-            $('#degree_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/degreeview/"
-            });
-            $('#institution_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/institutionview/"
-            });
-            $('#fundedsite_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/fundedsiteview/"
-            });
-            $('#publication_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/ksdb/publicationview/"
-            });
             $('.nav li a').on('click', function(e) {
                 changeTab($(this));
                 e.preventDefault();
@@ -119,9 +69,11 @@
                 </li>
                 <li><a id="grouptab" href="#group">Collaborative Group</a>
                 </li>
-                <li><a id="persontab" href="#person">Personnel</a>
+                <li><a id="committeetab" href="#committee">Committees</a>
                 </li>
                 <li><a id="protocoltab" href="#protocol">Protocols</a>
+                </li>
+                <li><a id="persontab" href="#person">Personnel</a>
                 </li>
                 <li><a id="publicationtab" href="#publication">Publications</a>
                 </li>
@@ -139,34 +91,37 @@
             <form id="viewform">
                 {% csrf_token %} 
                 <div class="tab-pane" id="protocol">
-                    {% include "protocolview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="protocol" ksdbobjtitle="Protocol" ksdbobjheaders=protocolheaders %} 
                 </div>
                 <div class="tab-pane active" id="program">
-                    {% include "programview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="program" ksdbobjtitle="Program" ksdbobjheaders=programheaders %} 
                 </div>
                 <div class="tab-pane" id="person">
-                    {% include "personview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="person" ksdbobjtitle="Person" ksdbobjheaders=personheaders %}
                 </div>
                 <div class="tab-pane" id="institution">
-                    {% include "institutionview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="institution" ksdbobjtitle="Institution" ksdbobjheaders=institutionheaders %} 
                 </div>
                 <div class="tab-pane" id="group">
-                    {% include "groupview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="group" ksdbobjtitle="Collaborative Group" ksdbobjheaders=groupheaders %} 
+                </div>
+                <div class="tab-pane" id="committee">
+                    {% include "ksdbobjview.html" with ksdbobj="committee" ksdbobjtitle="Committee" ksdbobjheaders=committeeheaders %} 
                 </div>
                 <div class="tab-pane" id="fundedsite">
-                    {% include "fundedsiteview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="fundedsite" ksdbobjtitle="Participating Site" ksdbobjheaders=fundedsiteheaders %} 
                 </div>
                 <div class="tab-pane" id="publication">
-                    {% include "publicationview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="publication" ksdbobjtitle="Publication" ksdbobjheaders=publicationheaders %} 
                 </div>
                 <div class="tab-pane" id="disease">
-                    {% include "diseaseview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="disease" ksdbobjtitle="Disease" ksdbobjheaders=diseaseheaders %} 
                 </div>
                 <div class="tab-pane" id="organ">
-                    {% include "organview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="organ" ksdbobjtitle="Organ" ksdbobjheaders=organheaders %} 
                 </div>
                 <div class="tab-pane" id="degree">
-                    {% include "degreeview.html" %} 
+                    {% include "ksdbobjview.html" with ksdbobj="degree" ksdbobjtitle="Degree" ksdbobjheaders=degreeheaders %} 
                 </div>
                 <div class="tab-pane" id="rdf">
                     {% include "rdfview.html" %} 

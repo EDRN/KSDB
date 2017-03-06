@@ -1,71 +1,56 @@
 {% extends request.GET.modal|yesno:'lib.html,base.html' %}
 {% block content %}        
         <script>
-            function fillgroupform() {
+            function fillcommitteeform() {
                     $('#programs').val({{program_link_id}});
                     $('#description').val("{{description}}");
-                    $('#name').val("{{name}}");
+                    $('#abbreviation').val("{{abbreviation}}");
+                    $('#title').val("{{title}}");
                     $('#duplicate').attr('disabled',true);
 
                     addPersonWidget("{{member_link_id}}", 'members');   //set member values
-                    addPersonWidget("{{chair_link_id}}", 'chairs');     //set chair values
-                    addPersonWidget("{{cochair_link_id}}", 'cochairs'); //set co-chair values
             }
             $(document).ready( function () {
                 updateLists("program", "programs");
                 setAutocompleteList('members','person');
-                setAutocompleteList('chairs','person');
-                setAutocompleteList('cochairs','person');
                 {% ifequal action "Edit" %}
-                    setTimeout(fillgroupform, 1000);
+                    setTimeout(fillcommitteeform, 1000);
                 {% endifequal %}
             });
         </script>
     <div class="container">
         <div class="col-md-12 text-center">
-            <H2>{{ action }} Collaborative Group: {{ name }}</H2>
+            <H2>{{ action }} Committee: {{ title }}</H2>
             <p>
                 Please update the KSDB database with accurate participating site information.
             </p>
             <br>
         </div>
         <div class="col-md-12">
-            <form id="groupinput" action="/ksdb/groupinput/" method="post" enctype="multipart/form-data">
+            <form id="committeeinput" action="/ksdb/committeeinput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="col-md-12">
-                    <fieldset class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Collaborative Group Name"> 
+                    <fieldset class="form-committee">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter Committee Title"> 
+                        <label for="abbreviation">Abbreviation</label>
+                        <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Committee Abbreviation"> 
                     </fieldset>
-                    <fieldset class="form-group">
+                    <fieldset class="form-committee">
                     <label for="programs">Programs  <a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
                     <select multiple class="form-control" size=7 id="programs" name="programs">
                     </select>
                     </fieldset>
                 </div>
-                <div class="col-md-4">
-                    <fieldset class="form-group">
-                    <label for="chairs">Chair(s)</label>
-                    <select multiple class="form-control" size=7 id="chairs" name="chairs">
-                    </select>
-                    </fieldset>
-                </div>
-                <div class="col-md-4">
-                    <fieldset class="form-group">
-                    <label for="cochairs">Co-Chair(s)</label>
-                    <select multiple class="form-control" size=7 id="cochairs" name="cochairs">
-                    </select>
-                    </fieldset>
-                </div>
-                <div class="col-md-4">
-                    <fieldset class="form-group">
+                <div class="col-md-12">
+                    <fieldset class="form-committee">
                     <label for="members">Members</label>
                     <select multiple class="form-control" size=7 id="members" name="members">
                     </select>
                     </fieldset>
                 </div>
                 <div class="col-md-12">
-                    <fieldset class="form-group">
+                    <fieldset class="form-committee">
                     <label for="description">Description</label>
                     <textarea class="form-control" id="description" name="description" rows="6"></textarea>
                     </fieldset>
@@ -74,7 +59,7 @@
                     </div>
                     {% ifequal action "Edit" %}
                     <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="groupid" value="{{id}}">
+                    <input type="hidden" name="committeeid" value="{{id}}">
                     {% endifequal %}
                     {% ifequal action "New" %}
                     <input type="hidden" name="action" value="new">
@@ -85,24 +70,24 @@
                 <font color="red"><center><div id="results"></div></center></font>
             <div class="col-md-12">
             <center>
-            <button type="button" class="btn btn-success" id="submit-group" type="button" >{{ action }}</button>
-            <button type="button" class="btn btn-danger" id="cancel-group" onClick="window.location = '/ksdb/view/?tabpage=group';" type="button" >Cancel</button>
+            <button type="button" class="btn btn-success" id="submit-committee" type="button" >{{ action }}</button>
+            <button type="button" class="btn btn-danger" id="cancel-committee" onClick="window.location = '/ksdb/view/?tabpage=committee';" type="button" >Cancel</button>
             </center>
             </div>
     </div>
 
 	<script>
-        var submitButton = document.querySelector("#submit-group");
-        var groupform = $('#groupinput');
+        var submitButton = document.querySelector("#submit-committee");
+        var committeeform = $('#committeeinput');
         submitButton.addEventListener("click", function () {
             $.ajax({
-                url : groupform.attr('action'),
+                url : committeeform.attr('action'),
                 type : 'POST',
-                data : groupform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
+                data : committeeform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);
-                        window.location = '/ksdb/view/?tabpage=group';
+                        window.location = '/ksdb/view/?tabpage=committee';
                     }else{
                         $('span.label-danger').remove();
                         jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
@@ -121,9 +106,9 @@
         });
         $('#institutions').change(function () {
             $.ajax({
-                url : groupform.attr('action'),
+                url : committeeform.attr('action'),
                 type : 'POST',
-                data : groupform.serialize()+"&instchange=1",
+                data : committeeform.serialize()+"&instchange=1",
                 success : function (response) {
                     initInstPersonnel(response.Personnel, response.Personnel);
                 },

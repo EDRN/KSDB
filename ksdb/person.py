@@ -37,6 +37,8 @@ def gen_person_data(request):
                     "id" : obj.id,
                     "firstname" : obj.firstname,
                     "lastname" : obj.lastname,
+                    "dcpflag" : obj.dcp,
+                    "dcbflag" : obj.dcb,
                     "degree_link_id" : [ pdl.degreeid for pdl in list(person_degree_link.objects.filter(personid=int(personid))) ],
                     "degrees" : degreefield,
                     "email" : obj.email,
@@ -88,6 +90,9 @@ def person_input(request):
             per_id = int(request.POST.get('personid'))
             message = "You have successfull edited person "+str(per_id)+"."
             parameters["id"] = per_id
+            #assign dcb and dcp flag because checkbox somehow require custom value extraction
+            parameters["dcp"] = request.POST.get('dcp')
+            parameters["dcb"] = request.POST.get('dcb')
             personi = person.objects.get(id=per_id)
             personm = PersonForm(parameters or None, instance=personi)
         else:

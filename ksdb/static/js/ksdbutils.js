@@ -74,3 +74,14 @@ function getTodayDate(){
 
     return new Date(year, month, day, 00, 00);
 }
+//Adds person to people search widget
+function addPersonWidget(ids, fieldid){
+    var ppl_array = ids.split(',');
+    for(var i = 0; i < ppl_array.length; i++) {
+        ppl_array[i] = ppl_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+        if(ppl_array[i] != ""){
+            var $option = $('<option value="'+ppl_array[i]+'" selected></option>');
+            $('#'+fieldid).append($option);
+        }
+    }
+}

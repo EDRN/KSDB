@@ -7,7 +7,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import group, group_member_link, group_program_link, person, program
+from ksdb.models import group, group_member_link, group_chair_link, group_cochair_link, group_program_link, person, program
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -18,13 +18,27 @@ import logging
 logger = logging.getLogger(__name__)
 
 def save_group_links(grp_id, request):
-    #delete and save new person group associations
+    #delete and save new person, member, cochair, chair to group associations
     members = request.POST.getlist('members')
     group_member_link.objects.filter(groupid=grp_id).delete()
     for per in members:
         per_split = per.split(":")
         group_member_linkm = group_member_link(groupid = grp_id, personid = per_split[0])
         group_member_linkm.save()
+
+    chairs = request.POST.getlist('chairs')
+    group_chair_link.objects.filter(groupid=grp_id).delete()
+    for per in chairs:
+        per_split = per.split(":")
+        group_chair_linkm = group_chair_link(groupid = grp_id, personid = per_split[0])
+        group_chair_linkm.save()
+
+    cochairs = request.POST.getlist('cochairs')
+    group_cochair_link.objects.filter(groupid=grp_id).delete()
+    for per in cochairs:
+        per_split = per.split(":")
+        group_cochair_linkm = group_cochair_link(groupid = grp_id, personid = per_split[0])
+        group_cochair_linkm.save()
 
     #delete and save new program group associations
     programs = request.POST.getlist('programs')
@@ -39,6 +53,8 @@ def gen_group_data(request):
     personfield = ekeutils.get_eke_list("person")
     data = {"action" : "New" ,
         "members" : personfield ,
+        "chairs" : personfield ,
+        "cochairs" : personfield ,
         "programs" : programfield ,
        }
     if request.method == 'GET':
@@ -49,8 +65,12 @@ def gen_group_data(request):
                     "id" : obj.id,
                     "description" : obj.description,
                     "member_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(group_member_link.objects.filter(groupid=int(groupid))) ]),
+                    "chair_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(group_chair_link.objects.filter(groupid=int(groupid))) ]),
+                    "cochair_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(group_cochair_link.objects.filter(groupid=int(groupid))) ]),
                     "program_link_id" : [ fpl.programid for fpl in list(group_program_link.objects.filter(groupid=int(groupid))) ],
                     "members" : personfield ,
+                    "chairs" : personfield ,
+                    "cochairs" : personfield ,
                     "programs" : programfield ,
                     "name" : obj.name ,
                    }
@@ -64,8 +84,12 @@ def delete_group(request):
         ids = request.POST.get("id").split(",")
         if len(ids) > 0:
             for grp_id in ids:
-                #delete pi group associations
+                #delete member group associations
                 group_member_link.objects.filter(groupid=grp_id).delete()
+                #delete chair group associations
+                group_chair_link.objects.filter(groupid=grp_id).delete()
+                #delete cochair group associations
+                group_cochair_link.objects.filter(groupid=grp_id).delete()
                 #delete program group associations
                 group_program_link.objects.filter(groupid=grp_id).delete()
                 #delete group itself
@@ -97,6 +121,10 @@ def group_input(request):
             parameters['programs'] = ", ".join(programs)
             members = request.POST.getlist('members')
             parameters['members'] = ", ".join(members)
+            chairs = request.POST.getlist('chairs')
+            parameters['chairs'] = ", ".join(chairs)
+            cochairs = request.POST.getlist('cochairs')
+            parameters['cochairs'] = ", ".join(cochairs)
             groupi = group.objects.get(id=grp_id)
             groupm = GroupForm(parameters or None, instance=groupi)
         else:
@@ -104,7 +132,7 @@ def group_input(request):
                 try:
                     group.objects.get(name=parameters['name'])
                     return JsonResponse({'Success':False,
-                                        'Message':'{"name":["There is already a participating site with the same name."]}'})
+                                        'Message':'{"name":["There is already a collaborative groupwith the same name."]}'})
                 except group.DoesNotExist:
                     pass
             grp_id = IdSeq.objects.raw("select sequence_name, nextval('group_seq') from group_seq")[0].nextval

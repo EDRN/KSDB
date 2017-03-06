@@ -1,0 +1,29 @@
+<script>
+    $(document).ready(function() {
+        $('#{{ksdbobj}}_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ksdb/{{ksdbobj}}view/"
+            });
+    });
+</script>
+<div class="col-md-12">
+    <br>
+    <table id="{{ksdbobj}}_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                {%for x in ksdbobjheaders%}
+                <th> {{x}} </th>
+                {% endfor%}
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <center>
+        <button type="button" class="btn btn-success" onClick="window.location = '/ksdb/{{ksdbobj}}input/';" id="submit-all" type="button">Add {{ksdbobjtitle}}</button>
+        <button type="button" class="btn btn-danger"  onClick="deleteObj('{{ksdbobj}}','delete{{ksdbobj}}');" id="remove-all" type="button">Delete {{ksdbobjtitle}}</button>
+    </center>
+</div>

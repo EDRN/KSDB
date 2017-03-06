@@ -255,3 +255,48 @@ CREATE TABLE disease_protocol_link(
         protocolid int references protocol(id),
         UNIQUE ( diseaseid, protocolid ));
 
+---3-3-17----
+
+alter table collabgroup add column chair text;
+alter table collabgroup add column cochair text;
+
+CREATE TABLE group_chair_link(
+        id serial NOT NULL,
+        groupid int references collabgroup(id),
+        personid int references person(id),
+        UNIQUE ( groupid, personid ));
+
+CREATE TABLE group_cochair_link(
+        id serial NOT NULL,
+        groupid int references collabgroup(id),
+        personid int references person(id),
+        UNIQUE ( groupid, personid ));
+
+alter table fundedsite add column abstract text;
+alter table fundedsite add column aims text;
+alter table fundedsite add column abbreviation text;
+
+alter table person add column dcp boolean;
+alter table person add column dcb boolean;
+
+CREATE TABLE committee(
+        id int,
+        title text,
+        abbreviation text,
+        description text,
+        programs text,
+        members text,
+        PRIMARY KEY( id ));
+CREATE SEQUENCE committee_seq START 1;
+
+CREATE TABLE committee_member_link(
+        id serial NOT NULL,
+        committeeid int references committee(id),
+        personid int references person(id),
+        UNIQUE ( committeeid, personid ));
+
+CREATE TABLE committee_program_link(
+        id serial NOT NULL,
+        committeeid int references committee(id),
+        programid int references program(id),
+        UNIQUE ( committeeid, programid ));

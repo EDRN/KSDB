@@ -5,7 +5,7 @@ from sitemain import settings
 from ksdb.forms import LoginForm
 from ksdb import home
 from django.contrib.auth import views
-from ksdb import protocols, program, person, institution, publication, fundedsite, group, view, organ, disease, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils, ksdbviews
+from ksdb import protocols, program, person, institution, publication, fundedsite, group, committee, view, organ, disease, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils, ksdbviews
 
 urlpatterns = [
 	url(r'^ksdb/', include('ksdb.urls')),
@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^publicationinput/$', publication.publication_input, name='publicationinput'),
     url(r'^fundedsiteinput/$', fundedsite.fundedsite_input, name='fundedsiteinput'),
     url(r'^groupinput/$', group.group_input, name='groupinput'),
+    url(r'^committeeinput/$', committee.committee_input, name='committeeinput'),
     url(r'^organinput/$', organ.organ_input, name='organinput'),
     url(r'^diseaseinput/$', disease.disease_input, name='diseaseinput'),
     url(r'^degreeinput/$', degree.degree_input, name='degreeinput'),
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^deleteinstitution/$', institution.delete_institution, name='deleteinstitution'),
     url(r'^deletefundedsite/$', fundedsite.delete_fundedsite, name='deletefundedsite'),
     url(r'^deletegroup/$', group.delete_group, name='deletegroup'),
+    url(r'^deletecommittee/$', committee.delete_committee, name='deletecommittee'),
     url(r'^deleteperson/$', person.delete_person, name='deleteperson'),
     url(r'^deletepublication/$', publication.delete_publication, name='deletepublication'),
     url(r'^deleteorgan/$', organ.delete_organ, name='deleteorgan'),
@@ -46,6 +48,7 @@ urlpatterns = [
     url(r'^institutionview/$', ksdbviews.InstitutionView.as_view(), name='institutionview'),
     url(r'^fundedsiteview/$', ksdbviews.FundedSiteView.as_view(), name='fundedsiteview'),
     url(r'^groupview/$', ksdbviews.GroupView.as_view(), name='groupview'),
+    url(r'^committeeview/$', ksdbviews.CommitteeView.as_view(), name='committeeview'),
     url(r'^protocolview/$', ksdbviews.ProtocolView.as_view(), name='protocolview'),
     url(r'^organview/$', ksdbviews.OrganView.as_view(), name='organview'),
     url(r'^diseaseview/$', ksdbviews.DiseaseView.as_view(), name='diseaseview'),

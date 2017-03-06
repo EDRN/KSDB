@@ -4,6 +4,16 @@
             function fillpersonform() {
                 $('#firstname').val("{{firstname}}");
                 $('#lastname').val("{{lastname}}");
+                if("{{dcpflag}}" == "True"){
+                    $('#dcpflag').attr('checked', true);
+                }else{
+                    $('#dcpflag').attr('checked', false);
+                }
+                if("{{dcbflag}}" == "True"){
+                    $('#dcbflag').attr('checked', true);
+                }else{
+                    $('#dcbflag').attr('checked', false);
+                }
                 $('#degrees').val({{degree_link_id}});
                 $('#email').val("{{email}}");
                 $('#telephone').val("{{telephone}}");
@@ -54,8 +64,16 @@
                 <div class="col-md-6">
                 <fieldset class="form-group">
                 <label for="degrees">Degrees <a data-toggle="modal" id="adddegree" data-target="#modal" onclick="startModal(this)" target="degrees" href="degree">(Add Degree)</a></label>
-                <select multiple size=6 class="form-control" id="degrees" name="degrees">
+                <select multiple size=4 class="form-control" id="degrees" name="degrees">
                 </select>
+                </fieldset>
+                <fieldset class="form-group">
+                <div class="col-md-5">
+                <label for="dcpflag">Part of DCP? <input type="checkbox" id="dcpflag" value="" name="dcpflag"></label>
+                </div>
+                <div class="col-md-5">
+                <label for="dcbflag">Part of DCB? <input type="checkbox" id="dcbflag" value="" name="dcbflag"></label>
+                </div>
                 </fieldset>
                 </div>
                 <div class="col-md-12">
@@ -100,7 +118,7 @@
                 $.ajax({
                 url : personform.attr('action'),
                 type : 'POST',
-                data : personform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
+                data : personform.serialize()+"&duplicate="+$('#duplicate').is(':checked')+"&dcp="+$('#dcpflag').is(':checked')+"&dcb="+$('#dcbflag').is(':checked'),
                 success : function (response) {
                     if(response.Success){
                         alert(response.Message);

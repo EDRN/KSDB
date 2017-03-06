@@ -34,6 +34,7 @@ def view_service(request):
     publicationheaders = ["Select","Publication ID", "Title", "Author", "Pubmed ID", "Year"]
     fundedsiteheaders = ["Select","Part. Site ID", "Name", "Program", "PIs", "Status", "Description"]
     groupheaders = ["Select", "Name", "Program", "Members"]
+    committeeheaders = ["Select", "Title", "Program", "Members"]
     institutionheaders = ["Select","Institution ID", "Name", "Abbreviation"]
     programheaders = ["Select","Program ID", "Title", "Abbreviation"]
     organheaders = ["Select","Organ ID", "Name"]
@@ -54,6 +55,7 @@ def view_service(request):
             'degreeheaders': degreeheaders,
             'diseaseheaders': diseaseheaders,
             'groupheaders': groupheaders,
+            'committeeheaders': committeeheaders,
         }
     )
 

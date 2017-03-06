@@ -19,7 +19,7 @@ class protocol(models.Model):
     irb_contact = models.CharField(max_length=500, blank=True, null=True)
     irb_contact_email = models.EmailField(max_length=500, blank=True, null=True)
     hum_sub_train = models.CharField(max_length=128)
-    abstract = models.CharField(max_length=500, blank=True, null=True)
+    abstract = models.CharField(max_length=5000, blank=True, null=True)
     publications = models.CharField(max_length=1000, blank=True, null=True)
     data_custodians = models.CharField(max_length=1000, blank=True, null=True)
 
@@ -62,7 +62,7 @@ class ci_protocol_link(models.Model):
 class organ(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
 
     class Meta:
         db_table = u'organ'
@@ -84,8 +84,10 @@ class person(models.Model):
     degrees = models.IntegerField(blank=True, null=True)
     email = models.EmailField(max_length=128, blank=True, null=True)
     telephone = models.CharField(max_length=500, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
-
+    description = models.CharField(max_length=5000, blank=True, null=True)
+    dcp = models.BooleanField()
+    dcb = models.BooleanField() 
+    
     class Meta:
         db_table = u'person'
 
@@ -94,7 +96,7 @@ class program(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
     abbreviation = models.CharField(max_length=128, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
 
     class Meta:
         db_table = u'program'
@@ -107,7 +109,7 @@ class institution(models.Model):
     department = models.CharField(max_length=128, blank=True, null=True)
     abbreviation = models.CharField(max_length=128, blank=True, null=True)
     url = models.URLField(max_length=500, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
     personnel = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
@@ -145,13 +147,16 @@ class publication_author_link(models.Model):
 class fundedsite(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=500)
+    abstract = models.CharField(max_length=5000, blank=True, null=True)
+    aims = models.CharField(max_length=5000, blank=True, null=True) 
+    abbreviation = models.CharField(max_length=500, blank=True, null=True) 
     pis = models.CharField(max_length=500)
     status = models.CharField(max_length=500)
     organs = models.CharField(max_length=500, blank=True, null=True)
     staff = models.CharField(max_length=500, blank=True, null=True)
     programs = models.CharField(max_length=500)
     institutions = models.CharField(max_length=500)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
     contacts = models.CharField(max_length=500,blank=True, null=True)
     funding_date_start = models.DateTimeField(blank=True, null=True)
     funding_date_finish = models.DateTimeField(blank=True, null=True)
@@ -219,7 +224,7 @@ class fundedsite_protocol_link(models.Model):
 class degree(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=128)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
 
     class Meta:
         db_table = u'degree'
@@ -239,12 +244,30 @@ class person_degree_link(models.Model):
 class group(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=500)
-    members = models.CharField(max_length=500)
+    members = models.CharField(max_length=5000)
+    chair = models.CharField(max_length=500, blank=True, null=True)
+    cochair = models.CharField(max_length=500, blank=True, null=True)
     programs = models.CharField(max_length=500)
     description = models.CharField(max_length=5000, blank=True, null=True)
 
     class Meta:
         db_table = u'collabgroup'
+
+class group_cochair_link(models.Model):
+    groupid = models.IntegerField()
+    personid = models.IntegerField()
+
+    class Meta:
+        db_table = u'group_cochair_link'
+        unique_together = (("groupid", "personid"),)
+
+class group_chair_link(models.Model):
+    groupid = models.IntegerField()
+    personid = models.IntegerField()
+
+    class Meta:
+        db_table = u'group_chair_link'
+        unique_together = (("groupid", "personid"),)
 
 class group_member_link(models.Model):
     groupid = models.IntegerField()
@@ -266,7 +289,7 @@ class group_program_link(models.Model):
 class disease(models.Model):
     id = models.IntegerField(primary_key=True)
     icd10 = models.CharField(max_length=128)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
 
     class Meta:
         db_table = u'disease'
@@ -278,6 +301,35 @@ class disease_protocol_link(models.Model):
     class Meta:
         db_table = u'disease_protocol_link'
         unique_together = (("diseaseid", "protocolid"),)
+
+#Committee related models
+class committee(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=500)
+    abbreviation = models.CharField(max_length=500)
+    members = models.CharField(max_length=5000, blank=True, null=True)
+    programs = models.CharField(max_length=500)
+    description = models.CharField(max_length=5000, blank=True, null=True)
+
+    class Meta:
+        db_table = u'committee'
+
+class committee_member_link(models.Model):
+    committeeid = models.IntegerField()
+    personid = models.IntegerField()
+
+    class Meta:
+        db_table = u'committee_member_link'
+        unique_together = (("committeeid", "personid"),)
+
+class committee_program_link(models.Model):
+    committeeid = models.IntegerField()
+    programid = models.IntegerField()
+
+    class Meta:
+        db_table = u'committee_program_link'
+        unique_together = (("committeeid", "programid"),)
+
 
 class IdSeq(models.Model):
     """

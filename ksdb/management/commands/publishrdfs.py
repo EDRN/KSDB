@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link
 from ksdb.forms import PublicationForm
 
 #import settings
@@ -19,6 +19,7 @@ class Command(BaseCommand):
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
     _mcltype = Namespace("https://mcl.jpl.nasa.gov/rdf/types.rdf#")
     _publication = Namespace(_baseurl+"ksdb/publicationinput/?id=")
+    _committee = Namespace(_baseurl+"ksdb/committeeinput/?id=")
     _protocol = Namespace(_baseurl+"ksdb/protocolinput/?id=")
     _person = Namespace(_baseurl+"ksdb/personinput/?id=")
     _degree = Namespace(_baseurl+"ksdb/degreeinput/?id=")
@@ -54,6 +55,8 @@ class Command(BaseCommand):
             rdf = self.getinstitutionrdf(filterobj, options['filterval'])
         if 'group' in options['rdftype']:
             rdf = self.getgrouprdf(filterobj, options['filterval'])
+        if 'committee' in options['rdftype']:
+            rdf = self.getcommitteerdf(filterobj, options['filterval'])
         if 'fundedsite' in options['rdftype']:
             rdf = self.getfundedsiterdf(filterobj, options['filterval'])
         if 'person' in options['rdftype']:
@@ -179,6 +182,11 @@ class Command(BaseCommand):
             self._graph.add( (peri, self._faof.mbox, URIRef(self._email[per.email])) )
             #phone
             self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
+            #dcp and dcb flag
+            if per.dcb:
+                self._graph.add( (peri, self._schema.has_dcb, Literal(per.dcb)) )
+            if per.dcp:
+                self._graph.add( (peri, self._schema.has_dcp, Literal(per.dcp)) )
             #degree
             for deg in list(person_degree_link.objects.filter(personid=per.id)):
                 self._graph.add( (peri, self._schema.degree, URIRef(self._degree[str(deg.degreeid)]) ))
@@ -209,6 +217,29 @@ class Command(BaseCommand):
 
         return  self._graph.serialize(format='xml')
 
+    def getcommitteerdf(self, filterobj, filterval):
+        coms = None
+        if filterobj is program:
+            cpl = committee_program_link.objects.filter(programid__in = filterval)
+
+            coms = committee.objects.filter(id__in = [obj.committeeid for obj in cpl])
+        else:
+            coms = committee.objects.all()
+        for com in coms:
+            comi = URIRef(self._committee[str(com.id)])
+            self._graph.add( (comi, RDF.type, self._mcltype.Group) )
+            #name
+            self._graph.add( (comi, self._terms.title, Literal(com.title)) )
+            #description
+            self._graph.add( (comi, self._terms.description, Literal(com.description)) )
+            #abbreviation
+            self._graph.add( (comi, self._schema.abbreviatedName, Literal(com.abbreviation)) )
+            #committee member, chair, cochair
+            for ppl in list(committee_member_link.objects.filter(committeeid=com.id)):
+                self._graph.add( (comi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
+
+        return  self._graph.serialize(format='xml')
+
     def getgrouprdf(self, filterobj, filterval):
         grps = None
         if filterobj is program:
@@ -224,9 +255,17 @@ class Command(BaseCommand):
             self._graph.add( (grpi, self._terms.title, Literal(grp.name)) )
             #description
             self._graph.add( (grpi, self._terms.description, Literal(grp.description)) )
-            #group member
+            #abbreviation
+            self._graph.add( (proi, self._schema.abbreviatedName, Literal(grp.abbreviation)) )
+            #aims
+            self._graph.add( (proi, self._schema.aims, Literal(grp.aims)) )
+            #group member, chair, cochair
             for ppl in list(group_member_link.objects.filter(groupid=grp.id)):
                 self._graph.add( (grpi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
+            for ppl in list(group_chair_link.objects.filter(groupid=grp.id)):
+                self._graph.add( (grpi, self._schema.chair, URIRef(self._person[str(ppl.personid)])) )
+            for ppl in list(group_cochair_link.objects.filter(groupid=grp.id)):
+                self._graph.add( (grpi, self._faof.cochair, URIRef(self._person[str(ppl.personid)])) )
 
         return  self._graph.serialize(format='xml')
 
@@ -271,6 +310,8 @@ class Command(BaseCommand):
             self._graph.add( (funi, self._terms.title, Literal(fun.name)) )
             #description
             self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
+            #abstract
+            self._graph.add( (funi, self._terms.abstract, Literal(fun.abstract)) )
             #funding start date
             self._graph.add( (funi, self._schema.fundingStartDate, Literal(fun.funding_date_start)) )
             #funding finish date

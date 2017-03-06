@@ -5,7 +5,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <script>
-            function initInstPersonnel(pis, staffs, contacts) {
+            function initInstPersonnel(pis, staffs) {
                 $('#pis').html("");
                 $.each(pis, function(key, value) { 
                     $('#pis').append($("<option></option>")
@@ -30,20 +30,15 @@
                     $('#organs').select2().val({{organ_link_id}}).trigger("change");
                     $('#programs').val({{program_link_id}});
                     $('#description').val("{{description}}");
+                    $('#abstract').val("{{abstract}}");
+                    $('#aims').val("{{aims}}");
+                    $('#abbreviation').val("{{abbreviation}}");
                     $('#status').val("{{status}}");
                     $('#name').val("{{name}}");
-                    $('#duplicate').attr('disabled',true);
                     $('#funding_date_start').val("{{funding_date_start}}");
                     $('#funding_date_finish').val("{{funding_date_finish}}");
 
-                    var contacts_array = "{{contact_link_id}}".split(',');
-                    for(var i = 0; i < contacts_array.length; i++) {
-                        contacts_array[i] = contacts_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-                        if(contacts_array[i] != ""){
-                            var $option = $('<option value="'+contacts_array[i]+'" selected></option>');
-                            $('#contacts').append($option);
-                        }
-                    }
+                    addPersonWidget("{{contact_link_id}}", 'contacts');
             }
             $(document).ready( function () {
                 $('#fundingstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
@@ -58,6 +53,7 @@
                 {% ifequal action "Edit" %}
                     setTimeout(initfundedsiteinst, 500);
                     setTimeout(fillfundedsiteform, 1000);
+                    $('#duplicate').attr('disabled',true);
                 {% endifequal %}
         } );
         </script>
@@ -74,75 +70,92 @@
             <form id="fundedsiteinput" action="/ksdb/fundedsiteinput/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="col-md-6">
-                <fieldset class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Participating Site Name"> 
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" id="status" name="status">
-                    <option value="Not Funded">Not Funded</option>
-                    <option value="Funded">Funded</option>
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="institutions">Institution <a data-toggle="modal" id="addinstitution" data-target="#modal" onclick="startModal(this)" target="institutions" href="institution">(Add Institution)</a></label>
-                <select multiple class="form-control" size=7 id="institutions" name="institutions">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="programs">Programs  <a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
-                <select multiple class="form-control" size=7 id="programs" name="programs">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="description">Participating Site Description</label>
-                <textarea class="form-control" id="description" name="description" rows="6"></textarea>
-                </fieldset>
+                    <fieldset class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Participating Site Name"> 
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <label for="abbreviation">Abbreviation</label>
+                        <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Enter Participating Site Abbreviated Name"> 
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="Not Funded">Not Funded</option>
+                        <option value="Funded">Funded</option>
+                    </select>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="programs">Programs  <a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
+                    <select multiple class="form-control" size=6 id="programs" name="programs">
+                    </select>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="organs">Organs <a data-toggle="modal" id="addorgan" data-target="#modal" onclick="startModal(this)" target="organs" href="organ">(Add Organ)</a></label>
+                    <select multiple class="form-control" size=7 id="organs" name="organs">
+                    </select>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="contacts">Contacts</label>
+                    <select multiple class="form-control" size=7 id="contacts" name="contacts">
+                    </select>
+                    </fieldset>
                 </div>
                 <div class="col-md-6">
-                <fieldset class="form-group">
-                <label for="pis">Principal Investigators - please select institution first</label>
-                <select multiple class="form-control" size=7 id="pis" name="pis">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="staff">Additional Staff - please select institution first</label>
-                <select multiple class="form-control" size=7 id="staff" name="staff">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="organs">Organs <a data-toggle="modal" id="addorgan" data-target="#modal" onclick="startModal(this)" target="organs" href="organ">(Add Organ)</a></label>
-                <select multiple class="form-control" size=7 id="organs" name="organs">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                <label for="contacts">Contacts</label>
-                <select multiple class="form-control" size=7 id="contacts" name="contacts">
-                </select>
-                </fieldset>
-                <fieldset class="form-group">
-                  <label for="fundingstart">Funding Start Date</label>
-                  <div class='input-group date' id='fundingstart'>
-                    <input type='text' class="form-control" id='funding_date_start' name='funding_date_start' />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
-                </fieldset>
-                <fieldset class="form-group">
-                  <label for="fundingfinish">Start Date</label>
-                  <div class='input-group date' id='fundingfinish'>
-                    <input type='text' class="form-control" id='funding_date_finish' name='funding_date_finish' />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
-                </fieldset>
-                <div class="checkbox">
-                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    <fieldset class="form-group">
+                    <label for="institutions">Institution <a data-toggle="modal" id="addinstitution" data-target="#modal" onclick="startModal(this)" target="institutions" href="institution">(Add Institution)</a></label>
+                    <select multiple class="form-control" size=7 id="institutions" name="institutions">
+                    </select>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="pis">Principal Investigators - please select institution first</label>
+                    <select multiple class="form-control" size=7 id="pis" name="pis">
+                    </select>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="staff">Additional Staff - please select institution first</label>
+                    <select multiple class="form-control" size=7 id="staff" name="staff">
+                    </select>
+                    </fieldset>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <fieldset class="form-group">
+                          <label for="fundingstart">Funding Start Date</label>
+                          <div class='input-group date' id='fundingstart'>
+                            <input type='text' class="form-control" id='funding_date_start' name='funding_date_start' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                          </div>
+                        </fieldset>
                     </div>
-                </fieldset>
+                    <div class="col-md-6">
+                        <fieldset class="form-group">
+                          <label for="fundingfinish">Funding Finish Date</label>
+                          <div class='input-group date' id='fundingfinish'>
+                            <input type='text' class="form-control" id='funding_date_finish' name='funding_date_finish' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                          </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <fieldset class="form-group">
+                    <label for="aims">Aims for this Participating Site</label>
+                    <textarea class="form-control" id="aims" name="aims" rows="4"></textarea>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <label for="description">Participating Site Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                    </fieldset>
+                    <div class="checkbox">
+                          <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                        </div>
+                    </fieldset>
+                </div>
                 {% ifequal action "Edit" %}
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="fundedsiteid" value="{{id}}">
@@ -150,7 +163,6 @@
                 {% ifequal action "New" %}
                 <input type="hidden" name="action" value="new">
                 {% endifequal %}
-                </div>
             </form>
             </div>
             <div class="col-md-12">
