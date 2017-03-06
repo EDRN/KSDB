@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link
 from ksdb.forms import PublicationForm
 
 #import settings
