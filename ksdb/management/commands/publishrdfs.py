@@ -255,10 +255,6 @@ class Command(BaseCommand):
             self._graph.add( (grpi, self._terms.title, Literal(grp.name)) )
             #description
             self._graph.add( (grpi, self._terms.description, Literal(grp.description)) )
-            #abbreviation
-            self._graph.add( (proi, self._schema.abbreviatedName, Literal(grp.abbreviation)) )
-            #aims
-            self._graph.add( (proi, self._schema.aims, Literal(grp.aims)) )
             #group member, chair, cochair
             for ppl in list(group_member_link.objects.filter(groupid=grp.id)):
                 self._graph.add( (grpi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
@@ -312,6 +308,10 @@ class Command(BaseCommand):
             self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
             #abstract
             self._graph.add( (funi, self._terms.abstract, Literal(fun.abstract)) )
+            #abbreviation
+            self._graph.add( (funi, self._schema.abbreviatedName, Literal(fun.abbreviation)) )
+            #aims
+            self._graph.add( (funi, self._schema.aims, Literal(fun.aims)) )
             #funding start date
             self._graph.add( (funi, self._schema.fundingStartDate, Literal(fun.funding_date_start)) )
             #funding finish date
