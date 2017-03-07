@@ -261,7 +261,7 @@ class Command(BaseCommand):
             for ppl in list(group_chair_link.objects.filter(groupid=grp.id)):
                 self._graph.add( (grpi, self._schema.chair, URIRef(self._person[str(ppl.personid)])) )
             for ppl in list(group_cochair_link.objects.filter(groupid=grp.id)):
-                self._graph.add( (grpi, self._faof.cochair, URIRef(self._person[str(ppl.personid)])) )
+                self._graph.add( (grpi, self._schema.cochair, URIRef(self._person[str(ppl.personid)])) )
 
         return  self._graph.serialize(format='xml')
 
