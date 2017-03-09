@@ -129,7 +129,7 @@ class Command(BaseCommand):
             for site in list(fundedsite_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.site, URIRef(self._fundedsite[str(site.fundedsiteid)])) )
             #title
-            self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
+            self._graph.add( (proi, self._terms.title, Literal(str(pro.title).encode("ascii", "ignore"))) )
             #startdate
             self._graph.add( (proi, self._schema.startDate, Literal(pro.start_date)) )
             #irbapproval
