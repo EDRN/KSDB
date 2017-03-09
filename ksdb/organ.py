@@ -1,6 +1,7 @@
 # protocols.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 import copy, simplejson
 
 # Create your views here.
@@ -25,7 +26,7 @@ def gen_organ_data(request):
             data = { "action" : "Edit",
                     "id" : obj.id,
                     "name" : obj.name,
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                    }
     return data
 

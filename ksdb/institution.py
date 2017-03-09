@@ -1,6 +1,7 @@
 # institution.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 import simplejson
 import copy
 
@@ -39,7 +40,7 @@ def gen_institution_data(request):
                     "abbreviation" : obj.abbreviation,
                     "url" : obj.url,
                     "person_link_id": ",".join([ str(ipl.personid)+":"+person.objects.filter(id=ipl.personid)[0].firstname+" "+person.objects.filter(id=ipl.personid)[0].lastname for ipl in list(institution_personnel_link.objects.filter(institutionid=int(institutionid))) ]),
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                    }
     return data
 

@@ -1,6 +1,7 @@
 # persons.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 import simplejson
 import copy
 
@@ -43,7 +44,7 @@ def gen_person_data(request):
                     "degrees" : degreefield,
                     "email" : obj.email,
                     "telephone" : obj.telephone,
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                    }
     return data
 

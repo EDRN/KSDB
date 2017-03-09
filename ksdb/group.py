@@ -1,6 +1,7 @@
 # groups.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 from ksdb import ekeutils
 import simplejson
 import copy
@@ -63,7 +64,7 @@ def gen_group_data(request):
             obj = group.objects.get(pk=int(groupid))
             data = { "action" : "Edit",
                     "id" : obj.id,
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                     "member_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(group_member_link.objects.filter(groupid=int(groupid))) ]),
                     "chair_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(group_chair_link.objects.filter(groupid=int(groupid))) ]),
                     "cochair_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(group_cochair_link.objects.filter(groupid=int(groupid))) ]),

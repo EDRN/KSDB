@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 import copy, simplejson
 
 # Create your views here.
@@ -28,7 +29,7 @@ def gen_program_data(request):
                     "id" : obj.id,
                     "title" : obj.title,
                     "abbreviation" : obj.abbreviation,
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                    }
     return data
 

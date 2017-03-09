@@ -1,6 +1,7 @@
 # protocols.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 from ksdb import ekeutils
 import simplejson
 import copy
@@ -108,7 +109,7 @@ def gen_protocol_data(request):
                     "site_contact_email" : obj.site_contact_email ,
                     "irb_approval_num" : obj.irb_approval_num,
                     "hum_sub_train" : obj.hum_sub_train,
-                    "abstract" : obj.abstract,
+                    "abstract" : escapejs(obj.abstract),
                    }
     return data
 

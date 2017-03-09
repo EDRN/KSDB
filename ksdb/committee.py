@@ -1,6 +1,7 @@
 # committees.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 from ksdb import ekeutils
 import simplejson
 import copy
@@ -47,7 +48,7 @@ def gen_committee_data(request):
             obj = committee.objects.get(pk=int(committeeid))
             data = { "action" : "Edit",
                     "id" : obj.id,
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                     "abbreviation" : obj.abbreviation,
                     "member_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(committee_member_link.objects.filter(committeeid=int(committeeid))) ]),
                     "program_link_id" : [ fpl.programid for fpl in list(committee_program_link.objects.filter(committeeid=int(committeeid))) ],

@@ -1,6 +1,7 @@
 # protocols.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
 import copy, simplejson
 
 # Create your views here.
@@ -24,7 +25,7 @@ def gen_disease_data(request):
             obj = disease.objects.get(pk=int(diseaseid))
             data = { "action" : "Edit",
                     "id" : obj.id,
-                    "description" : obj.description,
+                    "description" : escapejs(obj.description),
                     "icd10" : obj.icd10,
                    }
     return data

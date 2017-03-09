@@ -1,6 +1,8 @@
 # fundedsites.py
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import escapejs
+from django.utils.safestring import mark_safe
 import simplejson
 import copy
 
@@ -92,9 +94,9 @@ def gen_fundedsite_data(request):
             personfield = getPersonnelFromInst(institutionids)
             data = { "action" : "Edit",
                     "id" : obj.id,
-                    "description" : obj.description,
-                    "abstract" : obj.abstract,
-                    "aims" : obj.aims,
+                    "description" : escapejs(obj.description),
+                    "abstract" : escapejs(obj.abstract),
+                    "aims" : escapejs(obj.aims),
                     "abbreviation" : obj.abbreviation,
                     "pi_link_id" : [ fpl.personid for fpl in list(fundedsite_pi_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "contact_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(con_fundedsite_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]),
