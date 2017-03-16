@@ -89,14 +89,19 @@ class Command(BaseCommand):
                 #    if len(per) > 0:
                 #        name = per[0].firstname+" "+per[0].lastname
                 #        self._graph.add( (pubi, self._terms.author, Literal(name)) )
-                for pplname in re.split(', | and ',pub.authors):
-                    pplname = pplname.strip()
-                    if pplname != '':
-                        self._graph.add( (pubi, self._schema.author, Literal(pplname)) )
-                self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
-                self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
-                self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
-                self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
+                if pub.authors:
+                    for pplname in re.split(', | and ',pub.authors):
+                        pplname = pplname.strip()
+                        if pplname != '':
+                            self._graph.add( (pubi, self._schema.author, Literal(pplname)) )
+                if pub.journal:
+                    self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
+                if pub.title:
+                    self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
+                if pub.pubmedid:
+                    self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
+                if pub.pubyear:
+                    self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
                 #missing volume
                 #self._graph.add( (pubi, _schema.pubURL, URIRef("http://cebp.aacrjournals.org/")) )
 
@@ -129,21 +134,29 @@ class Command(BaseCommand):
             for site in list(fundedsite_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.site, URIRef(self._fundedsite[str(site.fundedsiteid)])) )
             #title
-            self._graph.add( (proi, self._terms.title, Literal(str(pro.title).encode("ascii", "ignore"))) )
+            if pro.title:
+                self._graph.add( (proi, self._terms.title, Literal(str(pro.title).encode("ascii", "ignore"))) )
             #startdate
-            self._graph.add( (proi, self._schema.startDate, Literal(pro.start_date)) )
+            if pro.start_date:
+                self._graph.add( (proi, self._schema.startDate, Literal(pro.start_date)) )
             #irbapproval
-            self._graph.add( (proi, self._schema.irbapproval, Literal(pro.irb_approval)) )
+            if pro.irb_approval:
+                self._graph.add( (proi, self._schema.irbapproval, Literal(pro.irb_approval)) )
             #irbapprovalnum
-            self._graph.add( (proi, self._schema.irbapprovalnum, Literal(pro.irb_approval_num)) )
+            if pro.irb_approval_num:
+                self._graph.add( (proi, self._schema.irbapprovalnum, Literal(pro.irb_approval_num)) )
             #human subject training
-            self._graph.add( (proi, self._schema.humanSubjectTraining, Literal(pro.hum_sub_train)) )
+            if pro.hum_sub_train:
+                self._graph.add( (proi, self._schema.humanSubjectTraining, Literal(pro.hum_sub_train)) )
             #abstract
-            self._graph.add( (proi, self._terms.abstract, Literal(pro.abstract)) )
+            if pro.abstract:
+                self._graph.add( (proi, self._terms.abstract, Literal(pro.abstract)) )
             #sitecontact
-            self._graph.add( (proi, self._schema.sitecontact, Literal(pro.site_contact)) )
+            if pro.site_contact:
+                self._graph.add( (proi, self._schema.sitecontact, Literal(pro.site_contact)) )
             #irbcontact
-            self._graph.add( (proi, self._schema.irbcontact, URIRef(self._email[pro.irb_contact])) )
+            if pro.irb_contact:
+                self._graph.add( (proi, self._schema.irbcontact, URIRef(self._email[pro.irb_contact])) )
             
         return  self._graph.serialize(format='xml')
 
@@ -175,13 +188,17 @@ class Command(BaseCommand):
             peri = URIRef(self._person[str(per.id)])
             self._graph.add( (peri, RDF.type, self._mcltype.Person) )
             #lastname
-            self._graph.add( (peri, self._faof.surname, Literal(per.lastname)) )
+            if per.lastname:
+                self._graph.add( (peri, self._faof.surname, Literal(per.lastname)) )
             #firstname
-            self._graph.add( (peri, self._faof.givenname, Literal(per.firstname)) )
+            if per.firstname:
+                self._graph.add( (peri, self._faof.givenname, Literal(per.firstname)) )
             #email
-            self._graph.add( (peri, self._faof.mbox, URIRef(self._email[per.email])) )
+            if per.email:
+                self._graph.add( (peri, self._faof.mbox, URIRef(self._email[per.email])) )
             #phone
-            self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
+            if per.telephone:
+                self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
             #dcp and dcb flag
             if per.dcb:
                 self._graph.add( (peri, self._schema.has_dcb, Literal(per.dcb)) )
@@ -198,9 +215,11 @@ class Command(BaseCommand):
             degi = URIRef(self._degree[str(deg.id)])
             self._graph.add( (degi, RDF.type, self._mcltype.Degree) )
             #title
-            self._graph.add( (degi, self._terms.title, Literal(deg.title)) )
+            if deg.title:
+                self._graph.add( (degi, self._terms.title, Literal(deg.title)) )
             #description
-            self._graph.add( (degi, self._terms.description, Literal(deg.description)) )
+            if deg.description:
+                self._graph.add( (degi, self._terms.description, Literal(deg.description)) )
 
         return  self._graph.serialize(format='xml')
 
@@ -209,11 +228,14 @@ class Command(BaseCommand):
             proi = URIRef(self._program[str(pro.id)])
             self._graph.add( (proi, RDF.type, self._mcltype.Program) )
             #title
-            self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
+            if pro.title:
+                self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
             #abbreviation
-            self._graph.add( (proi, self._schema.abbreviatedName, Literal(pro.abbreviation)) )
+            if pro.abbreviation:
+                self._graph.add( (proi, self._schema.abbreviatedName, Literal(pro.abbreviation)) )
             #description
-            self._graph.add( (proi, self._terms.description, Literal(pro.description)) )
+            if pro.description:
+                self._graph.add( (proi, self._terms.description, Literal(pro.description)) )
 
         return  self._graph.serialize(format='xml')
 
@@ -229,11 +251,14 @@ class Command(BaseCommand):
             comi = URIRef(self._committee[str(com.id)])
             self._graph.add( (comi, RDF.type, self._mcltype.Group) )
             #name
-            self._graph.add( (comi, self._terms.title, Literal(com.title)) )
+            if com.title:
+                self._graph.add( (comi, self._terms.title, Literal(com.title)) )
             #description
-            self._graph.add( (comi, self._terms.description, Literal(com.description)) )
+            if com.description:
+                self._graph.add( (comi, self._terms.description, Literal(com.description)) )
             #abbreviation
-            self._graph.add( (comi, self._schema.abbreviatedName, Literal(com.abbreviation)) )
+            if com.abbreviation:
+                self._graph.add( (comi, self._schema.abbreviatedName, Literal(com.abbreviation)) )
             #committee member
             for ppl in list(committee_member_link.objects.filter(committeeid=com.id)):
                 self._graph.add( (comi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
@@ -252,9 +277,11 @@ class Command(BaseCommand):
             grpi = URIRef(self._group[str(grp.id)])
             self._graph.add( (grpi, RDF.type, self._mcltype.Group) )
             #name
-            self._graph.add( (grpi, self._terms.title, Literal(grp.name)) )
+            if grp.name:
+                self._graph.add( (grpi, self._terms.title, Literal(grp.name)) )
             #description
-            self._graph.add( (grpi, self._terms.description, Literal(grp.description)) )
+            if grp.description:
+                self._graph.add( (grpi, self._terms.description, Literal(grp.description)) )
             #group member, chair, cochair
             for ppl in list(group_member_link.objects.filter(groupid=grp.id)):
                 self._graph.add( (grpi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
@@ -277,15 +304,20 @@ class Command(BaseCommand):
             insi = URIRef(self._institution[str(ins.id)])
             self._graph.add( (insi, RDF.type, self._mcltype.Institution) )
             #name
-            self._graph.add( (insi, self._terms.title, Literal(ins.name)) )
+            if ins.name:
+                self._graph.add( (insi, self._terms.title, Literal(ins.name)) )
             #abbreviation
-            self._graph.add( (insi, self._schema.abbreviatedName, Literal(ins.abbreviation)) )
+            if ins.abbreviation:
+                self._graph.add( (insi, self._schema.abbreviatedName, Literal(ins.abbreviation)) )
             #description
-            self._graph.add( (insi, self._terms.description, Literal(ins.description)) )
+            if ins.description:
+                self._graph.add( (insi, self._terms.description, Literal(ins.description)) )
             #department
-            self._graph.add( (insi, self._schema.department, Literal(ins.department)) )
+            if ins.department:
+                self._graph.add( (insi, self._schema.department, Literal(ins.department)) )
             #url
-            self._graph.add( (insi, self._faof.homepage, URIRef(ins.url)) )
+            if ins.url:
+                self._graph.add( (insi, self._faof.homepage, URIRef(ins.url)) )
             #personnel member
             for ppl in list(institution_personnel_link.objects.filter(institutionid=ins.id)):
                 self._graph.add( (insi, self._faof.member, URIRef(self._person[str(ppl.personid)])) )
@@ -303,19 +335,26 @@ class Command(BaseCommand):
             funi = URIRef(self._fundedsite[str(fun.id)])
             self._graph.add( (funi, RDF.type, self._mcltype.FundedSite) )
             #name
-            self._graph.add( (funi, self._terms.title, Literal(fun.name)) )
+            if fun.name:
+                self._graph.add( (funi, self._terms.title, Literal(fun.name)) )
             #description
-            self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
+            if fun.description:
+                self._graph.add( (funi, self._terms.description, Literal(fun.description)) )
             #abstract
-            self._graph.add( (funi, self._terms.abstract, Literal(fun.abstract)) )
+            if fun.abstract:
+                self._graph.add( (funi, self._terms.abstract, Literal(fun.abstract)) )
             #abbreviation
-            self._graph.add( (funi, self._schema.abbreviatedName, Literal(fun.abbreviation)) )
+            if fun.abbreviation:
+                self._graph.add( (funi, self._schema.abbreviatedName, Literal(fun.abbreviation)) )
             #aims
-            self._graph.add( (funi, self._schema.aims, Literal(fun.aims)) )
+            if fun.aims:
+                self._graph.add( (funi, self._schema.aims, Literal(fun.aims)) )
             #funding start date
-            self._graph.add( (funi, self._schema.fundingStartDate, Literal(fun.funding_date_start)) )
+            if fun.funding_date_start:
+                self._graph.add( (funi, self._schema.fundingStartDate, Literal(fun.funding_date_start)) )
             #funding finish date
-            self._graph.add( (funi, self._schema.fundingFinishDate, Literal(fun.funding_date_finish)) )
+            if fun.funding_date_finish:
+                self._graph.add( (funi, self._schema.fundingFinishDate, Literal(fun.funding_date_finish)) )
             #staff
             for ppl in list(fundedsite_staff_link.objects.filter(fundedsiteid=fun.id)):
                 self._graph.add( (funi, self._schema.staff, URIRef(self._person[str(ppl.personid)])) )
@@ -342,9 +381,11 @@ class Command(BaseCommand):
             orgi = URIRef(self._organ[str(org.id)])
             self._graph.add( (orgi, RDF.type, self._mcltype.Organ) )
             #name
-            self._graph.add( (orgi, self._terms.title, Literal(org.name)) )
+            if org.name:
+                self._graph.add( (orgi, self._terms.title, Literal(org.name)) )
             #description
-            self._graph.add( (orgi, self._terms.description, Literal(org.description)) )
+            if org.description:
+                self._graph.add( (orgi, self._terms.description, Literal(org.description)) )
 
         return  self._graph.serialize(format='xml')
 
@@ -353,8 +394,10 @@ class Command(BaseCommand):
             disi = URIRef(self._disease[str(dis.id)])
             self._graph.add( (disi, RDF.type, self._mcltype.Disease) )
             #name
-            self._graph.add( (disi, self._terms.title, Literal(dis.icd10)) )
+            if dis.icd10:
+                self._graph.add( (disi, self._terms.title, Literal(dis.icd10)) )
             #description
-            self._graph.add( (disi, self._terms.description, Literal(dis.description)) )
+            if dis.description:
+                self._graph.add( (disi, self._terms.description, Literal(dis.description)) )
 
         return  self._graph.serialize(format='xml')
