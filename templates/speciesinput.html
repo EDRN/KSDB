@@ -1,0 +1,90 @@
+{% extends request.GET.modal|yesno:'lib.html,base.html' %}
+{% block content %}
+    <script>
+            function fillspeciesform() {
+                    $('#title').val("{{title}}");
+                    $('#description').html("{{description}}");
+                    $('#duplicate').attr('disabled',true);
+            }
+            $(document).ready( function () {
+                {% ifequal action "Edit" %}fillspeciesform();{% endifequal %}
+        } );
+        </script>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <H2>{{ action }} Species: {{ title }}</H2>
+            <p>
+                Please update the KSDB database with accurate Species information.
+            </p>
+            <br>
+        </div>
+        <div class="col-md-12">
+            <form id="speciesinput" action="/ksdb/speciesinput/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                <label for="name">Species Name</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Name">
+                </fieldset>
+                <fieldset class="form-group">
+                <label for="description">Species Description</label>
+                <textarea class="form-control" name="description" id="description" rows="5"></textarea>
+                <small class="text-muted">Describe your species.</small>
+                </fieldset>
+                <fieldset>
+                    <div class="checkbox">
+                      <label><input name="duplicate" id="duplicate" type="checkbox" value="">Allow Duplicates?</label>
+                    </div>
+                </fieldset>
+                {% ifequal action "Edit" %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="speciesid" value="{{id}}">
+                {% endifequal %}
+                {% ifequal action "New" %}
+                <input type="hidden" name="action" value="new">
+                {% endifequal %}
+                </div>
+            </form>
+            <div class="col-md-12">
+                <font color="red"><center><div id="results"></div></center></font>
+            </div>
+            <div class="col-md-12">
+                <center>
+                <button type="button" class="btn btn-success" id="submit-species" type="button" >{{ action }}</button>
+                <button type="button" class="btn btn-danger" onClick="window.location = '/ksdb/view/?tabpage=species';" id="cancel-species" type="button" >Cancel</button>
+                </center>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var submitButton = document.querySelector("#submit-species")
+        var speciesform = $('#speciesinput');
+        //var removeButton = document.querySelector("#cancel-species")
+            submitButton.addEventListener("click", function () {
+                $.ajax({
+                url : speciesform.attr('action'),
+                type : 'POST',
+                data : speciesform.serialize()+"&duplicate="+$('#duplicate').is(':checked'),
+                success : function (response) {
+                    if(response.Success){
+                      alert(response.Message);
+                      window.location = '/ksdb/view/?tabpage=species';
+                    }else{
+                        $('span.label-danger').remove();
+                        jQuery.each(jQuery.parseJSON(response.Message), function(i, val) {
+                            var $lab_span = $('<span>');
+                            $lab_span.attr("class", "label label-danger");
+                            $lab_span.html(val);
+                            $('#'+i).parent().append($lab_span, '\n');
+                        });
+                        $('#results').html("<font color='red'>Please fix the above form input errors</font>");
+                    }
+                },
+                error : function(xhr, status, error) {
+                    alert("Error: "+xhr.responseText);
+                }
+            });
+        });
+    </script>
+{% endblock %}

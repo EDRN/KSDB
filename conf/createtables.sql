@@ -300,3 +300,33 @@ CREATE TABLE committee_program_link(
         committeeid int references committee(id),
         programid int references program(id),
         UNIQUE ( committeeid, programid ));
+
+---3-17-17----
+
+CREATE TABLE species(
+        id int,
+        title text,
+        description text,
+        PRIMARY KEY( id ));
+CREATE SEQUENCE species_seq START 1;
+
+CREATE TABLE specimentype(
+        id int,
+        title text,
+        description text,
+        organs text,
+        PRIMARY KEY( id ));
+CREATE SEQUENCE specimentype_seq START 1;
+
+CREATE TABLE specimentype_organ_link(
+        id serial NOT NULL,
+        specimentypeid int references specimentype(id),
+        organid int references organ(id),
+        UNIQUE ( specimentypeid, organid ));
+
+CREATE TABLE discipline(
+        id int,
+        title text,
+        description text,
+        PRIMARY KEY( id ));
+CREATE SEQUENCE discipline_seq START 1;

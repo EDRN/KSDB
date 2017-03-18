@@ -4,9 +4,6 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 import requests
 
-# Create your views here.
-from ksdb.models import protocol, organ, organ_protocol_link, person, pi_protocol_link, program, institution, fundedsite, publication, degree
-
 #import settings
 from django.conf import settings
 import logging
@@ -38,6 +35,9 @@ def view_service(request):
     institutionheaders = ["Select","Institution ID", "Name", "Abbreviation"]
     programheaders = ["Select","Program ID", "Title", "Abbreviation"]
     organheaders = ["Select","Organ ID", "Name"]
+    disciplineheaders = ["Select","Discipline ID", "Name"]
+    speciesheaders = ["Select","Species ID", "Name"]
+    specimentypeheaders = ["Select","Specimen Type ID", "Name"]
     diseaseheaders = ["Select","Disease ID", "ICD10 Name"]
     degreeheaders = ["Select","Degree ID", "Title"]
 
@@ -52,6 +52,9 @@ def view_service(request):
             'institutionheaders': institutionheaders,
             'programheaders': programheaders,
             'organheaders': organheaders,
+            'disciplineheaders': disciplineheaders,
+            'speciesheaders': speciesheaders,
+            'specimentypeheaders': specimentypeheaders,
             'degreeheaders': degreeheaders,
             'diseaseheaders': diseaseheaders,
             'groupheaders': groupheaders,

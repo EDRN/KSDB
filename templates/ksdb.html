@@ -79,6 +79,12 @@
                 </li>
                 <li><a id="organtab" href="#organ">Organs</a>
                 </li>
+                <li><a id="speciestab" href="#species">Species</a>
+                </li>
+                <li><a id="specimentypetab" href="#specimentype">Specimen Type</a>
+                </li>
+                <li><a id="disciplinetab" href="#discipline">Discipline</a>
+                </li>
                 <li><a id="diseasetab" href="#disease">Diseases</a>
                 </li>
                 <li><a id="degreetab" href="#degree">Degrees</a>
@@ -119,6 +125,15 @@
                 </div>
                 <div class="tab-pane" id="organ">
                     {% include "ksdbobjview.html" with ksdbobj="organ" ksdbobjtitle="Organ" ksdbobjheaders=organheaders %} 
+                </div>
+                <div class="tab-pane" id="discipline">
+                    {% include "ksdbobjview.html" with ksdbobj="discipline" ksdbobjtitle="Discipline" ksdbobjheaders=disciplineheaders %} 
+                </div>
+                <div class="tab-pane" id="species">
+                    {% include "ksdbobjview.html" with ksdbobj="species" ksdbobjtitle="Species" ksdbobjheaders=speciesheaders %} 
+                </div>
+                <div class="tab-pane" id="specimentype">
+                    {% include "ksdbobjview.html" with ksdbobj="specimentype" ksdbobjtitle="Specimen Type" ksdbobjheaders=specimentypeheaders %} 
                 </div>
                 <div class="tab-pane" id="degree">
                     {% include "ksdbobjview.html" with ksdbobj="degree" ksdbobjtitle="Degree" ksdbobjheaders=degreeheaders %} 

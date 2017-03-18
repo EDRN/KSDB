@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, species, specimentype, discipline, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link
 from ksdb.forms import PublicationForm
 
 #import settings
@@ -27,6 +27,9 @@ class Command(BaseCommand):
     _program = Namespace(_baseurl+"ksdb/programinput/?id=")
     _group = Namespace(_baseurl+"ksdb/groupinput/?id=")
     _organ = Namespace(_baseurl+"ksdb/organinput/?id=")
+    _species = Namespace(_baseurl+"ksdb/speciesinput/?id=")
+    _specimentype = Namespace(_baseurl+"ksdb/specimentypeinput/?id=")
+    _discipline = Namespace(_baseurl+"ksdb/disciplineinput/?id=")
     _disease = Namespace(_baseurl+"ksdb/diseaseinput/?id=")
     _fundedsite = Namespace(_baseurl+"ksdb/fundedsiteinput/?id=")
     _email = Namespace("mailto:")
@@ -63,6 +66,12 @@ class Command(BaseCommand):
             rdf = self.getpersonrdf(filterobj, options['filterval'])
         if 'organ' in options['rdftype']:
             rdf = self.getorganrdf()
+        if 'discipline' in options['rdftype']:
+            rdf = self.getdisciplinerdf()
+        if 'specimentype' in options['rdftype']:
+            rdf = self.getspecimentyperdf()
+        if 'species' in options['rdftype']:
+            rdf = self.getspeciesrdf()
         if 'disease' in options['rdftype']:
             rdf = self.getdiseaserdf()
         if 'degree' in options['rdftype']:
@@ -386,6 +395,45 @@ class Command(BaseCommand):
             #description
             if org.description:
                 self._graph.add( (orgi, self._terms.description, Literal(org.description)) )
+
+        return  self._graph.serialize(format='xml')
+
+    def getspeciesrdf(self):
+        for spe in list(species.objects.all()):
+            spei = URIRef(self._species[str(spe.id)])
+            self._graph.add( (spei, RDF.type, self._mcltype.Species) )
+            #name
+            if spe.title:
+                self._graph.add( (spei, self._terms.title, Literal(spe.title)) )
+            #description
+            if spe.description:
+                self._graph.add( (spei, self._terms.description, Literal(spe.description)) )
+
+        return  self._graph.serialize(format='xml')
+
+    def getspecimentyperdf(self):
+        for spe in list(specimentype.objects.all()):
+            spei = URIRef(self._specimentype[str(spe.id)])
+            self._graph.add( (spei, RDF.type, self._mcltype.SpecimenType) )
+            #name
+            if spe.title:
+                self._graph.add( (spei, self._terms.title, Literal(spe.title)) )
+            #description
+            if spe.description:
+                self._graph.add( (spei, self._terms.description, Literal(spe.description)) )
+
+        return  self._graph.serialize(format='xml')
+
+    def getdisciplinerdf(self):
+        for dis in list(discipline.objects.all()):
+            disi = URIRef(self._discipline[str(dis.id)])
+            self._graph.add( (disi, RDF.type, self._mcltype.Discipline) )
+            #name
+            if dis.title:
+                self._graph.add( (disi, self._terms.title, Literal(dis.title)) )
+            #description
+            if dis.description:
+                self._graph.add( (disi, self._terms.description, Literal(dis.description)) )
 
         return  self._graph.serialize(format='xml')
 

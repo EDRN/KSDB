@@ -330,6 +330,41 @@ class committee_program_link(models.Model):
         db_table = u'committee_program_link'
         unique_together = (("committeeid", "programid"),)
 
+#Species
+class species(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=5000, blank=True, null=True)
+
+    class Meta:
+        db_table = u'species'
+
+#Specimen Type
+class specimentype(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=128)
+    organs = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
+
+    class Meta:
+        db_table = u'specimentype'
+
+class specimentype_organ_link(models.Model):
+    specimentypeid = models.IntegerField()
+    organid = models.IntegerField()
+
+    class Meta:
+        db_table = u'specimentype_organ_link'
+        unique_together = (("specimentypeid", "organid"),)
+
+#Discipline
+class discipline(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=5000, blank=True, null=True)
+
+    class Meta:
+        db_table = u'discipline'
 
 class IdSeq(models.Model):
     """
@@ -346,4 +381,3 @@ class IdSeq(models.Model):
     log_cnt = models.IntegerField()
     is_cycled = models.BooleanField()
     is_called = models.BooleanField()
-
