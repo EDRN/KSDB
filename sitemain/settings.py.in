@@ -4,7 +4,7 @@ import ldap
 from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE_URL = "[SITE_URL]"
+RDF_URL = "[RDF_URL]"
 
 #LDAP Configurations
 # Baseline configuration.

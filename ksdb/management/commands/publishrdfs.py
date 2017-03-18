@@ -13,11 +13,11 @@ import re
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    _baseurl = settings.SITE_URL
-    _schema = Namespace("https://mcl.jpl.nasa.gov/rdf/schema.rdf#")
+    _baseurl = settings.RDF_URL
+    _schema = Namespace("https://cancer.jpl.nasa.gov/rdf/schema.rdf#")
     _terms = Namespace("http://purl.org/dc/terms/")
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
-    _mcltype = Namespace("https://mcl.jpl.nasa.gov/rdf/types.rdf#")
+    _cancertype = Namespace("https://cancer.jpl.nasa.gov/rdf/types.rdf#")
     _publication = Namespace(_baseurl+"ksdb/publicationinput/?id=")
     _committee = Namespace(_baseurl+"ksdb/committeeinput/?id=")
     _protocol = Namespace(_baseurl+"ksdb/protocolinput/?id=")
@@ -91,7 +91,7 @@ class Command(BaseCommand):
         if pubs:
             for pub in pubs:
                 pubi = URIRef(self._publication[str(pub.id)])
-                self._graph.add( (pubi, RDF.type, self._mcltype.Publication) )
+                self._graph.add( (pubi, RDF.type, self._cancertype.Publication) )
                 #currently not linking authors to internal people database yet, displaying author as text
                 #for ppl in list(publication_author_link.objects.filter(publicationid=pub.id)):
                 #    per = person.objects.filter(id=ppl.personid)
@@ -126,7 +126,7 @@ class Command(BaseCommand):
             prots = protocol.objects.all()
         for pro in prots:
             proi = URIRef(self._protocol[str(pro.id)])
-            self._graph.add( (proi, RDF.type, self._mcltype.Protocol) )
+            self._graph.add( (proi, RDF.type, self._cancertype.Protocol) )
             #pis
             for ppl in list(pi_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.pi, URIRef(self._person[str(ppl.id)])) )
@@ -195,7 +195,7 @@ class Command(BaseCommand):
             pers = person.objects.all()
         for per in pers:
             peri = URIRef(self._person[str(per.id)])
-            self._graph.add( (peri, RDF.type, self._mcltype.Person) )
+            self._graph.add( (peri, RDF.type, self._cancertype.Person) )
             #lastname
             if per.lastname:
                 self._graph.add( (peri, self._faof.surname, Literal(per.lastname)) )
@@ -222,7 +222,7 @@ class Command(BaseCommand):
     def getdegreerdf(self):
         for deg in list(degree.objects.all()):
             degi = URIRef(self._degree[str(deg.id)])
-            self._graph.add( (degi, RDF.type, self._mcltype.Degree) )
+            self._graph.add( (degi, RDF.type, self._cancertype.Degree) )
             #title
             if deg.title:
                 self._graph.add( (degi, self._terms.title, Literal(deg.title)) )
@@ -235,7 +235,7 @@ class Command(BaseCommand):
     def getprogramrdf(self):
         for pro in list(program.objects.all()):
             proi = URIRef(self._program[str(pro.id)])
-            self._graph.add( (proi, RDF.type, self._mcltype.Program) )
+            self._graph.add( (proi, RDF.type, self._cancertype.Program) )
             #title
             if pro.title:
                 self._graph.add( (proi, self._terms.title, Literal(pro.title)) )
@@ -258,7 +258,7 @@ class Command(BaseCommand):
             coms = committee.objects.all()
         for com in coms:
             comi = URIRef(self._committee[str(com.id)])
-            self._graph.add( (comi, RDF.type, self._mcltype.Group) )
+            self._graph.add( (comi, RDF.type, self._cancertype.Group) )
             #name
             if com.title:
                 self._graph.add( (comi, self._terms.title, Literal(com.title)) )
@@ -284,7 +284,7 @@ class Command(BaseCommand):
             grps = group.objects.all()
         for grp in grps:
             grpi = URIRef(self._group[str(grp.id)])
-            self._graph.add( (grpi, RDF.type, self._mcltype.Group) )
+            self._graph.add( (grpi, RDF.type, self._cancertype.Group) )
             #name
             if grp.name:
                 self._graph.add( (grpi, self._terms.title, Literal(grp.name)) )
@@ -311,7 +311,7 @@ class Command(BaseCommand):
             ints = institution.objects.all()
         for ins in ints:
             insi = URIRef(self._institution[str(ins.id)])
-            self._graph.add( (insi, RDF.type, self._mcltype.Institution) )
+            self._graph.add( (insi, RDF.type, self._cancertype.Institution) )
             #name
             if ins.name:
                 self._graph.add( (insi, self._terms.title, Literal(ins.name)) )
@@ -342,7 +342,7 @@ class Command(BaseCommand):
             funs = fundedsite.objects.all()
         for fun in funs:
             funi = URIRef(self._fundedsite[str(fun.id)])
-            self._graph.add( (funi, RDF.type, self._mcltype.FundedSite) )
+            self._graph.add( (funi, RDF.type, self._cancertype.FundedSite) )
             #name
             if fun.name:
                 self._graph.add( (funi, self._terms.title, Literal(fun.name)) )
@@ -388,7 +388,7 @@ class Command(BaseCommand):
     def getorganrdf(self):
         for org in list(organ.objects.all()):
             orgi = URIRef(self._organ[str(org.id)])
-            self._graph.add( (orgi, RDF.type, self._mcltype.Organ) )
+            self._graph.add( (orgi, RDF.type, self._cancertype.Organ) )
             #name
             if org.name:
                 self._graph.add( (orgi, self._terms.title, Literal(org.name)) )
@@ -401,7 +401,7 @@ class Command(BaseCommand):
     def getspeciesrdf(self):
         for spe in list(species.objects.all()):
             spei = URIRef(self._species[str(spe.id)])
-            self._graph.add( (spei, RDF.type, self._mcltype.Species) )
+            self._graph.add( (spei, RDF.type, self._cancertype.Species) )
             #name
             if spe.title:
                 self._graph.add( (spei, self._terms.title, Literal(spe.title)) )
@@ -414,7 +414,7 @@ class Command(BaseCommand):
     def getspecimentyperdf(self):
         for spe in list(specimentype.objects.all()):
             spei = URIRef(self._specimentype[str(spe.id)])
-            self._graph.add( (spei, RDF.type, self._mcltype.SpecimenType) )
+            self._graph.add( (spei, RDF.type, self._cancertype.SpecimenType) )
             #name
             if spe.title:
                 self._graph.add( (spei, self._terms.title, Literal(spe.title)) )
@@ -427,7 +427,7 @@ class Command(BaseCommand):
     def getdisciplinerdf(self):
         for dis in list(discipline.objects.all()):
             disi = URIRef(self._discipline[str(dis.id)])
-            self._graph.add( (disi, RDF.type, self._mcltype.Discipline) )
+            self._graph.add( (disi, RDF.type, self._cancertype.Discipline) )
             #name
             if dis.title:
                 self._graph.add( (disi, self._terms.title, Literal(dis.title)) )
@@ -440,7 +440,7 @@ class Command(BaseCommand):
     def getdiseaserdf(self):
         for dis in list(disease.objects.all()):
             disi = URIRef(self._disease[str(dis.id)])
-            self._graph.add( (disi, RDF.type, self._mcltype.Disease) )
+            self._graph.add( (disi, RDF.type, self._cancertype.Disease) )
             #name
             if dis.icd10:
                 self._graph.add( (disi, self._terms.title, Literal(dis.icd10)) )
