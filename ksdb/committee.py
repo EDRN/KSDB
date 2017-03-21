@@ -8,7 +8,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import committee, committee_member_link, committee_program_link, person, program
+from ksdb.models import committee, committee_member_link, committee_chair_link, committee_cochair_link, committee_program_link, person, program
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -27,6 +27,20 @@ def save_committee_links(com_id, request):
         committee_member_linkm = committee_member_link(committeeid = com_id, personid = per_split[0])
         committee_member_linkm.save()
 
+    chairs = request.POST.getlist('chairs')
+    committee_chair_link.objects.filter(committeeid=com_id).delete()
+    for per in chairs:
+        per_split = per.split(":")
+        committee_chair_linkm = committee_chair_link(committeeid = com_id, personid = per_split[0])
+        committee_chair_linkm.save()
+
+    cochairs = request.POST.getlist('cochairs')
+    committee_cochair_link.objects.filter(committeeid=com_id).delete()
+    for per in cochairs:
+        per_split = per.split(":")
+        committee_cochair_linkm = committee_cochair_link(committeeid = com_id, personid = per_split[0])
+        committee_cochair_linkm.save()
+
     #delete and save new program committee associations
     programs = request.POST.getlist('programs')
     committee_program_link.objects.filter(committeeid=com_id).delete()
@@ -40,6 +54,8 @@ def gen_committee_data(request):
     personfield = ekeutils.get_eke_list("person")
     data = {"action" : "New" ,
         "members" : personfield ,
+        "chairs" : personfield ,
+        "cochairs" : personfield ,
         "programs" : programfield ,
        }
     if request.method == 'GET':
@@ -51,8 +67,12 @@ def gen_committee_data(request):
                     "description" : escapejs(obj.description),
                     "abbreviation" : obj.abbreviation,
                     "member_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(committee_member_link.objects.filter(committeeid=int(committeeid))) ]),
+                    "chair_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(committee_chair_link.objects.filter(committeeid=int(committeeid))) ]),
+                    "cochair_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(committee_cochair_link.objects.filter(committeeid=int(committeeid))) ]),
                     "program_link_id" : [ fpl.programid for fpl in list(committee_program_link.objects.filter(committeeid=int(committeeid))) ],
                     "members" : personfield ,
+                    "chairs" : personfield ,
+                    "cochairs" : personfield ,
                     "programs" : programfield ,
                     "title" : obj.title ,
                    }
@@ -68,6 +88,10 @@ def delete_committee(request):
             for com_id in ids:
                 #delete member committee associations
                 committee_member_link.objects.filter(committeeid=com_id).delete()
+                #delete chair committee associations
+                committee_chair_link.objects.filter(committeeid=com_id).delete()
+                #delete cochair committee associations
+                committee_cochair_link.objects.filter(committeeid=com_id).delete()
                 #delete program committee associations
                 committee_program_link.objects.filter(committeeid=com_id).delete()
                 #delete committee itself
@@ -99,6 +123,10 @@ def committee_input(request):
             parameters['programs'] = ", ".join(programs)
             members = request.POST.getlist('members')
             parameters['members'] = ", ".join(members)
+            chairs = request.POST.getlist('chairs')
+            parameters['chairs'] = ", ".join(chairs)
+            cochairs = request.POST.getlist('cochairs')
+            parameters['cochairs'] = ", ".join(cochairs)
             committeei = committee.objects.get(id=com_id)
             committeem = CommitteeForm(parameters or None, instance=committeei)
         else:

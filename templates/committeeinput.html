@@ -9,10 +9,14 @@
                     $('#duplicate').attr('disabled',true);
 
                     addPersonWidget("{{member_link_id}}", 'members');   //set member values
+                    addPersonWidget("{{chair_link_id}}", 'chairs');     //set chair values
+                    addPersonWidget("{{cochair_link_id}}", 'cochairs'); //set co-chair values
             }
             $(document).ready( function () {
                 updateLists("program", "programs");
                 setAutocompleteList('members','person');
+                setAutocompleteList('chairs','person');
+                setAutocompleteList('cochairs','person');
                 {% ifequal action "Edit" %}
                     setTimeout(fillcommitteeform, 1000);
                 {% endifequal %}
@@ -42,7 +46,21 @@
                     </select>
                     </fieldset>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-4">
+                    <fieldset class="form-group">
+                    <label for="chairs">Chair(s)</label>
+                    <select multiple class="form-control" size=7 id="chairs" name="chairs">
+                    </select>
+                    </fieldset>
+                </div>
+                <div class="col-md-4">
+                    <fieldset class="form-group">
+                    <label for="cochairs">Co-Chair(s)</label>
+                    <select multiple class="form-control" size=7 id="cochairs" name="cochairs">
+                    </select>
+                    </fieldset>
+                </div>
+                <div class="col-md-4">
                     <fieldset class="form-committee">
                     <label for="members">Members</label>
                     <select multiple class="form-control" size=7 id="members" name="members">

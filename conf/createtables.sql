@@ -330,3 +330,20 @@ CREATE TABLE discipline(
         description text,
         PRIMARY KEY( id ));
 CREATE SEQUENCE discipline_seq START 1;
+
+---3-21-17----
+alter table committee add column chair text;
+alter table committee add column cochair text;
+
+CREATE TABLE committee_chair_link(
+        id serial NOT NULL,
+        committeeid int references committee(id),
+        personid int references person(id),
+        UNIQUE ( committeeid, personid ));
+
+CREATE TABLE committee_cochair_link(
+        id serial NOT NULL,
+        committeeid int references committee(id),
+        personid int references person(id),
+        UNIQUE ( committeeid, personid ));
+

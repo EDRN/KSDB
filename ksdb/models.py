@@ -307,6 +307,8 @@ class committee(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=500)
     abbreviation = models.CharField(max_length=500)
+    chair = models.CharField(max_length=500, blank=True, null=True)
+    cochair = models.CharField(max_length=500, blank=True, null=True)
     members = models.CharField(max_length=5000, blank=True, null=True)
     programs = models.CharField(max_length=500)
     description = models.CharField(max_length=5000, blank=True, null=True)
@@ -329,6 +331,22 @@ class committee_program_link(models.Model):
     class Meta:
         db_table = u'committee_program_link'
         unique_together = (("committeeid", "programid"),)
+
+class committee_cochair_link(models.Model):
+    committeeid = models.IntegerField()
+    personid = models.IntegerField()
+
+    class Meta:
+        db_table = u'committee_cochair_link'
+        unique_together = (("committeeid", "personid"),)
+
+class committee_chair_link(models.Model):
+    committeeid = models.IntegerField()
+    personid = models.IntegerField()
+
+    class Meta:
+        db_table = u'committee_chair_link'
+        unique_together = (("committeeid", "personid"),)
 
 #Species
 class species(models.Model):
