@@ -9,6 +9,7 @@ from sitemain import settings
 import logging
 import json
 import re
+import phonenumbers
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,6 @@ class Command(BaseCommand):
     _discipline = Namespace(_baseurl+"ksdb/disciplineinput/?id=")
     _disease = Namespace(_baseurl+"ksdb/diseaseinput/?id=")
     _fundedsite = Namespace(_baseurl+"ksdb/fundedsiteinput/?id=")
-    _email = Namespace("mailto:")
 
     _graph = None
 
@@ -165,7 +165,7 @@ class Command(BaseCommand):
                 self._graph.add( (proi, self._schema.sitecontact, Literal(pro.site_contact)) )
             #irbcontact
             if pro.irb_contact:
-                self._graph.add( (proi, self._schema.irbcontact, URIRef(self._email[pro.irb_contact])) )
+                self._graph.add( (proi, self._schema.irbcontact, URIRef(pro.irb_contact)) )
             
         return  self._graph.serialize(format='xml')
 
@@ -204,10 +204,13 @@ class Command(BaseCommand):
                 self._graph.add( (peri, self._faof.givenname, Literal(per.firstname)) )
             #email
             if per.email:
-                self._graph.add( (peri, self._faof.mbox, URIRef(self._email[per.email])) )
+                self._graph.add( (peri, self._faof.mbox, URIRef(per.email)) )
             #phone
             if per.telephone:
-                self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
+                #Correct phone before publishing
+                parsednumber = phonenumbers.parse(per.telephone, "US")
+                formatednumber = phonenumbers.format_number(parsednumber, phonenumbers.PhoneNumberFormat.RFC3966).replace("tel:","")
+                self._graph.add( (peri, self._faof.phone, Literal(formatednumber)) )
             #dcp and dcb flag
             if per.dcb:
                 self._graph.add( (peri, self._schema.has_dcb, Literal(per.dcb)) )
