@@ -9,7 +9,6 @@ from sitemain import settings
 import logging
 import json
 import re
-import phonenumbers
 
 logger = logging.getLogger(__name__)
 
@@ -207,10 +206,7 @@ class Command(BaseCommand):
                 self._graph.add( (peri, self._faof.mbox, URIRef(per.email)) )
             #phone
             if per.telephone:
-                #Correct phone before publishing
-                parsednumber = phonenumbers.parse(per.telephone, "US")
-                formatednumber = phonenumbers.format_number(parsednumber, phonenumbers.PhoneNumberFormat.RFC3966).replace("tel:","")
-                self._graph.add( (peri, self._faof.phone, Literal(formatednumber)) )
+                self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
             #dcp and dcb flag
             if per.dcb:
                 self._graph.add( (peri, self._schema.has_dcb, Literal(per.dcb)) )
