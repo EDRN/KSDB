@@ -203,7 +203,7 @@ class Command(BaseCommand):
                 self._graph.add( (peri, self._faof.givenname, Literal(per.firstname)) )
             #email
             if per.email:
-                self._graph.add( (peri, self._faof.mbox, URIRef(per.email)) )
+                self._graph.add( (peri, self._faof.mbox, Literal(per.email)) )
             #phone
             if per.telephone:
                 self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
