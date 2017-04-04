@@ -19,7 +19,7 @@
                     $('#duplicate').attr('disabled',true);
             }
             $(document).ready( function () {
-                setAutocompleteList('personnel','person');
+                setAutocompleteList('personnel','person', '', '', 1);
                 {% ifequal action "Edit" %}
                     setTimeout(fillinstitutionform, 500);
                 {% endifequal %}

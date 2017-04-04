@@ -61,9 +61,9 @@
                 updateLists("organ", "organs");
                 updateLists("publication", "publications");
                 updateLists("fundedsite", "fundedsites");
-                setAutocompleteList('pis','person');
-                setAutocompleteList('cis','person');
-                setAutocompleteList('cus','person');
+                setAutocompleteList('pis','person', '', '', 1);
+                setAutocompleteList('cis','person', '', '', 1);
+                setAutocompleteList('cus','person', '', '', 1);
                 $('#organs').select2();
                 $('#publications').select2();
                 {% ifequal action "Edit" %}

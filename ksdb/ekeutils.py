@@ -2,35 +2,51 @@
 from django.http import JsonResponse
 # Create your views here.
 from django.db.models import Q
-from ksdb.models import protocol, organ, person, fundedsite, program, degree, institution, publication
+from ksdb.models import protocol, organ, person, fundedsite, program, degree, institution, publication, institution_personnel_link
 
 _KSDBhref = "/ksdb/"
+
+def getPersonnelFromInst(institutions, q=None):
+    persons = None
+    if q:
+        person_objs = person.objects.filter(id__in = [ipl.personid for ipl in institution_personnel_link.objects.filter(institutionid__in = institutions)])
+        persons = person_objs.filter(q)
+    else:
+        persons = person.objects.filter(id__in = [ipl.personid for ipl in institution_personnel_link.objects.filter(institutionid__in = institutions)])
+    return persons
 
 def eke_api(request):
     if request.GET.get("action") == "getobjlist":
         objlist = []
         if "filter" in request.GET:
-            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filter"))
+            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=request.GET.get("filtervalue"), filtersearch=request.GET.get("filter"))
         else:
-            objlist = get_eke_list(request.GET.get("eketype"))
+            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=request.GET.get("filtervalue"))
             
         return JsonResponse({'objlist':objlist})
 
-def get_eke_list(eketype, filterby=None):
+def get_eke_list(eketype, filterby=None, filterval=None, filtersearch=None):
     field = []
 
     q = None
-    if filterby:
-        for word in filterby.split():
+    if filtersearch:
+        for word in filtersearch.split():
            q_aux = Q( firstname__icontains = word )
            q_aux2 = Q( lastname__icontains = word )
            q = ( (q_aux | q_aux2) & q ) if bool( q ) else (q_aux2 | q_aux)
 
     if eketype == "person":
-        if filterby:
-            field = [ { "id": str(obj.id)+":"+str(obj.firstname)+" "+str(obj.lastname), "name": str(obj.firstname)+" "+str(obj.lastname)} for obj in list(person.objects.filter( q )) ]
-        else:
-            field = [ [str(obj.id), str(obj.firstname)+" "+str(obj.lastname)] for obj in list(person.objects.all()) ]
+        persons = None
+        if filterby and filterval:
+            if filterby != '' and filterval != '':
+                if filterby == 'institution':
+                    persons = getPersonnelFromInst(list(map(int, filterval.split(','))), q)
+        if persons is None:
+            if q:
+                persons = person.objects.filter( q )
+            else:
+                persons = person.objects.all()
+        field = [ { "id": str(obj.id)+":"+str(obj.firstname)+" "+str(obj.lastname), "name": str(obj.firstname)+" "+str(obj.lastname)} for obj in list(persons) ]
         #field.sort(key=lambda x: x[1].lower())
     elif eketype == "organ":
         field = [ [str(obj.id), str(obj.name)] for obj in list(organ.objects.all()) ]
@@ -55,6 +71,7 @@ def get_eke_list(eketype, filterby=None):
         field.sort(key=lambda x: x[1].lower())
 
     return field
+
 
 def getPersonNameByID(perid):
     try:

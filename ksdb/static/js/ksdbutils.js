@@ -18,6 +18,7 @@ function updateselectobjs(objtype, objs) {
         }
     });
 }
+//This functions automatically queries the db. For short queries.
 function updateLists(type, ele) {
     $.ajax({
         url : "/ksdb/ekeapi/?action=getobjlist&eketype="+type,
@@ -30,9 +31,12 @@ function updateLists(type, ele) {
         }
     });
 }
-function setAutocompleteList(id, type){
+//This function requires you to type at least one character to start
+//searching through the db. Speeds up the processing time. For large
+//queries. Also allows filtering by linking other tables to main table.
+function setAutocompleteList(id, type, filterby, filterval, minlength){
     $('#'+id).select2({
-        minimumInputLength: 1,
+        minimumInputLength: minlength,
         ajax: {
             url : "/ksdb/ekeapi/?action=getobjlist&eketype="+type,
             type : 'GET',
@@ -40,7 +44,9 @@ function setAutocompleteList(id, type){
             data: function (params) {
               return {
                 filter: params.term, // search term
-                page: params.page
+                page: params.page,
+                filtervalue: filterval,
+                filterby: filterby,
               };
             },
             processResults: function (data, page) {

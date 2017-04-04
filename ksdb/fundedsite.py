@@ -18,21 +18,13 @@ from ksdb.forms import FundedsiteForm
 import logging
 logger = logging.getLogger(__name__)
 
-def getPersonnelFromInst(institutions):
-    personfield = []
-    for ins in institutions:
-        for ipl in institution_personnel_link.objects.filter(institutionid = ins):
-            per = person.objects.get(id = ipl.personid)
-            personfield.append([str(per.id), str(per.firstname), str(per.lastname)])
-    personfield.sort(key=lambda x: x[1].lower())
-    return personfield
-
 def save_fundedsite_links(fun_id, request):
     #delete and save new person fundedsite associations
     pis = request.POST.getlist('pis')
     fundedsite_pi_link.objects.filter(fundedsiteid=fun_id).delete()
     for per in pis:
-        fundedsite_pi_linkm = fundedsite_pi_link(fundedsiteid = fun_id, personid = per)
+        per_split = per.split(":")
+        fundedsite_pi_linkm = fundedsite_pi_link(fundedsiteid = fun_id, personid = per_split[0])
         fundedsite_pi_linkm.save()
 
     #delete and save new contact fundedsite associations
@@ -47,7 +39,8 @@ def save_fundedsite_links(fun_id, request):
     staffs = request.POST.getlist('staff')
     fundedsite_staff_link.objects.filter(fundedsiteid=fun_id).delete()
     for per in staffs:
-        fundedsite_staff_linkm = fundedsite_staff_link(fundedsiteid = fun_id, personid = per)
+        per_split = per.split(":")
+        fundedsite_staff_linkm = fundedsite_staff_link(fundedsiteid = fun_id, personid = per_split[0])
         fundedsite_staff_linkm.save()
 
     #delete and save new person fundedsite associations
@@ -91,22 +84,18 @@ def gen_fundedsite_data(request):
         if fundedsiteid:
             obj = fundedsite.objects.get(pk=int(fundedsiteid))
             institutionids = [ fil.institutionid for fil in list(fundedsite_institution_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]
-            personfield = getPersonnelFromInst(institutionids)
             data = { "action" : "Edit",
                     "id" : obj.id,
                     "description" : escapejs(obj.description),
                     "abstract" : escapejs(obj.abstract),
                     "aims" : escapejs(obj.aims),
                     "abbreviation" : obj.abbreviation,
-                    "pi_link_id" : [ fpl.personid for fpl in list(fundedsite_pi_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
-                    "contact_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(con_fundedsite_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]),
-                    "staff_link_id" : [ fsl.personid for fsl in list(fundedsite_staff_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
+                    "pi_link_id" : ",".join([ str(fpl.personid)+":"+person.objects.get(id=fpl.personid).firstname+" "+person.objects.get(id=fpl.personid).lastname for fpl in list(fundedsite_pi_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]),
+                    "contact_link_id" : ",".join([ str(fpl.personid)+":"+person.objects.get(id=fpl.personid).firstname+" "+person.objects.get(id=fpl.personid).lastname for fpl in list(con_fundedsite_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]),
+                    "staff_link_id" : ",".join([ str(fsl.personid)+":"+person.objects.get(id=fsl.personid).firstname+" "+person.objects.get(id=fsl.personid).lastname for fsl in list(fundedsite_staff_link.objects.filter(fundedsiteid=int(fundedsiteid))) ]),
                     "organ_link_id" : [ fol.organid for fol in list(fundedsite_organ_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "program_link_id" : [ fpl.programid for fpl in list(fundedsite_program_link.objects.filter(fundedsiteid=int(fundedsiteid))) ],
                     "institution_link_id" : institutionids,
-                    "pis" : personfield ,
-                    "contacts" : personfield ,
-                    "staffs" : personfield ,
                     "organs" : organfield ,
                     "programs" : programfield ,
                     "name" : obj.name ,
@@ -197,10 +186,10 @@ def fundedsite_input(request):
         return JsonResponse({'Success':success,
                                 'Message':message})
 
-    elif request.method == 'POST' and instchange == "1":
-            institutions = request.POST.getlist('institutions')
-            personfield = getPersonnelFromInst(institutions)
-            return JsonResponse({'Personnel':personfield})
+    #elif request.method == 'POST' and instchange == "1":
+            #institutions = request.POST.getlist('institutions')
+            #personfield = getPersonnelFromInst(institutions)
+            #return JsonResponse({'Personnel':personfield})
     
     #generate fundedsite data from db
     data = gen_fundedsite_data(request)

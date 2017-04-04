@@ -13,9 +13,9 @@
             }
             $(document).ready( function () {
                 updateLists("program", "programs");
-                setAutocompleteList('members','person');
-                setAutocompleteList('chairs','person');
-                setAutocompleteList('cochairs','person');
+                setAutocompleteList('members','person', '', '', 1);
+                setAutocompleteList('chairs','person', '', '', 1);
+                setAutocompleteList('cochairs','person', '', '', 1);
                 {% ifequal action "Edit" %}
                     setTimeout(fillgroupform, 1000);
                 {% endifequal %}
