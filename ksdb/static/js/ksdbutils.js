@@ -2,19 +2,26 @@ function updateselectobjs(objtype, objs) {
     var selected = $('#'+objtype).val();
     $('#'+objtype).html("");
     $.each(objs, function(key, value) {
+        var valobj = value;
         addedflag = 0;
         $.each(selected, function(selkey, selvalue) {
-            if(value.join(":")  == selvalue){
-                $('#'+objtype).append($("<option selected></option>")
-                .attr("value",value.join(":"))
-                .text(value[1]));
-                addedflag = 1;
+            if(valobj.length > 1 || "id" in valobj){
+                if("id" in valobj){
+                    valobj = valobj.id.split(":");
+                    selvalue = selvalue.split(":")[0];
+                }
+                if(valobj[0] == selvalue){
+                    $('#'+objtype).append($("<option selected></option>")
+                    .attr("value",valobj.join(":"))
+                    .text(valobj[1]));
+                    addedflag = 1;
+                }
             }
         });
         if (addedflag == 0){
             $('#'+objtype).append($("<option></option>")
-                .attr("value",value[0])
-                .text(value[1]));
+                .attr("value",valobj[0])
+                .text(valobj[1]));
         }
     });
 }
