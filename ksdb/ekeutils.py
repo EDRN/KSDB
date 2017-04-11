@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 from ksdb.models import protocol, organ, person, fundedsite, program, degree, institution, publication, institution_personnel_link
 
+import re
+
 _KSDBhref = "/ksdb/"
 
 def getPersonnelFromInst(institutions, q=None):
@@ -86,3 +88,23 @@ def getProgramTitleByID(proid):
         return str(pro.title)
     except:
         return None
+
+def format_phone(phone):
+    # strip non-numeric characters
+    phone = phone.lower().strip()
+    if phone == "":
+        return phone
+    extension = ""
+    if 'ext' in phone:
+        phone, extension = phone.split('ext')
+    if 'x' in phone:
+        phone, extension = phone.split('x')
+    phone = re.sub(r'\D', '', phone)
+    # remove leading 1 (area codes never start with 1)
+    if len(phone) == 11:
+        return ['+{} ({}) {}.{}'.format(phone[0], phone[1:4], phone[4:7], phone[7:11]), extension]
+    elif len(phone) == 10:
+        return ['+1 ({}) {}.{}'.format(phone[0:3], phone[3:6], phone[6:10]), extension]
+    else:
+        return None
+        

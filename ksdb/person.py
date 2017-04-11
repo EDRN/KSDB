@@ -1,4 +1,5 @@
 # persons.py
+from ksdb.ekeutils import format_phone
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.html import escapejs
@@ -42,8 +43,9 @@ def gen_person_data(request):
                     "dcbflag" : obj.dcb,
                     "degree_link_id" : [ pdl.degreeid for pdl in list(person_degree_link.objects.filter(personid=int(personid))) ],
                     "degrees" : degreefield,
-                    "email" : obj.email,
-                    "telephone" : obj.telephone,
+                    "email" : obj.email or "",
+                    "telephone" : obj.telephone or "",
+                    "extension" : obj.extension or "",
                     "description" : escapejs(obj.description),
                    }
     return data
@@ -82,11 +84,16 @@ def delete_person(request):
 
 def person_input(request):
     if request.method == 'POST':
-        
         per_id = None
         message = "You have successfully added a person."
         success = True
         parameters = copy.copy(request.POST)
+        new_phone = format_phone(parameters["telephone"])
+        if new_phone:
+            parameters["telephone"] = new_phone[0]
+            if new_phone[1] != "":
+                parameters["extension"] = new_phone[1]
+
         if request.POST.get('action') == "edit":
             per_id = int(request.POST.get('personid'))
             message = "You have successfull edited person "+str(per_id)+"."
@@ -111,14 +118,14 @@ def person_input(request):
             per_id = IdSeq.objects.raw("select sequence_name, nextval('person_seq') from person_seq")[0].nextval
             parameters["id"] = per_id
             personm = PersonForm(parameters)
-        
-
-        if personm.is_valid():
+        if personm.is_valid() and new_phone:
             personm.save()
 
             #save personnel data into db
             save_person_links(per_id, request)
         else:
+            if new_phone is None:
+                personm.errors["telephone"] = ["Incorrect format. Must be 10 digits for US or 11 digits for international."]
             message = simplejson.dumps(personm.errors)
             success = False
 

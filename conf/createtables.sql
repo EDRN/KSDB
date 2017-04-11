@@ -347,3 +347,23 @@ CREATE TABLE committee_cochair_link(
         personid int references person(id),
         UNIQUE ( committeeid, personid ));
 
+
+---4-9-17---
+
+alter table person add column extension text;
+
+CREATE TABLE knowledge_objects(
+        id serial NOT NULL,
+        obj_name text,
+        PRIMARY KEY( id ));
+
+CREATE TABLE knowledge_attributes(
+        obj_attr_id serial NOT NULL,
+        obj_id text,
+        obj_attr_name text,
+        obj_attr_type text
+        UNIQUE ( obj_id, obj_attr_name, obj_attr_type ));
+
+CREATE TABLE knowledge_values(
+        obj_
+        obj_attr_id number,

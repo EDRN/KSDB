@@ -17,6 +17,7 @@
                 $('#degrees').val({{degree_link_id}});
                 $('#email').val("{{email}}");
                 $('#telephone').val("{{telephone}}");
+                $('#extension').val("{{extension}}");
                 $('#description').html("{{description}}");
                 $('#duplicate').attr('disabled',true);
             }
@@ -56,10 +57,17 @@
                   <label for="email">Email</label>
                   <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
                 </fieldset>
+                <div class="col-md-8">
                 <fieldset class="form-group">
-                <label for="telephone">Telephone (Please enter only numbers, no formatting)</label>
+                <label for="telephone">Telephone (Please enter 10 or 11 digits)</label>
                 <input type="text" class="form-control" name="telephone" id="telephone" placeholder="ex: 6197722098">
                 </fieldset>
+                </div><div class="col-md-4">
+                <fieldset class="form-group">
+                <label for="extension">Extension</label>
+                <input type="text" class="form-control" name="extension" id="extension" placeholder="ex: x7458">
+                </fieldset>
+                </div>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">

@@ -3,6 +3,7 @@ from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
 from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, species, specimentype, discipline, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link
 from ksdb.forms import PublicationForm
+from ksdb.ekeutils import format_phone
 
 #import settings
 from sitemain import settings
@@ -206,7 +207,15 @@ class Command(BaseCommand):
                 self._graph.add( (peri, self._faof.mbox, Literal(per.email)) )
             #phone
             if per.telephone:
-                self._graph.add( (peri, self._faof.phone, Literal(per.telephone)) )
+                phone_num = per.telephone
+                new_phone = format_phone(phone_num)
+                if new_phone:
+                    phone_num = new_phone[0]
+                    if new_phone[1] != "":
+                        phone_num += " x"+new_phone[1]
+                if per.extension:
+                    phone_num += " x"+per.extension
+                self._graph.add( (peri, self._faof.phone, Literal(phone_num)) )
             #dcp and dcb flag
             if per.dcb:
                 self._graph.add( (peri, self._schema.has_dcb, Literal(per.dcb)) )
