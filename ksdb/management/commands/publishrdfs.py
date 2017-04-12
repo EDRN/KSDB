@@ -129,10 +129,10 @@ class Command(BaseCommand):
             self._graph.add( (proi, RDF.type, self._cancertype.Protocol) )
             #pis
             for ppl in list(pi_protocol_link.objects.filter(protocolid=pro.id)):
-                self._graph.add( (proi, self._schema.pi, URIRef(self._person[str(ppl.id)])) )
+                self._graph.add( (proi, self._schema.pi, URIRef(self._person[str(ppl.personid)])) )
             #custodian
             for ppl in list(protocol_custodian_link.objects.filter(protocolid=pro.id)):
-                self._graph.add( (proi, self._schema.custodian, URIRef(self._person[str(ppl.id)])) )
+                self._graph.add( (proi, self._schema.custodian, URIRef(self._person[str(ppl.personid)])) )
             #organs
             for org in list(organ_protocol_link.objects.filter(protocolid=pro.id)):
                 self._graph.add( (proi, self._schema.organ, URIRef(self._organ[str(org.organid)])) )
