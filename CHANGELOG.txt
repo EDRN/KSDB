@@ -1,4 +1,4 @@
-Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2016-10-31
+Release Notes - Early Detection of Cancer - Version KSDB 0.0.3 - 2016-10-31
 
 ** Bug and Improvement
     * [CA-1495] - Produce RDF for program specific objects.
