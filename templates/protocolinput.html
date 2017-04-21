@@ -11,6 +11,7 @@
                     $('#organs').select2().val({{organ_link_id}}).trigger("change");
                     $('#publications').select2().val({{pub_link_id}}).trigger("change");
                     $('#fundedsites').val({{fundedsite_link_id}});
+                    $('#programs').val({{program_link_id}});
                     $('#start_date').val("{{start_date}}");
                     $('#site_contact').val("{{site_contact}}");
                     $('#site_contact_email').val("{{site_contact_email}}");
@@ -61,6 +62,7 @@
                 updateLists("organ", "organs");
                 updateLists("publication", "publications");
                 updateLists("fundedsite", "fundedsites");
+                updateLists("program", "programs");
                 setAutocompleteList('pis','person', '', '', 1);
                 setAutocompleteList('cis','person', '', '', 1);
                 setAutocompleteList('cus','person', '', '', 1);
@@ -140,8 +142,13 @@
                 <input type="text" class="form-control" name="shortname" id="shortname" placeholder="Enter Short Name">
                 </fieldset>
                 <fieldset class="form-group">
+                <label for="programs">Programs<a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
+                <select multiple class="form-control" size=3 id="programs" name="programs">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
                 <label for="fundedsites">Participating Sites <a data-toggle="modal" id="addfundedsite" data-target="#modal" onclick="startModal(this)" target="fundedsites" href="fundedsite">(Add Site)</a></label>
-                <select multiple class="form-control" size=10 id="fundedsites" name="fundedsites">
+                <select multiple class="form-control" size=5 id="fundedsites" name="fundedsites">
                 </select>
                 </fieldset>
                 <fieldset class="form-group">

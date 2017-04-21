@@ -9,6 +9,7 @@ class protocol(models.Model):
     shortname = models.CharField(max_length=128)
     organs = models.CharField(max_length=1000, blank=True, null=True)
     fundedsites = models.CharField(max_length=1000)
+    programs = models.CharField(max_length=1000)
     pis = models.CharField(max_length=1000)
     cis = models.CharField(max_length=1000, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
@@ -25,6 +26,14 @@ class protocol(models.Model):
 
     class Meta:
         db_table = u'protocol'
+
+class protocol_program_link(models.Model):
+    protocolid = models.IntegerField()
+    programid = models.IntegerField()
+
+    class Meta:
+        db_table = u'protocol_program_link'
+        unique_together = (("programid", "protocolid"),)
 
 class pi_protocol_link(models.Model):
     protocolid = models.IntegerField()

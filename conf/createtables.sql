@@ -349,9 +349,22 @@ CREATE TABLE committee_cochair_link(
 
 
 ---4-9-17---
-
 alter table person add column extension text;
 
+----4-17-17---
+alter table protocol add column programs text;
+
+CREATE TABLE protocol_program_link(
+        id serial NOT NULL,
+        protocolid int references protocol(id),
+        programid int references program(id),
+        UNIQUE ( protocolid, programid ));
+
+
+
+
+
+---4-9-17---  #Not yet implemented
 CREATE TABLE knowledge_objects(
         id serial NOT NULL,
         obj_name text,
