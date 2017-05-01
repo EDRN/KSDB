@@ -8,6 +8,16 @@ import re
 
 _KSDBhref = "/ksdb/"
 
+def getAttrVal(attr_type, obj):
+    if attr_type == "text":
+        return obj.knowledge_value_text
+    elif attr_type == "int":
+        return obj.knowledge_value_int
+    elif attr_type == "date":
+        return obj.knowledge_value_date
+    else:
+        return knowledge_objects.objects.filter(id__in= [k.id for k in knowledge_linkage.objects.filter(sourceid=obj.obj_id)])
+
 def getPersonnelFromInst(institutions, q=None):
     persons = None
     if q:
@@ -91,6 +101,8 @@ def getProgramTitleByID(proid):
 
 def format_phone(phone):
     # strip non-numeric characters
+    if not phone:
+        return ""
     phone = phone.lower().strip()
     if phone == "":
         return phone

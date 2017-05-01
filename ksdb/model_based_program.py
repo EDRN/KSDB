@@ -1,13 +1,14 @@
-# program.py
+# protocols.py
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.html import escapejs
 import copy, simplejson
+from ksdb.ekeutils import getAttrVal
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import program, fundedsite_program_link
+from ksdb.models import program, fundedsite_program_link, knowledge_object_types, knowledge_attributes, knowledge_objects, knowledge_values
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -24,13 +25,13 @@ def gen_program_data(request):
     if request.method == 'GET':
         programid = request.GET.get('id')
         if programid:
-            obj = program.objects.get(pk=int(programid))
+            obj = knowledge_objects.objects.get(pk=int(programid))
+            vals = obj.knowledge_values_set.all()
             data = { "action" : "Edit",
-                    "id" : obj.id,
-                    "title" : obj.title,
-                    "abbreviation" : obj.abbreviation,
-                    "description" : escapejs(obj.description),
-                   }
+                    "id" : obj.id}
+            for val in vals:
+                attr = knowledge_attributes.objects.get(id=val.obj_attr_id)
+                data[attr.obj_attr_name] = getAttrVal(attr.obj_attr_type, val)
     return data
 
 def delete_program(request):
@@ -42,9 +43,10 @@ def delete_program(request):
         if len(ids) > 0:
             for pro_id in ids:
                 #delete person program associations
-                fundedsite_program_link.objects.filter(programid=pro_id).delete()
+                knowledge_objects.objects.filter(id=pro_id).delete()
                 #delete program itself
-                program.objects.filter(id=pro_id).delete()
+                knowledge_link.objects.filter(sourceid=pro_id).delete()
+                knowledge_link.objects.filter(targetid=pro_id).delete()
 
             message = "Successfully deleted program id(s): "+request.POST.get("id")
             success = True
@@ -69,7 +71,7 @@ def program_input(request):
             pro_id = int(request.POST.get('programid'))
             message = "You have successfull edited program "+str(pro_id)+"."
             parameters["id"] = pro_id
-            programi = program.objects.get(id=pro_id)
+            programi = knowledge_objects.objects.get(id=pro_id)
             programm = ProgramForm(parameters or None, instance=programi)
         else:
             if (request.POST.get('duplicate') == 'false'):
@@ -79,7 +81,7 @@ def program_input(request):
                                         'Message':'{"title":["There is already a program with the same title."]}'})
                 except program.DoesNotExist:
                     pass
-            pro_id = IdSeq.objects.raw("select sequence_name, nextval('program_seq') from program_seq")[0].nextval
+            pro_id = IdSeq.objects.raw("select sequence_name, nextval('object_seq') from object_seq")[0].nextval
             parameters["id"] = pro_id
             programm = ProgramForm(parameters)
         

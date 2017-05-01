@@ -90,9 +90,10 @@ def person_input(request):
         parameters = copy.copy(request.POST)
         new_phone = format_phone(parameters["telephone"])
         if new_phone:
-            parameters["telephone"] = new_phone[0]
-            if new_phone[1] != "":
-                parameters["extension"] = new_phone[1]
+            if new_phone != "":
+              parameters["telephone"] = new_phone[0]
+              if new_phone[1] != "":
+                  parameters["extension"] = new_phone[1]
 
         if request.POST.get('action') == "edit":
             per_id = int(request.POST.get('personid'))
@@ -118,7 +119,7 @@ def person_input(request):
             per_id = IdSeq.objects.raw("select sequence_name, nextval('person_seq') from person_seq")[0].nextval
             parameters["id"] = per_id
             personm = PersonForm(parameters)
-        if personm.is_valid() and new_phone:
+        if personm.is_valid() and new_phone is not None:
             personm.save()
 
             #save personnel data into db

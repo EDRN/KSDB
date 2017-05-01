@@ -394,6 +394,50 @@ class discipline(models.Model):
     class Meta:
         db_table = u'discipline'
 
+
+#Model based design
+class knowledge_object_types(models.Model):
+    id = models.IntegerField(primary_key=True)
+    obj_type = models.CharField(max_length=128)
+
+    class Meta:
+         db_table = u'knowledge_object_types'
+
+class knowledge_attributes(models.Model):
+    id  = models.IntegerField(primary_key=True)
+    obj_type_id = models.ForeignKey("knowledge_object_types")
+    obj_attr_name = models.CharField(max_length=128)
+    obj_attr_type = models.CharField(max_length=128)
+    class Meta:
+        db_table = u'knowledge_attributes'
+        unique_together = (("obj_type_id", "obj_attr_name"),)
+
+class knowledge_objects(models.Model):
+    id = models.IntegerField(primary_key=True)
+    object_type_id = models.ForeignKey("knowledge_object_types")
+    created_by = models.CharField(max_length=256)
+    created_date = models.DateTimeField(blank=True, null=True)
+    modified_date = models.DateTimeField(blank=True, null=True)
+    class Meta:
+        db_table = u'knowledge_objects'
+
+class knowledge_linkage(models.Model):
+    sourceid = models.ForeignKey(knowledge_objects, related_name='sourceid')
+    targetid = models.ForeignKey(knowledge_objects, related_name='targetid')
+    class Meta:
+        db_table = u'knowledge_linkage'
+        unique_together = (("sourceid", "targetid"),)
+
+class knowledge_values(models.Model):
+    id = models.IntegerField(primary_key=True)
+    obj_id = models.ForeignKey("knowledge_objects")
+    obj_attr_id = models.ForeignKey("knowledge_attributes")
+    knowledge_value_text = models.TextField(blank=True, null=True)
+    knowledge_value_int = models.IntegerField(blank=True, null=True)
+    knowledge_value_date = models.DateTimeField(blank=True, null=True)
+    class Meta:
+        db_table = u'knowledge_values'
+
 class IdSeq(models.Model):
     """
     This class maps to input_file_id_seq which is a PostgreSQL sequence.
