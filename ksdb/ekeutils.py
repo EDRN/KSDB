@@ -28,36 +28,53 @@ def getPersonnelFromInst(institutions, q=None):
     return persons
 
 def eke_api(request):
+    print("SUCCESS")
     if request.GET.get("action") == "getobjlist":
         objlist = []
+
+        #make sure filterval get's any list characters removed
+        filterval = request.GET.get("filtervalue")
+        if filterval:
+            filterval = filterval.strip()
+            if filterval.startswith("["):
+                filterval = filterval.replace("[","")
+            if filterval.endswith("]"):
+                filterval = filterval.replace("]","")
         if "filter" in request.GET:
-            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=request.GET.get("filtervalue"), filtersearch=request.GET.get("filter"))
+            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=filterval, filtersearch=request.GET.get("filter"))
         else:
-            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=request.GET.get("filtervalue"))
+            objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=filterval)
             
         return JsonResponse({'objlist':objlist})
 
 def get_eke_list(eketype, filterby=None, filterval=None, filtersearch=None):
     field = []
-
     q = None
     if filtersearch:
         for word in filtersearch.split():
            q_aux = Q( firstname__icontains = word )
            q_aux2 = Q( lastname__icontains = word )
            q = ( (q_aux | q_aux2) & q ) if bool( q ) else (q_aux2 | q_aux)
-
     if eketype == "person":
         persons = None
+        #check if filtering is on, if so, then make sure to empty out person object if none is found
+        filterflag = 0
+        if filterby:
+            if filterby != '':
+                filterflag = 1
+
         if filterby and filterval:
             if filterby != '' and filterval != '':
                 if filterby == 'institution':
                     persons = getPersonnelFromInst(list(map(int, filterval.split(','))), q)
         if persons is None:
-            if q:
-                persons = person.objects.filter( q )
+            if filterflag == 0:
+                if q:
+                    persons = person.objects.filter( q )
+                else:
+                    persons = person.objects.all()
             else:
-                persons = person.objects.all()
+                persons = []
         field = [ { "id": str(obj.id)+":"+str(obj.firstname)+" "+str(obj.lastname), "name": str(obj.firstname)+" "+str(obj.lastname)} for obj in list(persons) ]
         #field.sort(key=lambda x: x[1].lower())
     elif eketype == "organ":

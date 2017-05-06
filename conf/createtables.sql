@@ -365,18 +365,154 @@ CREATE TABLE protocol_program_link(
 
 
 ---4-9-17---  #Not yet implemented
-CREATE TABLE knowledge_objects(
+CREATE TABLE knowledge_object_types(
         id serial NOT NULL,
-        obj_name text,
+        obj_type text,
         PRIMARY KEY( id ));
 
 CREATE TABLE knowledge_attributes(
-        obj_attr_id serial NOT NULL,
-        obj_id text,
+        id serial NOT NULL,
+        obj_type_id int,
         obj_attr_name text,
-        obj_attr_type text
-        UNIQUE ( obj_id, obj_attr_name, obj_attr_type ));
+        obj_attr_type text,
+        PRIMARY KEY( id ),
+        UNIQUE ( obj_type_id, obj_attr_name ));
+
+CREATE TABLE knowledge_objects(
+        id serial NOT NULL,
+        object_type_id int REFERENCES knowledge_object_types(id),
+        created_by text,
+        created_date date,
+        modified_date date,
+        PRIMARY KEY( id ));
+
+CREATE SEQUENCE object_seq START 1;
 
 CREATE TABLE knowledge_values(
-        obj_
-        obj_attr_id number,
+        id serial NOT NULL,
+        obj_id int REFERENCES knowledge_objects(id),
+        obj_attr_id int REFERENCES knowledge_attributes(id),
+        knowledge_value_text text,
+        knowledge_value_int int,
+        knowledge_value_date date,
+        knowledge_value_object int,
+        PRIMARY KEY( id ));
+CREATE SEQUENCE value_seq START 1;
+
+CREATE TABLE knowledge_linkage(
+        sourceid int REFERENCES knowledge_objects(id),
+        targetid int REFERENCES knowledge_objects(id),
+        UNIQUE ( sourceid, targetid ));
+
+
+insert into knowledge_object_types VALUES (1, 'protocol');
+insert into knowledge_object_types VALUES (2, 'organ');
+insert into knowledge_object_types VALUES (3, 'person');
+insert into knowledge_object_types VALUES (4, 'program');
+insert into knowledge_object_types VALUES (5, 'institution');
+insert into knowledge_object_types VALUES (6, 'publication');
+insert into knowledge_object_types VALUES (7, 'fundedsite');
+insert into knowledge_object_types VALUES (8, 'degree');
+insert into knowledge_object_types VALUES (9, 'group');
+insert into knowledge_object_types VALUES (10, 'disease');
+insert into knowledge_object_types VALUES (11, 'committee');
+insert into knowledge_object_types VALUES (12, 'species');
+insert into knowledge_object_types VALUES (13, 'specimentype');
+insert into knowledge_object_types VALUES (14, 'discipline');
+
+insert into knowledge_attributes VALUES (1, 1, 'title', 'text'); 
+insert into knowledge_attributes VALUES (2, 1, 'description','text');
+insert into knowledge_attributes VALUES (3, 1, 'organs','organ');
+insert into knowledge_attributes VALUES (4, 1, 'pis','person');
+insert into knowledge_attributes VALUES (5, 1, 'start_date','timestamp');
+insert into knowledge_attributes VALUES (6, 1, 'site_contact','text');
+insert into knowledge_attributes VALUES (7, 1, 'irb_approval','text');
+insert into knowledge_attributes VALUES (8, 1, 'irb_approval_num','text');
+insert into knowledge_attributes VALUES (9, 1, 'irb_contact','text');
+insert into knowledge_attributes VALUES (10, 1, 'hum_sub_train','text');
+insert into knowledge_attributes VALUES (11, 1, 'abstract','text');
+insert into knowledge_attributes VALUES (12, 1, 'shortname','text');
+insert into knowledge_attributes VALUES (13, 1, 'irb_contact_email','text');
+insert into knowledge_attributes VALUES (14, 1, 'site_contact_email','text');
+insert into knowledge_attributes VALUES (15, 1, 'cis','person');
+insert into knowledge_attributes VALUES (16, 1, 'fundedsites','fundedsite');
+insert into knowledge_attributes VALUES (17, 1, 'publications','publication');
+insert into knowledge_attributes VALUES (18, 1, 'data_custodians','person');
+insert into knowledge_attributes VALUES (19, 1, 'programs','program');
+
+insert into knowledge_attributes VALUES (20, 2, 'name','text');
+insert into knowledge_attributes VALUES (21, 2, 'description','text');
+
+insert into knowledge_attributes VALUES (22, 3, 'firstname','text');
+insert into knowledge_attributes VALUES (23, 3, 'lastname','text');
+insert into knowledge_attributes VALUES (24, 3, 'degrees','degree');
+insert into knowledge_attributes VALUES (25, 3, 'email','text');
+insert into knowledge_attributes VALUES (26, 3, 'telephone','text');
+insert into knowledge_attributes VALUES (27, 3, 'description','text');
+insert into knowledge_attributes VALUES (28, 3, 'dcp','boolean');
+insert into knowledge_attributes VALUES (29, 3, 'dcb','boolean');
+insert into knowledge_attributes VALUES (30, 3, 'extension','text');
+
+insert into knowledge_attributes VALUES (31, 4, 'title','text');
+insert into knowledge_attributes VALUES (32, 4, 'abbreviation','text');
+insert into knowledge_attributes VALUES (33, 4, 'description','text');
+
+insert into knowledge_attributes VALUES (34, 5, 'name','text');
+insert into knowledge_attributes VALUES (35, 5, 'department','text');
+insert into knowledge_attributes VALUES (36, 5, 'abbreviation','text');
+insert into knowledge_attributes VALUES (37, 5, 'url','text');
+insert into knowledge_attributes VALUES (38, 5, 'description','text');
+insert into knowledge_attributes VALUES (39, 5, 'personnel','person');
+
+insert into knowledge_attributes VALUES (40, 6, 'title','text');
+insert into knowledge_attributes VALUES (41, 6, 'authors','text');
+insert into knowledge_attributes VALUES (42, 6, 'journal','text');
+insert into knowledge_attributes VALUES (43, 6, 'pubyear','integer');
+insert into knowledge_attributes VALUES (44, 6, 'pubmedid','text');
+
+insert into knowledge_attributes VALUES (45, 7, 'title','text');
+insert into knowledge_attributes VALUES (46, 7, 'description','text');
+insert into knowledge_attributes VALUES (47, 7, 'organs','organ');
+insert into knowledge_attributes VALUES (48, 7, 'pis','person');
+insert into knowledge_attributes VALUES (49, 7, 'programs','program');
+insert into knowledge_attributes VALUES (50, 7, 'institutions','institution');
+insert into knowledge_attributes VALUES (51, 7, 'staff','person');
+insert into knowledge_attributes VALUES (52, 7, 'status','text');
+insert into knowledge_attributes VALUES (53, 7, 'name','text');
+insert into knowledge_attributes VALUES (54, 7, 'funding_date_start','timestamp');
+insert into knowledge_attributes VALUES (55, 7, 'funding_date_finish','timestamp');
+insert into knowledge_attributes VALUES (56, 7, 'contacts','person');
+insert into knowledge_attributes VALUES (57, 7, 'abstract','text');
+insert into knowledge_attributes VALUES (58, 7, 'aims','text');
+insert into knowledge_attributes VALUES (59, 7, 'abbreviation','text');
+
+insert into knowledge_attributes VALUES (60, 8, 'title','text');
+insert into knowledge_attributes VALUES (61, 8, 'description','text');
+
+insert into knowledge_attributes VALUES (62, 9, 'description','text');
+insert into knowledge_attributes VALUES (63, 9, 'members','person');
+insert into knowledge_attributes VALUES (64, 9, 'programs','program');
+insert into knowledge_attributes VALUES (65, 9, 'name','text');
+insert into knowledge_attributes VALUES (66, 9, 'chair','person');
+insert into knowledge_attributes VALUES (67, 9, 'cochair','person');
+
+insert into knowledge_attributes VALUES (68, 10, 'icd10','text');
+insert into knowledge_attributes VALUES (69, 10, 'description','text');
+
+insert into knowledge_attributes VALUES (70, 11, 'title','text');
+insert into knowledge_attributes VALUES (71, 11, 'abbreviation','text');
+insert into knowledge_attributes VALUES (72, 11, 'description','text');
+insert into knowledge_attributes VALUES (73, 11, 'members','person');
+insert into knowledge_attributes VALUES (74, 11, 'programs','program');
+insert into knowledge_attributes VALUES (75, 11, 'chair','person');
+insert into knowledge_attributes VALUES (76, 11, 'cochair','person');
+
+insert into knowledge_attributes VALUES (77, 12, 'title','text');
+insert into knowledge_attributes VALUES (78, 12, 'description','text');
+
+insert into knowledge_attributes VALUES (79, 13, 'title','text');
+insert into knowledge_attributes VALUES (80, 13, 'description','text');
+insert into knowledge_attributes VALUES (81, 13, 'organs','organ');
+
+insert into knowledge_attributes VALUES (82, 14, 'title','text');
+insert into knowledge_attributes VALUES (83, 14, 'description','text');

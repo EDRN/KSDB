@@ -20,7 +20,8 @@
                 });
             }
             function initfundedsiteinst() {
-                    $('#institutions').val({{institution_link_id}});
+                    //$('#institutions').val({{institution_link_id}});
+                    $('#institutions').select2().val({{institution_link_id}}).trigger("change");
                     var event = new Event('change');
                     document.getElementById("institutions").dispatchEvent(event);
             }
@@ -49,8 +50,10 @@
                 updateLists("program", "programs");
                 updateLists("organ", "organs");
                 setAutocompleteList('contacts','person','','',1);
+                setAutocompleteList('institutions','institution','','',0);
                 setAutocompleteList('staff','person','institution','{{institution_link_id}}',0);
                 setAutocompleteList('pis','person','institution','{{institution_link_id}}',0);
+                //$('#institutions').select2();
                 $('#organs').select2();
                 {% ifequal action "Edit" %}
                     setTimeout(initfundedsiteinst, 500);
@@ -223,8 +226,13 @@
             //        alert("Error: "+xhr.responseText);
             //    }
             //});
-            setAutocompleteList('pis','person','institution',$('#institutions').val().join(),0);
-            setAutocompleteList('staff','person','institution',$('#institutions').val().join(),0);
+            var institutions_joined = '';
+            if($('#institutions').val()){
+                  institutions_joined = $('#institutions').val().join();
+            }
+            setAutocompleteList('pis','person','institution',institutions_joined,0);
+            setAutocompleteList('staff','person','institution',institutions_joined,0);
+            
         });
 	</script>
 {% endblock %}
