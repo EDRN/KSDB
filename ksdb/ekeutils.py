@@ -2,7 +2,7 @@
 from django.http import JsonResponse
 # Create your views here.
 from django.db.models import Q
-from ksdb.models import protocol, organ, person, fundedsite, program, degree, institution, publication, institution_personnel_link
+from ksdb.models import protocol, organ, person, fundedsite, program, degree, institution, publication, institution_personnel_link, fundedsite_pi_link, con_fundedsite_link, fundedsite_staff_link
 
 import re
 
@@ -18,6 +18,22 @@ def getAttrVal(attr_type, obj):
     else:
         return knowledge_objects.objects.filter(id__in= [k.id for k in knowledge_linkage.objects.filter(sourceid=obj.obj_id)])
 
+def checkPersonInOtherObj(personid, objtype):
+    if objtype == "fundedsite":
+        pis = fundedsite_pi_link.objects.filter(personid=personid)
+        contacts = con_fundedsite_link.objects.filter(personid=personid)
+        staff = fundedsite_staff_link.objects.filter(personid=personid)
+        print ({
+            "pis": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in pis]) ],
+            "contacts": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in contacts]) ],
+            "staff": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in staff]) ]
+        })
+        return JsonResponse({
+            "pis": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in pis]) ],
+            "contacts": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in contacts]) ],
+            "staff": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in staff]) ]
+        })
+
 def getPersonnelFromInst(institutions, q=None):
     persons = None
     if q:
@@ -28,7 +44,6 @@ def getPersonnelFromInst(institutions, q=None):
     return persons
 
 def eke_api(request):
-    print("SUCCESS")
     if request.GET.get("action") == "getobjlist":
         objlist = []
 
@@ -46,6 +61,8 @@ def eke_api(request):
             objlist = get_eke_list(request.GET.get("eketype"), filterby=request.GET.get("filterby"), filterval=filterval)
             
         return JsonResponse({'objlist':objlist})
+    if request.GET.get("action") == "checkPersonInOtherObj":
+        return checkPersonInOtherObj(request.GET.get("personid"), request.GET.get("otherobj"))
 
 def get_eke_list(eketype, filterby=None, filterval=None, filtersearch=None):
     field = []
