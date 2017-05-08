@@ -5,6 +5,9 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <script>
+            var selected_pis = {};
+            var selected_staff = {};
+            var selected_contacts = {};
             function initInstPersonnel(pis, staffs) {
                 $('#pis').html("");
                 $.each(pis, function(key, value) { 
@@ -233,29 +236,56 @@
             setAutocompleteList('pis','person','institution',institutions_joined,0);
             setAutocompleteList('staff','person','institution',institutions_joined,0);
         });
-        function checkPersonInOtherObj(personid){
+        function checkPersonInOtherObj(personinfo, source){
+            var personid = personinfo.split(":")[0]
+            if(source == 'pis' && personid in selected_pis){
+                return;
+            }
+            if(source == 'staff' && personid in selected_staff){
+                return;
+            }
+            if(source == 'contacts' && personid in selected_contacts){
+                return;
+            }
             $.ajax({
                     url : "/ksdb/ekeapi/?action=checkPersonInOtherObj&otherobj=fundedsite&personid="+personid,
                     type : 'GET',
                     success : function (response) {
+                        var response_flag = 0;
+                        var alert_msg = "";
+                        var selected = "";
                         if(response.pis.length > 0){
-                            var alert_msg = "Person id:"+personid+" is already in the following Participating Sites:\n";
+                            alert_msg += "Person "+personinfo+" is already a PI in the following Participating Sites:\n";
                             for(var i = 0; i < response.pis.length; i++){
-                                alert_msg += "Site id: "+response.pis[i][0] +" name: "+response.pis[i][1]+" person type: PI\n";
+                                alert_msg += "Site id: "+response.pis[i][0] +" name: "+response.pis[i][1]+"\n";
                             }
-                            alert(alert_msg);
+                            response_flag = 1;
                         }
                         if(response.staff.length > 0){
-                            var alert_msg = "Person id:"+personid+" is already in the following Participating Sites:\n";
+                            alert_msg += "\n\nPerson id:"+personinfo+" is already a STAFF in the following Participating Sites:\n";
                             for(var i = 0; i < response.staff.length; i++){
-                                alert_msg += "Site id: "+response.staff[i][0] +" name: "+response.staff[i][1]+" person type: Staff\n";
-                            }                            alert(alert_msg);
+                                alert_msg += "Site id: "+response.staff[i][0] +" name: "+response.staff[i][1]+"\n";
+                            }
+                            response_flag = 1;
                         }
                         if(response.contacts.length > 0){
-                            var alert_msg = "Person id:"+personid+" is already in the following Participating Sites:\n";
+                            alert_msg += "\n\nPerson id:"+personinfo+" is already a CONTACT in the following Participating Sites:\n";
                             for(var i = 0; i < response.contacts.length; i++){
-                                alert_msg += "Site id: "+response.contacts[i][0] +" name: "+response.contacts[i][1]+" person type: Contact\n";
-                            }                            alert(alert_msg);
+                                alert_msg += "Site id: "+response.contacts[i][0] +" name: "+response.contacts[i][1]+"\n";
+                            }
+                            response_flag = 1;
+                        }
+                        if(response_flag == 1){
+                            if(source == 'pis'){
+                                selected_pis[personid] = 1;
+                            }
+                            if(source == 'contacts'){
+                                selected_contacts[personid] = 1;
+                            }
+                            if(source == 'staff'){
+                                selected_staff[personid] = 1;
+                            }
+                            alert(alert_msg);
                         }
                     },
                     error : function(xhr, status, error) {
@@ -263,22 +293,28 @@
                     }
             });
         }
-        $('#pis').change(function () {
+        $('#pis').change(function (event) {
             if($('#pis').val()){
-                var new_person = $('#pis').val()[$('#pis').val().length-1];
-                checkPersonInOtherObj(new_person.split(":")[0]);
+                for(var i = 0; i < $('#pis').val().length; i++){
+                    var new_person = $('#pis').val()[i];
+                    checkPersonInOtherObj(new_person, "pis");
+                }
             }
         });
-        $('#staff').change(function () {
+        $('#staff').change(function (event) {
             if($('#staff').val()){
-                var new_person = $('#staff').val()[$('#staff').val().length-1];
-                checkPersonInOtherObj(new_person.split(":")[0]);
+                for(var i = 0; i < $('#staff').val().length; i++){
+                    var new_person = $('#staff').val()[i];
+                    checkPersonInOtherObj(new_person, "staff");
+                }
             }
         });
-        $('#contacts').change(function () {
+        $('#contacts').change(function (event) {
             if($('#contacts').val()){
-                var new_person = $('#contacts').val()[$('#contacts').val().length-1];
-                checkPersonInOtherObj(new_person.split(":")[0]);
+                for(var i = 0; i < $('#contacts').val().length; i++){
+                    var new_person = $('#contacts').val()[i];
+                    checkPersonInOtherObj(new_person, "contacts");
+                }
             }
         });
 	</script>
