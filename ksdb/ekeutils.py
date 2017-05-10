@@ -18,16 +18,16 @@ def getAttrVal(attr_type, obj):
     else:
         return knowledge_objects.objects.filter(id__in= [k.id for k in knowledge_linkage.objects.filter(sourceid=obj.obj_id)])
 
-def checkPersonInOtherObj(personid, objtype):
+def checkPersonInOtherObj(personid, objtype, curid = None):
     if objtype == "fundedsite":
         pis = fundedsite_pi_link.objects.filter(personid=personid)
         contacts = con_fundedsite_link.objects.filter(personid=personid)
         staff = fundedsite_staff_link.objects.filter(personid=personid)
-        print ({
-            "pis": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in pis]) ],
-            "contacts": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in contacts]) ],
-            "staff": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in staff]) ]
-        })
+        
+        if curid:
+            pis = pis.exclude(fundedsiteid = curid)
+            contacts = contacts.exclude(fundedsiteid = curid)
+            staff = staff.exclude(fundedsiteid = curid)
         return JsonResponse({
             "pis": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in pis]) ],
             "contacts": [ [f.id, f.name] for f in fundedsite.objects.filter(id__in = [obj.fundedsiteid for obj in contacts]) ],
@@ -62,7 +62,7 @@ def eke_api(request):
             
         return JsonResponse({'objlist':objlist})
     if request.GET.get("action") == "checkPersonInOtherObj":
-        return checkPersonInOtherObj(request.GET.get("personid"), request.GET.get("otherobj"))
+        return checkPersonInOtherObj(request.GET.get("personid"), request.GET.get("otherobj"), request.GET.get("curid"))
 
 def get_eke_list(eketype, filterby=None, filterval=None, filtersearch=None):
     field = []

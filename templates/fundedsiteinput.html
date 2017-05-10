@@ -56,7 +56,7 @@
                 setAutocompleteList('institutions','institution','','',0);
                 setAutocompleteList('staff','person','institution','{{institution_link_id}}',0);
                 setAutocompleteList('pis','person','institution','{{institution_link_id}}',0);
-                //$('#institutions').select2();
+                $('#institutions').select2();
                 $('#organs').select2();
                 {% ifequal action "Edit" %}
                     setTimeout(initfundedsiteinst, 500);
@@ -247,8 +247,12 @@
             if(source == 'contacts' && personid in selected_contacts){
                 return;
             }
+            var ekeurl = "/ksdb/ekeapi/?action=checkPersonInOtherObj&otherobj=fundedsite&personid="+personid;
+            {% ifequal action "Edit" %}
+                ekeurl += "&curid={{id}}";
+            {% endifequal %}
             $.ajax({
-                    url : "/ksdb/ekeapi/?action=checkPersonInOtherObj&otherobj=fundedsite&personid="+personid,
+                    url : ekeurl,
                     type : 'GET',
                     success : function (response) {
                         var response_flag = 0;
