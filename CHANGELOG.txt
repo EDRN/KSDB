@@ -1,6 +1,7 @@
-Release Notes - Early Detection of Cancer - Version KSDB 0.0.3 - 2016-10-31
+Release Notes - Early Detection of Cancer - Version KSDB 0.0.2 - 2017-6-20
 
 ** Bug and Improvement
+    * [CA-1546] - Add Personnels Institution Affiliation to MCL Portal
     * [CA-1495] - Produce RDF for program specific objects.
     * [CA-1494] - Add rdfs publishing for disease and collaborative group objects
     * [CA-1432] - KSDB list of modifications

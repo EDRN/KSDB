@@ -228,6 +228,10 @@ class Command(BaseCommand):
             for deg in list(person_degree_link.objects.filter(personid=per.id)):
                 self._graph.add( (peri, self._schema.degree, URIRef(self._degree[str(deg.degreeid)]) ))
 
+            #institution 6-19-17
+            for ins in list(institution_personnel_link.objects.filter(personid=per.id)):
+                self._graph.add( (peri, self._schema.institution, URIRef(self._institution[str(ins.institutionid)]) ))
+
         return  self._graph.serialize(format='xml')
 
     def getdegreerdf(self):
