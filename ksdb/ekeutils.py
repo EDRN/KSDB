@@ -153,4 +153,6 @@ def format_phone(phone):
         return ['+1 ({}) {}.{}'.format(phone[0:3], phone[3:6], phone[6:10]), extension]
     else:
         return None
-        
+
+def strip_syms(data):
+    return data.replace("\\'","'")
