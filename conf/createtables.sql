@@ -516,3 +516,8 @@ insert into knowledge_attributes VALUES (81, 13, 'organs','organ');
 
 insert into knowledge_attributes VALUES (82, 14, 'title','text');
 insert into knowledge_attributes VALUES (83, 14, 'description','text');
+
+#12/31/2017 modifying protocols to remove and add some fields
+
+alter table protocol add column aims text;
+alter table protocol add column end_date timestamp;

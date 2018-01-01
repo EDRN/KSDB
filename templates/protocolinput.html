@@ -13,6 +13,7 @@
                     $('#fundedsites').val({{fundedsite_link_id}});
                     $('#programs').val({{program_link_id}});
                     $('#start_date').val("{{start_date}}");
+                    $('#end_date').val("{{end_date}}");
                     $('#site_contact').val("{{site_contact}}");
                     $('#site_contact_email').val("{{site_contact_email}}");
                     $('input:radio[name=irb_approval]').filter('[value={{irb_approval}}]').prop('checked', true);
@@ -21,6 +22,7 @@
                     $('#irb_contact_email').val("{{irb_contact_email}}");
                     $('input:radio[name=hum_sub_train]').filter('[value="{{hum_sub_train}}"]').prop('checked', true);
                     $('#abstract').val("{{abstract}}");
+                    $('#aims').val("{{aims}}");
                     $('#shortname').val("{{shortname}}");
                     var pis_array = "{{pi_link_id}}".split(',');
                     for(var i = 0; i < pis_array.length; i++) {
@@ -59,6 +61,8 @@
             $(document).ready( function () {
                 $('#protocolstart').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
                 $('#protocolstart').data('DateTimePicker').date(getTodayDate());
+                $('#protocolend').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+                $('#protocolend').data('DateTimePicker').date(getTodayDate());
                 updateLists("organ", "organs");
                 updateLists("publication", "publications");
                 updateLists("fundedsite", "fundedsites");
@@ -130,16 +134,25 @@
                   <label for="site_contact_email">Site Contact Email</label>
                   <input type="text" class="form-control" id="site_contact_email" name="site_contact_email" placeholder="Enter Site Contact Email">
                 </fieldset>
-                <fieldset class="form-group">
+                <!--<fieldset class="form-group">
                 <label for="cus">Custodian <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis,cis,cus" href="person">(Add Person)</a></label>
                 <select multiple class="form-control" size=13 id="cus" name="cus">
                 </select>
-                </fieldset>
+                </fieldset>-->
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
                 <label for="shortname">Short Name</label>
                 <input type="text" class="form-control" name="shortname" id="shortname" placeholder="Enter Short Name">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label for="protocolend">End Date</label>
+                  <div class='input-group date' id='protocolend'>
+                    <input type='text' class="form-control" id='end_date' name='end_date' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="programs">Programs<a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
@@ -176,7 +189,7 @@
                   <label for="irb_approval_num">Approval #</label>
                   <input type="text" class="form-control" id="irb_approval_num" name="irb_approval_num" placeholder="Enter Approval #">
                 </fieldset>
-                <fieldset class="form-group">
+                <!--<fieldset class="form-group">
                   <label for="hum_sub_train">Human Subjects Training</label>
                     <div class="radio">
                         <label>
@@ -202,7 +215,7 @@
                             Unknown
                         </label>
                     </div>
-                </fieldset>
+                </fieldset>-->
                 <fieldset class="form-group">
                 <label for="publications">Publications</label>
                 <select multiple class="form-control" size=13 id="publications" name="publications">
@@ -218,6 +231,11 @@
                 </div>
             </div>
             <div class="col-md-12">
+            <fieldset class="form-group">
+              <label for="aims">Aims</label>
+              <textarea class="form-control" id="aims" name="aims" rows="8"></textarea>
+              <small class="text-muted">Enter aims for this protocol.</small>
+            </fieldset>
             <fieldset class="form-group">
               <label for="abstract">Abstract</label>
               <textarea class="form-control" id="abstract" name="abstract" rows="8"></textarea>

@@ -113,6 +113,7 @@ def gen_protocol_data(request):
                     "program_link_id" : [ fun.programid for fun in list(protocol_program_link.objects.filter(protocolid=int(protocolid))) ],
                     "pub_link_id" : [ ppl.publicationid for ppl in list(protocol_publication_link.objects.filter(protocolid=int(protocolid))) ],
                     "start_date" : str(obj.start_date),
+                    "end_date" : str(obj.end_date),
                     "irb_approval" : obj.irb_approval,
                     "irb_contact" : obj.irb_contact ,
                     "site_contact" : obj.site_contact ,
@@ -121,6 +122,7 @@ def gen_protocol_data(request):
                     "irb_approval_num" : obj.irb_approval_num,
                     "hum_sub_train" : obj.hum_sub_train,
                     "abstract" : escapejs(obj.abstract),
+                    "aims" : escapejs(obj.aims)
                    }
     return data
 
@@ -192,6 +194,7 @@ def protocol_input(request):
             save_protocol_links(pro_id, request)
 
         else:
+            print(protocolm.errors)
             message = simplejson.dumps(protocolm.errors)
             success = False
         return JsonResponse({'Success':success,
