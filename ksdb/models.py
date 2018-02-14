@@ -141,6 +141,7 @@ class publication(models.Model):
     title = models.CharField(max_length=128)
     authors = models.CharField(max_length=5000)
     journal = models.CharField(max_length=500)
+    projectid = models.IntegerField()
     pubyear = models.IntegerField()
     pubmedid = models.CharField(max_length=128)
 

@@ -38,6 +38,7 @@ def gen_publication_data(request):
                     "id" : obj.id,
                     "title" : obj.title,
                     "journal" : obj.journal,
+                    "projectid" : obj.projectid,
                     "pubmedid" : obj.pubmedid,
                     "pubyear" : str(obj.pubyear),
 #                    "author_link_id" : [ ppl.personid for ppl in list(publication_author_link.objects.filter(publicationid=int(publicationid))) ],

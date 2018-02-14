@@ -521,3 +521,6 @@ insert into knowledge_attributes VALUES (83, 14, 'description','text');
 
 alter table protocol add column aims text;
 alter table protocol add column end_date timestamp;
+
+#2/13/2018 modifying publications to add project id
+alter table publication add column projectid int;

@@ -28,7 +28,7 @@ def setupTable(frame, objtype):
 def view_service(request):
     personheaders = ["Select","Person ID", "First Name", "Last Name", "Phone", "Email"]
     protocolheaders = ["Select","Protocol ID", "Title", "Short Name"]
-    publicationheaders = ["Select","Publication ID", "Title", "Author", "Pubmed ID", "Year"]
+    publicationheaders = ["Select","Publication ID", "Project ID", "Title", "Author", "Pubmed ID", "Year"]
     fundedsiteheaders = ["Select","Part. Site ID", "Name", "Program", "PIs", "Status", "Description"]
     groupheaders = ["Select", "Name", "Program", "Members"]
     committeeheaders = ["Select", "Title", "Program", "Members"]
