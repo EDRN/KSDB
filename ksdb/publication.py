@@ -6,7 +6,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import publication, person
+from ksdb.models import publication, person, publication_program_link, program
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -16,19 +16,18 @@ from ksdb.forms import PublicationForm
 import logging
 logger = logging.getLogger(__name__)
 
-#def save_publication_links(pub_id, request):
-#    #delete and save new person publication associations
-#    authorlist = request.POST.getlist('authors')
-#    publication_author_link.objects.filter(publicationid=pub_id).delete()
-#    for per in authorlist:
-#        publication_author_linkm = publication_author_link(publicationid = pub_id, personid = per)
-#        publication_author_linkm.save()
+def save_publication_links(pub_id, request):
+    #delete and save new person publication associations
+    programlist = request.POST.getlist('programs')
+    publication_program_link.objects.filter(publicationid=pub_id).delete()
+    for per in programlist:
+        publication_program_linkm = publication_program_link(publicationid = pub_id, programid = per)
+        publication_program_linkm.save()
 
 def gen_publication_data(request):
-#    personfield = [ [str(obj.id), str(obj.firstname), str(obj.lastname)] for obj in list(person.objects.all()) ]
-#    personfield.sort(key=lambda x: x[1].lower())
+    programfield = [ str(obj.id) for obj in list(program.objects.all()) ]
     data = {"action" : "New" ,
-#            "authors" : personfield ,
+            "programs" : programfield ,
            }
     if request.method == 'GET':
         publicationid = request.GET.get('id')
@@ -38,10 +37,11 @@ def gen_publication_data(request):
                     "id" : obj.id,
                     "title" : obj.title,
                     "journal" : obj.journal,
-                    "projectid" : obj.projectid,
+                    #"projectid" : obj.projectid,
+                    "programs" : programfield ,
                     "pubmedid" : obj.pubmedid,
                     "pubyear" : str(obj.pubyear),
-#                    "author_link_id" : [ ppl.personid for ppl in list(publication_author_link.objects.filter(publicationid=int(publicationid))) ],
+                    "program_link_id" : [ ppl.programid for ppl in list(publication_program_link.objects.filter(publicationid=int(publicationid))) ],
                     "authors" : obj.authors ,
                    }
 
@@ -56,7 +56,7 @@ def delete_publication(request):
         if len(ids) > 0:
             for pub_id in ids:
                 #delete author publication associations
-                #publication_author_link.objects.filter(publicationid=pub_id).delete()
+                publication_program_link.objects.filter(publicationid=pub_id).delete()
                 #delete publication itself
                 publication.objects.filter(id=pub_id).delete()
 
@@ -81,6 +81,8 @@ def publication_input(request):
             pub_id = int(request.POST.get('publicationid'))
             message = "You have successfull edited publication "+str(pub_id)+"."
             parameters["id"] = pub_id
+            programs = request.POST.getlist('programs')
+            parameters['programs'] = ", ".join(programs)
             publicationi = publication.objects.get(id=pub_id)
             publicationm = PublicationForm(parameters or None, instance=publicationi)
         else:
@@ -99,12 +101,15 @@ def publication_input(request):
             publicationm = PublicationForm(parameters)
         
         if publicationm.is_valid():
+            print ("Is valid")
             publicationm.save()
 
             #save publication data into db
-            #save_publication_links(pub_id, request)
+            save_publication_links(pub_id, request)
         else:
+            print ("failed")
             message = simplejson.dumps(publicationm.errors)
+            print (message)
             success = False
 
         return JsonResponse({'Success':success,

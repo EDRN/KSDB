@@ -35,9 +35,9 @@ class PublicationView(BaseDatatableView):
     model = publication
     objtype = "publication"
     # define the columns that will be returned
-    columns = ['Select', 'id', 'projectid', 'title', 'authors', 'pubmedid', 'pubyear']
+    columns = ['Select', 'id', 'programs', 'title', 'authors', 'pubmedid', 'pubyear']
 
-    order_columns = ['id', 'id', 'projectid', 'title', 'authors', 'pubmedid', 'pubyear']
+    order_columns = ['id', 'id', 'programs', 'title', 'authors', 'pubmedid', 'pubyear']
     max_display_length = 500
 
     def render_column(self, row, column):
@@ -52,7 +52,7 @@ class PublicationView(BaseDatatableView):
         if search:
             qs = qs.filter(Q(title__icontains=search) |
                            Q(id__icontains=search) |
-                           Q(projectid__icontains=search) |
+                           Q(programs__icontains=search) |
                            Q(authors__icontains=search) |
                            Q(pubmedid__icontains=search) |
                            Q(pubyear__icontains=search) )

@@ -141,7 +141,7 @@ class publication(models.Model):
     title = models.CharField(max_length=128)
     authors = models.CharField(max_length=5000)
     journal = models.CharField(max_length=500)
-    projectid = models.IntegerField()
+    programs = models.CharField(max_length=5000)
     pubyear = models.IntegerField()
     pubmedid = models.CharField(max_length=128)
 
@@ -155,6 +155,14 @@ class publication_author_link(models.Model):
     class Meta:
         db_table = u'publication_author_link'
         unique_together = (("publicationid", "personid"),)
+
+class publication_program_link(models.Model):
+    publicationid = models.IntegerField()
+    programid = models.IntegerField()
+
+    class Meta:
+        db_table = u'publication_program_link'
+        unique_together = (("publicationid", "programid"),)
 
 #Fundedsite related models
 class fundedsite(models.Model):
