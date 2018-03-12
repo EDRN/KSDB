@@ -10,15 +10,18 @@
                     $('#title').val("{{title}}");
                     $('#authors').val("{{authors}}");
                     $('#journal').val("{{journal}}");
-                    $('#projectid').val("{{projectid}}");
+                    //$('#projectid').val("{{projectid}}");
                     $('#pubyear').val("{{pubyear}}");
                     $('#pubmedid').val("{{pubmedid}}");
                     $('#duplicate').attr('disabled',true);
+                    $('#programs').select2().val({{program_link_id}}).trigger("change");
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}
                     setTimeout(fillpublicationform, 500);
                 {% endifequal %}
+                updateLists("program", "programs");
+                $('#programs').select2();
         } );
         </script>
     <div class="container">
@@ -37,9 +40,14 @@
                 <label for="pubmedid">PubMed ID</label>
                 <input type="text" class="form-control" name="pubmedid" id="pubmedid" placeholder="Enter Publication ID">
                 </fieldset>
-                <fieldset class="form-group">
+                <!--<fieldset class="form-group">
                 <label for="projectid">Project ID</label>
                 <input type="text" class="form-control" name="projectid" id="projectid" placeholder="Enter Project ID">
+                </fieldset>-->
+                <fieldset class="form-group">
+                <label for="programs">Programs <a data-toggle="modal" id="addprogram" data-target="#modal" onclick="startModal(this)" target="programs" href="program">(Add Program)</a></label>
+                <select multiple class="form-control" size=13 id="programs" name="programs">
+                </select>
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="title">Publication Title</label>

@@ -523,4 +523,11 @@ alter table protocol add column aims text;
 alter table protocol add column end_date timestamp;
 
 #2/13/2018 modifying publications to add project id
-alter table publication add column projectid int;
+alter table publication add column programs text;
+
+#3/6/2018
+CREATE TABLE publication_program_link(
+    id serial NOT NULL,
+    publicationid int references publication(id),
+    programid int references program(id),
+    UNIQUE ( fundedsiteid, programid ));
