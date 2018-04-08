@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, species, specimentype, discipline, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link, committee_chair_link, committee_cochair_link, protocol_program_link
+from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, species, specimentype, discipline, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link, committee_chair_link, committee_cochair_link, protocol_program_link, publication_program_link, pi_publication_link
 from ksdb.forms import PublicationForm
 from ksdb.ekeutils import format_phone, strip_syms
 
@@ -82,9 +82,11 @@ class Command(BaseCommand):
     def getpublicationrdf(self, filterobj, filterval):
         pubs = None
         if filterobj is program:
-            fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
-            fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
-            ppl = protocol_publication_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
+            #fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
+            #fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            #ppl = protocol_publication_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
+            #pubs = publication.objects.filter(id__in = [obj.publicationid for obj in ppl])
+            ppl = publication_program_link.objects.filter(programid__in = filterval)
             pubs = publication.objects.filter(id__in = [obj.publicationid for obj in ppl])
         else:
             pubs = publication.objects.all()
@@ -111,6 +113,10 @@ class Command(BaseCommand):
                     self._graph.add( (pubi, self._schema.pmid, Literal(pub.pubmedid)) )
                 if pub.pubyear:
                     self._graph.add( (pubi, self._schema.year, Literal(pub.pubyear)) )
+                #pis
+                for ppl in list(pi_publication_link.objects.filter(publicationid=pub.id)):
+                    self._graph.add( (pubi, self._schema.pi, URIRef(self._person[str(ppl.personid)])) )
+
                 #missing volume
                 #self._graph.add( (pubi, _schema.pubURL, URIRef("http://cebp.aacrjournals.org/")) )
 

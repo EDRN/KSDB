@@ -8,7 +8,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import person, degree, person_degree_link, fundedsite_staff_link, fundedsite_pi_link, publication_author_link, institution_personnel_link, pi_protocol_link
+from ksdb.models import person, degree, person_degree_link, fundedsite_staff_link, fundedsite_pi_link, institution_personnel_link, pi_protocol_link
 
 # Allow external command processing
 from django.http import JsonResponse

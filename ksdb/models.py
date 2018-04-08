@@ -148,12 +148,14 @@ class publication(models.Model):
     class Meta:
         db_table = u'publication'
 
-class publication_author_link(models.Model):
+
+
+class pi_publication_link(models.Model):
     publicationid = models.IntegerField()
     personid = models.IntegerField()
 
     class Meta:
-        db_table = u'publication_author_link'
+        db_table = u'pi_publication_link'
         unique_together = (("publicationid", "personid"),)
 
 class publication_program_link(models.Model):

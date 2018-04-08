@@ -10,18 +10,30 @@
                     $('#title').val("{{title}}");
                     $('#authors').val("{{authors}}");
                     $('#journal').val("{{journal}}");
-                    //$('#projectid').val("{{projectid}}");
                     $('#pubyear').val("{{pubyear}}");
                     $('#pubmedid').val("{{pubmedid}}");
                     $('#duplicate').attr('disabled',true);
+                    $('#protocols').select2().val({{pro_link_id}}).trigger("change");
                     $('#programs').select2().val({{program_link_id}}).trigger("change");
+                    var pis_array = "{{pi_link_id}}".split(',');
+                    for(var i = 0; i < pis_array.length; i++) {
+                        pis_array[i] = pis_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                        if(pis_array[i] != ""){
+                            var $option = $('<option value="'+pis_array[i]+'" selected></option>');
+                            $('#pis').append($option);
+                        }
+                    }
+
             }
             $(document).ready( function () {
                 {% ifequal action "Edit" %}
                     setTimeout(fillpublicationform, 500);
                 {% endifequal %}
                 updateLists("program", "programs");
+                updateLists("protocol", "protocols");
+                setAutocompleteList('pis','person', '', '', 1);
                 $('#programs').select2();
+                $('#protocols').select2();
         } );
         </script>
     <div class="container">
@@ -50,8 +62,18 @@
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
+                <label for="protocols">Protocols</label>
+                <select multiple class="form-control" size=13 id="protocols" name="protocols">
+                </select>
+                </fieldset>
+                <fieldset class="form-group">
                 <label for="title">Publication Title</label>
                 <input type="text" class="form-control" name="title" id="title" placeholder="Enter Publication Title">
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="pis">Lead Investigators <a data-toggle="modal" id="addperson" data-target="#modal" onclick="startModal(this)" target="pis" href="person">(Add Person)</a></label>
+                <select multiple class="form-control" size=14 id="pis" name="pis">
+                </select>
                 </fieldset>
                 <fieldset class="form-group">
                 <label for="authors">Authors</label>

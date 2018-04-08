@@ -530,4 +530,13 @@ CREATE TABLE publication_program_link(
     id serial NOT NULL,
     publicationid int references publication(id),
     programid int references program(id),
-    UNIQUE ( fundedsiteid, programid ));
+    UNIQUE ( publicationid, programid ));
+
+
+#4/8/2018
+
+CREATE TABLE pi_publication_link(
+        id serial NOT NULL,
+        publicationid int references publication(id),
+        personid int references person(id),
+        UNIQUE ( publicationid, personid ));

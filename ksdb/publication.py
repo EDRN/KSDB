@@ -6,11 +6,15 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import publication, person, publication_program_link, program
+from ksdb.models import publication, person, publication_program_link, program, pi_publication_link, protocol_publication_link
 
 # Allow external command processing
 from django.http import JsonResponse
 from ksdb.forms import PublicationForm
+
+#Utils
+from ksdb import ekeutils
+
 
 #import settings
 import logging
@@ -24,10 +28,31 @@ def save_publication_links(pub_id, request):
         publication_program_linkm = publication_program_link(publicationid = pub_id, programid = per)
         publication_program_linkm.save()
 
+    #delete and save new pi publication associations
+    pilist = request.POST.getlist('pis')
+    pi_publication_link.objects.filter(publicationid=pub_id).delete()
+    for per in pilist:
+        per_split = per.split(":")
+        pi_publication_linkm = pi_publication_link(publicationid = pub_id, personid = per_split[0])
+        pi_publication_linkm.save()
+
+    #delete and save new publication protocol associations
+    protocollist = request.POST.getlist('protocols')
+    protocol_publication_link.objects.filter(publicationid=pub_id).delete()
+    for pro in protocollist:
+        pro_split = pro.split(":")
+        protocol_publication_linkm = protocol_publication_link(protocolid = pro, publicationid = pub_id)
+        protocol_publication_linkm.save()
+
 def gen_publication_data(request):
     programfield = [ str(obj.id) for obj in list(program.objects.all()) ]
+    personfield = ekeutils.get_eke_list("person")
+    protocolfield = ekeutils.get_eke_list("protocol")
+
     data = {"action" : "New" ,
             "programs" : programfield ,
+            "pis" : personfield ,
+            "protocols" : protocolfield ,
            }
     if request.method == 'GET':
         publicationid = request.GET.get('id')
@@ -37,11 +62,15 @@ def gen_publication_data(request):
                     "id" : obj.id,
                     "title" : obj.title,
                     "journal" : obj.journal,
-                    #"projectid" : obj.projectid,
+                    "pis" : personfield ,
+                    "protocols" : protocolfield ,
                     "programs" : programfield ,
                     "pubmedid" : obj.pubmedid,
                     "pubyear" : str(obj.pubyear),
                     "program_link_id" : [ ppl.programid for ppl in list(publication_program_link.objects.filter(publicationid=int(publicationid))) ],
+                    "pi_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(pi_publication_link.objects.filter(publicationid=int(publicationid))) ]),
+                    "pro_link_id" : [ ppl.protocolid for ppl in list(protocol_publication_link.objects.filter(publicationid=int(publicationid))) ],
+
                     "authors" : obj.authors ,
                    }
 
@@ -59,6 +88,11 @@ def delete_publication(request):
                 publication_program_link.objects.filter(publicationid=pub_id).delete()
                 #delete publication itself
                 publication.objects.filter(id=pub_id).delete()
+                #delete person publication associations
+                pi_publication_link.objects.filter(publicationid=pub_id).delete()
+                #delete publication protocol associations
+                protocol_publication_link.objects.filter(publicationid=pub_id).delete()
+
 
             message = "Successfully deleted publication id(s): "+request.POST.get("id")
             success = True
