@@ -184,6 +184,7 @@ class Command(BaseCommand):
             fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
             gpl = group_program_link.objects.filter(programid__in = filterval)
             fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            ppl = publication_program_link.objects.filter(programid__in = filterval)
 
             #all persons associated with protocols
             pipl = pi_protocol_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
@@ -197,9 +198,12 @@ class Command(BaseCommand):
             
             #all persons associated with collaborative groups
             gml = group_member_link.objects.filter(groupid__in = [obj.groupid for obj in gpl])
+
+            #all pis associated with publications
+            lpl = pi_publication_link.objects.filter(publicationid__in = [obj.publicationid for obj in ppl])
         
             #combine all persons
-            pers = person.objects.filter(id__in = set([obj.personid for obj in list(pipl)+list(prcl)+list(cipl)+list(cfl)+list(fpil)+list(fsl)+list(gml)]))
+            pers = person.objects.filter(id__in = set([obj.personid for obj in list(pipl)+list(prcl)+list(cipl)+list(cfl)+list(fpil)+list(fsl)+list(gml)+list(lpl)]))
         else:
             pers = person.objects.all()
         for per in pers:
