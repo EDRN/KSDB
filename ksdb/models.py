@@ -138,7 +138,7 @@ class institution_personnel_link(models.Model):
 #Publication related models
 class publication(models.Model):
     id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=2000)
     authors = models.CharField(max_length=5000)
     journal = models.CharField(max_length=500)
     programs = models.CharField(max_length=5000)

@@ -540,3 +540,5 @@ CREATE TABLE pi_publication_link(
         publicationid int references publication(id),
         personid int references person(id),
         UNIQUE ( publicationid, personid ));
+
+alter table publication alter column title type varchar(2000)
