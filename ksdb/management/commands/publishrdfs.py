@@ -1,7 +1,7 @@
 #publishPublication.rdf
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, publication_author_link, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, species, specimentype, discipline, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link, committee_chair_link, committee_cochair_link, protocol_program_link, publication_program_link, pi_publication_link
+from ksdb.models import publication, person, protocol, pi_protocol_link, organ_protocol_link, person_degree_link, degree, program, institution, institution_personnel_link, fundedsite, fundedsite_staff_link, fundedsite_pi_link, fundedsite_organ_link, fundedsite_program_link, fundedsite_institution_link, organ, species, specimentype, discipline, IdSeq, disease, group, group_member_link, con_fundedsite_link, protocol_custodian_link,protocol_publication_link, fundedsite_protocol_link, group_program_link, ci_protocol_link, committee, committee_member_link, committee_program_link, group_chair_link, group_cochair_link, committee_chair_link, committee_cochair_link, protocol_program_link, publication_program_link, pi_publication_link
 from ksdb.forms import PublicationForm
 from ksdb.ekeutils import format_phone, strip_syms
 
@@ -184,6 +184,7 @@ class Command(BaseCommand):
             fpl = fundedsite_program_link.objects.filter(programid__in = filterval)
             gpl = group_program_link.objects.filter(programid__in = filterval)
             fpr = fundedsite_protocol_link.objects.filter(fundedsiteid__in = [obj.fundedsiteid for obj in fpl])
+            ppl = publication_program_link.objects.filter(programid__in = filterval)
 
             #all persons associated with protocols
             pipl = pi_protocol_link.objects.filter(protocolid__in = [obj.protocolid for obj in fpr])
@@ -197,9 +198,12 @@ class Command(BaseCommand):
             
             #all persons associated with collaborative groups
             gml = group_member_link.objects.filter(groupid__in = [obj.groupid for obj in gpl])
+
+            #all pis associated with publications
+            lpl = pi_publication_link.objects.filter(publicationid__in = [obj.publicationid for obj in ppl])
         
             #combine all persons
-            pers = person.objects.filter(id__in = set([obj.personid for obj in list(pipl)+list(prcl)+list(cipl)+list(cfl)+list(fpil)+list(fsl)+list(gml)]))
+            pers = person.objects.filter(id__in = set([obj.personid for obj in list(pipl)+list(prcl)+list(cipl)+list(cfl)+list(fpil)+list(fsl)+list(gml)+list(lpl)]))
         else:
             pers = person.objects.all()
         for per in pers:
