@@ -1,0 +1,957 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:ns1="https://cancer.jpl.nasa.gov/rdf/schema.rdf#"
+   xmlns:ns2="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1795">
+    <ns2:title>Immune DNA signature of T-cell infiltration in breast tumor exomes.</ns2:title>
+    <ns1:author>Eric Levy</ns1:author>
+    <ns1:pmid>27452728</ns1:pmid>
+    <ns1:author>Olivier Harismendy</ns1:author>
+    <ns1:author>Brian Woo</ns1:author>
+    <ns1:author>Rachel Marty</ns1:author>
+    <ns1:pi rdf:resource="https://cancer.jpl.nasa.gov/ksdb/personinput/?id=1354"/>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:journal>Scientific reports</ns1:journal>
+    <ns1:author>Hannah Carter</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Michelle Dow</ns1:author>
+    <ns1:author>Ricardo Armisen</ns1:author>
+    <ns1:author>Valentina G\xc3\xa1rate Calder\xc3\xb3n</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1816">
+    <ns1:pmid>28104621</ns1:pmid>
+    <ns1:author>J Castillo</ns1:author>
+    <ns1:author>L Foretova</ns1:author>
+    <ns1:author>G Varadhachary</ns1:author>
+    <ns1:author>D U Kim</ns1:author>
+    <ns1:author>P Gascoyne</ns1:author>
+    <ns1:author>F Meric-Bernstam</ns1:author>
+    <ns1:author>M Katz</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>H Alvarez</ns1:author>
+    <ns1:author>E Fabianova</ns1:author>
+    <ns1:author>M J Overman</ns1:author>
+    <ns1:author>T Kumar</ns1:author>
+    <ns1:author>D Li</ns1:author>
+    <ns1:author>I Wistuba</ns1:author>
+    <ns1:author>V Bernard</ns1:author>
+    <ns1:author>K Allenson</ns1:author>
+    <ns1:author>V Janout</ns1:author>
+    <ns1:author>S Hanash</ns1:author>
+    <ns1:author>A Maitra</ns1:author>
+    <ns1:author>G Davis</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>P Brennan</ns1:author>
+    <ns1:journal>Annals of oncology : official journal of the European Society for Medical Oncology</ns1:journal>
+    <ns1:author>G Scelo</ns1:author>
+    <ns1:author>I Holcatova</ns1:author>
+    <ns1:author>F A San Lucas</ns1:author>
+    <ns2:title>High prevalence of mutant KRAS in circulating exosome-derived DNA from early-stage pancreatic cancer patients.</ns2:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1792">
+    <ns1:author>Bo Nordenskj\xc3\xb6ld</ns1:author>
+    <ns1:author>Linda S Lindstr\xc3\xb6m</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Katherine A Hoadley</ns1:author>
+    <ns1:author>Laura J van 't Veer</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Olle St\xc3\xa5l</ns1:author>
+    <ns1:author>Tommy Fornander</ns1:author>
+    <ns1:journal>JAMA oncology</ns1:journal>
+    <ns1:author>Alexander D Borowsky</ns1:author>
+    <ns2:title>Use of Molecular Tools to Identify Patients With Indolent Breast Cancers With Ultralow Risk Over 2 Decades.</ns2:title>
+    <ns1:author>Christopher C Benz</ns1:author>
+    <ns1:author>Carlie K Thompson</ns1:author>
+    <ns1:pmid>28662222</ns1:pmid>
+    <ns1:author>Nicholas P Tobin</ns1:author>
+    <ns1:author>Christina Yau</ns1:author>
+    <ns1:author>Laura J Esserman</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1817">
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Huamin Wang</ns1:author>
+    <ns2:title>Quantitative imaging to evaluate malignant potential of IPMNs.</ns2:title>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:journal>Oncotarget</ns1:journal>
+    <ns1:author>Eric P Tamm</ns1:author>
+    <ns1:author>Matthew H Katz</ns1:author>
+    <ns1:author>Eugene J Koay</ns1:author>
+    <ns1:author>Ziding Feng</ns1:author>
+    <ns1:pmid>27588410</ns1:pmid>
+    <ns1:author>Leonidas E Bantis</ns1:author>
+    <ns1:author>Alexander N Hanania</ns1:author>
+    <ns1:author>Anirban Maitra</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1836">
+    <ns1:author>Jonathan R Hart</ns1:author>
+    <ns1:journal>Proceedings of the National Academy of Sciences of the United States of America</ns1:journal>
+    <ns1:author>Carlo M Croce</ns1:author>
+    <ns1:author>Letizia Perracchio</ns1:author>
+    <ns1:author>Luisa Tomasello</ns1:author>
+    <ns1:author>Gary S Stein</ns1:author>
+    <ns1:author>Alexey Palamarchuk</ns1:author>
+    <ns1:author>Anna Antenucci</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Dario Veneziano</ns1:author>
+    <ns1:author>Mariantonia Carosi</ns1:author>
+    <ns1:author>Edoardo Pescarmona</ns1:author>
+    <ns1:author>Yuri Pekarsky</ns1:author>
+    <ns1:author>Andrea Russo</ns1:author>
+    <ns1:author>Paolo Visca</ns1:author>
+    <ns1:author>Peter K Vogt</ns1:author>
+    <ns1:author>Maria Diodoro</ns1:author>
+    <ns1:author>Curtis C Harris</ns1:author>
+    <ns1:author>Alessandra Drusco</ns1:author>
+    <ns2:title>tsRNA signatures in cancer.</ns2:title>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Nicholas H Farina</ns1:author>
+    <ns1:author>Terri L Messier</ns1:author>
+    <ns1:author>Jane B Lian</ns1:author>
+    <ns1:author>Antonio Ciardi</ns1:author>
+    <ns1:author>Chang-Gong Liu</ns1:author>
+    <ns1:pmid>28696308</ns1:pmid>
+    <ns1:author>Veronica Balatti</ns1:author>
+    <ns1:author>Catherine Bell</ns1:author>
+    <ns1:author>Giovanni Nigita</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1826">
+    <ns1:author>Deborah J Thompson</ns1:author>
+    <ns1:author>Penny Soucy</ns1:author>
+    <ns1:author>Zhaoming Wang</ns1:author>
+    <ns1:author>Belynda D Hicks</ns1:author>
+    <ns1:author>Julie M Cunningham</ns1:author>
+    <ns1:journal>Cancer epidemiology, biomarkers &amp; prevention : a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology</ns1:journal>
+    <ns1:author>Kyriaki Michailidou</ns1:author>
+    <ns1:author>Zsofia Kote-Jarai</ns1:author>
+    <ns1:author>Daniela Seminara</ns1:author>
+    <ns1:author>Alison M Dunning</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Peter Kraft</ns1:author>
+    <ns1:author>Linda E Kelemen</ns1:author>
+    <ns1:author>Charlisse Caga-Anan</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Marc T Goodman</ns1:author>
+    <ns1:author>Jane Romm</ns1:author>
+    <ns1:author>Sune F Nielsen</ns1:author>
+    <ns1:author>Stephen B Gruber</ns1:author>
+    <ns1:author>Douglas F Easton</ns1:author>
+    <ns1:author>Jinyoung Byun</ns1:author>
+    <ns1:author>Tameka Shelford</ns1:author>
+    <ns1:author>Gerhard A Coetzee</ns1:author>
+    <ns1:author>Christopher A Haiman</ns1:author>
+    <ns1:author>Xiangjun Xiao</ns1:author>
+    <ns1:author>Fredrick R Schumacher</ns1:author>
+    <ns1:author>Paul Brennan</ns1:author>
+    <ns1:author>Ulrike Peters</ns1:author>
+    <ns1:author>Hongbing Shen</ns1:author>
+    <ns1:author>Christopher K Edlund</ns1:author>
+    <ns1:author>Andrew Berchuck</ns1:author>
+    <ns1:author>Laura Ottini</ns1:author>
+    <ns1:author>Ali Amin Al Olama</ns1:author>
+    <ns1:author>Daniel Vincent</ns1:author>
+    <ns1:author>John K Field</ns1:author>
+    <ns1:author>Lesley McGuffog</ns1:author>
+    <ns1:author>Joe Dennis</ns1:author>
+    <ns1:author>Fergus J Couch</ns1:author>
+    <ns1:author>Sara Lindstr\xc3\xb6m</ns1:author>
+    <ns2:title>The OncoArray Consortium: A Network for Understanding the Genetic Architecture of Common Cancers.</ns2:title>
+    <ns1:pmid>27697780</ns1:pmid>
+    <ns1:author>Rita Schmutzler</ns1:author>
+    <ns1:author>Daniel Tessier</ns1:author>
+    <ns1:author>Irene Br\xc3\xbcske-Hohlfeld</ns1:author>
+    <ns1:author>Mads Thomassen</ns1:author>
+    <ns1:author>Thomas A Sellers</ns1:author>
+    <ns1:author>Elizabeth Gillanders</ns1:author>
+    <ns1:author>Karoline Kuchenbaecker</ns1:author>
+    <ns1:author>Dennis J Hazelett</ns1:author>
+    <ns1:author>Graham G Giles</ns1:author>
+    <ns1:author>Kenneth Offit</ns1:author>
+    <ns1:author>Graham Casey</ns1:author>
+    <ns1:author>Michael F Seldin</ns1:author>
+    <ns1:author>David E Goldgar</ns1:author>
+    <ns1:author>Antonis C Antoniou</ns1:author>
+    <ns1:author>Jack A Taylor</ns1:author>
+    <ns1:author>Rosalind A Eeles</ns1:author>
+    <ns1:author>Marjorie Riggan</ns1:author>
+    <ns1:author>Melanie Waldenberger</ns1:author>
+    <ns1:author>Jonathan Marchini</ns1:author>
+    <ns1:author>Andrew Lee</ns1:author>
+    <ns1:author>Fran\xc3\xa7ois Bacot</ns1:author>
+    <ns1:author>Sylvie Laboissiere</ns1:author>
+    <ns1:author>Yafang Li</ns1:author>
+    <ns1:author>James D McKay</ns1:author>
+    <ns1:author>Stephen Demetriades</ns1:author>
+    <ns1:author>Heike Bickeb\xc3\xb6ller</ns1:author>
+    <ns1:author>Simon A Gayther</ns1:author>
+    <ns1:author>Liesel FitzGerald</ns1:author>
+    <ns1:author>Yongyong Shi</ns1:author>
+    <ns1:author>Paul D P Pharoah</ns1:author>
+    <ns1:author>Stephanie L Schmit</ns1:author>
+    <ns1:author>Stefanie Nelson</ns1:author>
+    <ns1:author>Laura Fachal</ns1:author>
+    <ns1:author>Judith Manz</ns1:author>
+    <ns1:author>Ahsan Kamal</ns1:author>
+    <ns1:author>Christopher I Amos</ns1:author>
+    <ns1:author>Catherine M Phelan</ns1:author>
+    <ns1:author>Rayjean J Hung</ns1:author>
+    <ns1:author>Stig E Bojesen</ns1:author>
+    <ns1:author>Sara Benlloch</ns1:author>
+    <ns1:author>Hua Ling</ns1:author>
+    <ns1:author>Sue K Park</ns1:author>
+    <ns1:author>Marcia Adams</ns1:author>
+    <ns1:author>Amanda B Spurdle</ns1:author>
+    <ns1:author>Judith L Forman</ns1:author>
+    <ns1:author>Angela Risch</ns1:author>
+    <ns1:author>Stephen J Chanock</ns1:author>
+    <ns1:author>Craig Luccarini</ns1:author>
+    <ns1:author>Tracy A O'Mara</ns1:author>
+    <ns1:author>Elizabeth Pugh</ns1:author>
+    <ns1:author>Katja Butterbach</ns1:author>
+    <ns1:author>Georgia Chenevix-Trench</ns1:author>
+    <ns1:author>David J Hunter</ns1:author>
+    <ns1:author>Jacques Simard</ns1:author>
+    <ns1:author>David V Conti</ns1:author>
+    <ns1:author>David J Van Den Berg</ns1:author>
+    <ns1:author>Kimberly Doheny</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1810">
+    <ns1:journal>Abdominal radiology (New York)</ns1:journal>
+    <ns1:author>Joseph M Herman</ns1:author>
+    <ns1:author>Eugene J Koay</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Beth Erickson</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2018</ns1:year>
+    <ns1:author>Peter C Park</ns1:author>
+    <ns1:pmid>29110053</ns1:pmid>
+    <ns1:author>William Hall</ns1:author>
+    <ns2:title>The role of imaging in the clinical practice of radiation oncology for pancreatic cancer.</ns2:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1833">
+    <ns1:author>Heidi Auman</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Wei Wei</ns1:author>
+    <ns1:author>Ziding Feng</ns1:author>
+    <ns1:author>Antonio Hurtado-Coll</ns1:author>
+    <ns1:author>Jesse K McKenney</ns1:author>
+    <ns1:author>Martin E Gleave</ns1:author>
+    <ns1:author>Lisa F Newcomb</ns1:author>
+    <ns1:author>James D Brooks</ns1:author>
+    <ns1:author>Okyaz Eminaga</ns1:author>
+    <ns2:title>MUC1 Expression by Immunohistochemistry Is Associated with Adverse Pathologic Features in Prostate Cancer</ns2:title>
+    <ns1:author>Lawrence D True</ns1:author>
+    <ns1:pmid>27846218</ns1:pmid>
+    <ns1:author>Daniel W Lin</ns1:author>
+    <ns1:journal>PloS one</ns1:journal>
+    <ns1:author>Dean A Troyer</ns1:author>
+    <ns1:author>Ladan Fazli</ns1:author>
+    <ns1:author>Jeff Simko</ns1:author>
+    <ns1:author>Ian M Thompson</ns1:author>
+    <ns1:author>Peter S Nelson</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Sarah J Hawley</ns1:author>
+    <ns1:author>Peter R Carroll</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1811">
+    <ns1:pmid>28986391</ns1:pmid>
+    <ns1:author>Shahina Maqbool</ns1:author>
+    <ns1:author>Ulrich Steidl</ns1:author>
+    <ns1:author>James Bradner</ns1:author>
+    <ns1:author>John M Greally</ns1:author>
+    <ns1:author>Sanchari Bhattacharyya</ns1:author>
+    <ns1:author>Nathaniel Campbell</ns1:author>
+    <ns2:title>Altered hydroxymethylation is seen at regulatory regions in pancreatic cancer and regulates oncogenic pathways.</ns2:title>
+    <ns1:author>Tushar D Bhagat</ns1:author>
+    <ns1:author>Aparna Vasantkumar</ns1:author>
+    <ns1:author>Jozef Mazdo</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Yiting Yu</ns1:author>
+    <ns1:author>Kith Pradhan</ns1:author>
+    <ns1:author>Anirban Maitra</ns1:author>
+    <ns1:author>Amit Verma</ns1:author>
+    <ns1:author>Masako Suzuki</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:journal>Genome research</ns1:journal>
+    <ns1:author>Meelad Dawlaty</ns1:author>
+    <ns1:author>Lucy Godley</ns1:author>
+    <ns1:author>Sonal Gupta</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1822">
+    <ns1:author>H Alvarez</ns1:author>
+    <ns1:journal>Annals of oncology : official journal of the European Society for Medical Oncology</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2015</ns1:year>
+    <ns1:author>J L Petersen</ns1:author>
+    <ns1:author>M Katz</ns1:author>
+    <ns1:author>K Ellis</ns1:author>
+    <ns1:author>G Varadhachary</ns1:author>
+    <ns1:pmid>26681674</ns1:pmid>
+    <ns1:author>V Bernard</ns1:author>
+    <ns1:author>I Wistuba</ns1:author>
+    <ns1:author>K Allenson</ns1:author>
+    <ns1:author>D Li</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>G E Davies</ns1:author>
+    <ns2:title>Minimally invasive genomic and transcriptomic profiling of visceral cancers by next-generation sequencing</ns2:title>
+    <ns1:author>E A Ehli</ns1:author>
+    <ns1:author>R Wolff</ns1:author>
+    <ns1:author>D U Kim</ns1:author>
+    <ns1:author>A Maitra</ns1:author>
+    <ns1:author>J Castillo</ns1:author>
+    <ns1:author>F A San Lucas</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1812">
+    <ns1:author>Nickolas Papadopoulos</ns1:author>
+    <ns1:author>Peter J Allen</ns1:author>
+    <ns1:author>Kenneth W Kinzler</ns1:author>
+    <ns1:author>Gloria M Petersen</ns1:author>
+    <ns1:author>Samir M Hanash</ns1:author>
+    <ns1:author>Alison P Klein</ns1:author>
+    <ns1:author>Anne Marie Lennon</ns1:author>
+    <ns2:title>Combined circulating tumor DNA and protein biomarker-based liquid biopsy for the earlier detection of pancreatic cancers.</ns2:title>
+    <ns1:pmid>28874546</ns1:pmid>
+    <ns1:author>Matthew J Weiss</ns1:author>
+    <ns1:author>Martin A Makary</ns1:author>
+    <ns1:author>Maria Popoli</ns1:author>
+    <ns1:author>Anirban Maitra</ns1:author>
+    <ns1:author>Mark Schattner</ns1:author>
+    <ns1:author>Jeanne Tie</ns1:author>
+    <ns1:author>Jin He</ns1:author>
+    <ns1:author>Fay Wong</ns1:author>
+    <ns1:author>Christopher L Wolfgang</ns1:author>
+    <ns1:author>Aatur D Singhi</ns1:author>
+    <ns1:author>Marco Dal Molin</ns1:author>
+    <ns1:author>Cristian Tomasetti</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Michael G Goggins</ns1:author>
+    <ns1:author>Joshua D Cohen</ns1:author>
+    <ns1:author>Natalie Silliman</ns1:author>
+    <ns1:journal>Proceedings of the National Academy of Sciences of the United States of America</ns1:journal>
+    <ns1:author>Claudio Doglioni</ns1:author>
+    <ns1:author>Ammar A Javed</ns1:author>
+    <ns1:author>Seung-Mo Hong</ns1:author>
+    <ns1:author>Bert Vogelstein</ns1:author>
+    <ns1:author>C Max Schmidt</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Massimo Falconi</ns1:author>
+    <ns1:author>Ralph H Hruban</ns1:author>
+    <ns1:author>Michele T Yip-Schneider</ns1:author>
+    <ns1:author>Peter Gibbs</ns1:author>
+    <ns1:author>Yuxuan Wang</ns1:author>
+    <ns1:author>Song Cheol Kim</ns1:author>
+    <ns1:author>Nita Ahuja</ns1:author>
+    <ns1:author>Lu Li</ns1:author>
+    <ns1:author>Randall E Brand</ns1:author>
+    <ns1:author>Janine Ptak</ns1:author>
+    <ns1:author>Joy Schaefer</ns1:author>
+    <ns1:author>Christopher Thoburn</ns1:author>
+    <ns1:author>Lisa Dobbyn</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1837">
+    <ns1:author>Andrew J Fritz</ns1:author>
+    <ns1:author>Janet L Stein</ns1:author>
+    <ns1:author>Prachi N Ghule</ns1:author>
+    <ns1:author>Sayyed K Zaidi</ns1:author>
+    <ns1:author>Gary S Stein</ns1:author>
+    <ns1:author>Andre J van Wijnen</ns1:author>
+    <ns1:author>Diana L Gerrard</ns1:author>
+    <ns1:author>Adam S Weinheimer</ns1:author>
+    <ns1:author>Ahmet R Barutcu</ns1:author>
+    <ns1:author>Natalie A Page</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:journal>Journal of cellular physiology</ns1:journal>
+    <ns1:pmid>28504305</ns1:pmid>
+    <ns1:author>Joseph R Boyd</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns2:title>Intranuclear and higher-order chromatin organization of the major histone gene cluster in breast cancer.</ns2:title>
+    <ns1:author>Jane B Lian</ns1:author>
+    <ns1:author>Coralee E Tye</ns1:author>
+    <ns1:author>Anthony N Imbalzano</ns1:author>
+    <ns1:author>David J Shirley</ns1:author>
+    <ns1:author>Deli Hong</ns1:author>
+    <ns1:author>Seth Frietze</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1790">
+    <ns2:title>Pathobiology of the 129:Stat1 -/- mouse model of human age-related ER-positive breast cancer with an immune infiltrate-excluded phenotype.</ns2:title>
+    <ns1:author>Russell C Hovey</ns1:author>
+    <ns1:author>Zsofia Penzvalto</ns1:author>
+    <ns1:author>Josephine F Trott</ns1:author>
+    <ns1:journal>Breast cancer research : BCR</ns1:journal>
+    <ns1:author>Neil E Hubbard</ns1:author>
+    <ns1:author>Jane Q Chen</ns1:author>
+    <ns1:author>Robert D Cardiff</ns1:author>
+    <ns1:author>Hidetoshi Mori</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:pmid>28865492</ns1:pmid>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Alexander D Borowsky</ns1:author>
+    <ns1:author>Louis Schuetter</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1804">
+    <ns1:author>Phuoc T Tran</ns1:author>
+    <ns1:author>Ashley E Ross</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Michael A Gorin</ns1:author>
+    <ns1:author>Jeffrey J Tosoian</ns1:author>
+    <ns1:author>Kenneth J Pienta</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:journal>Nature reviews. Urology</ns1:journal>
+    <ns2:title>Oligometastatic prostate cancer: definitions, clinical outcomes, and treatment considerations.</ns2:title>
+    <ns1:pmid>27725639</ns1:pmid>
+    <ns1:author>Edward M Schaeffer</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1835">
+    <ns1:author>Heidi L H Malaby</ns1:author>
+    <ns1:author>Jane B Lian</ns1:author>
+    <ns1:author>Jason Stumpff</ns1:author>
+    <ns1:author>Prachi N Ghule</ns1:author>
+    <ns1:author>Kirsten M Tracy</ns1:author>
+    <ns2:title>Mitotically-Associated lncRNA (MANCR) Affects Genomic Stability and Cell Division in Aggressive Breast Cancer.</ns2:title>
+    <ns1:author>Gary S Stein</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2018</ns1:year>
+    <ns1:author>Coralee E Tye</ns1:author>
+    <ns1:author>Janet L Stein</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:journal>Molecular cancer research : MCR</ns1:journal>
+    <ns1:pmid>29378907</ns1:pmid>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1794">
+    <ns1:author>Joe W Gray</ns1:author>
+    <ns1:author>Jasmine Wong</ns1:author>
+    <ns1:author>Alfred Au</ns1:author>
+    <ns1:author>Michael J Campbell</ns1:author>
+    <ns1:author>Frederick Baehner</ns1:author>
+    <ns1:author>Rita Mukhtar</ns1:author>
+    <ns1:pmid>27785654</ns1:pmid>
+    <ns1:author>Ekene Ojukwu</ns1:author>
+    <ns1:author>Booyeon Han</ns1:author>
+    <ns1:author>Gregor Krings</ns1:author>
+    <ns1:journal>Breast cancer research and treatment</ns1:journal>
+    <ns1:author>Tess O'Meara</ns1:author>
+    <ns1:author>Vickram Tandon</ns1:author>
+    <ns1:author>Laura Esserman</ns1:author>
+    <ns1:author>Zelos Zhu</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns2:title>Characterizing the immune microenvironment in high-risk ductal carcinoma in situ of the breast.</ns2:title>
+    <ns1:author>Max Endicott</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1824">
+    <ns1:author>Christine Ladd-Acosta</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Jacqueline Kerr</ns1:author>
+    <ns1:author>Marta Jankowska</ns1:author>
+    <ns1:author>Ian A Blair</ns1:author>
+    <ns1:author>Beate Ritz</ns1:author>
+    <ns1:author>M Daniele Fallin</ns1:author>
+    <ns1:author>Margaret R Karagas</ns1:author>
+    <ns1:author>Susan L Teitelbaum</ns1:author>
+    <ns1:author>Juliette Madan</ns1:author>
+    <ns1:journal>Cancer epidemiology, biomarkers &amp; prevention : a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology</ns1:journal>
+    <ns2:title>Opportunities and Challenges for Environmental Exposure Assessment in Population-Based Studies.</ns2:title>
+    <ns1:author>Duncan C Thomas</ns1:author>
+    <ns1:author>Leah E Mechanic</ns1:author>
+    <ns1:author>Christopher I Amos</ns1:author>
+    <ns1:author>Chirag J Patel</ns1:author>
+    <ns1:author>Nilanjan Chatterjee</ns1:author>
+    <ns1:author>Bhramar Mukherjee</ns1:author>
+    <ns1:pmid>28710076</ns1:pmid>
+    <ns1:author>Kimberly A McAllister</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1819">
+    <ns1:author>Giulio F Draetta</ns1:author>
+    <ns1:author>Anirban Maitra</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:journal>Genes &amp; development</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Ronald A DePinho</ns1:author>
+    <ns1:author>Haoqiang Ying</ns1:author>
+    <ns1:author>Prasenjit Dey</ns1:author>
+    <ns1:author>Alec C Kimmelman</ns1:author>
+    <ns1:author>Wantong Yao</ns1:author>
+    <ns1:pmid>26883357</ns1:pmid>
+    <ns2:title>Genetics and biology of pancreatic ductal adenocarcinoma.</ns2:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1834">
+    <ns1:author>Robert B West</ns1:author>
+    <ns1:author>Sarah J Hawley</ns1:author>
+    <ns1:author>Peter S Nelson</ns1:author>
+    <ns2:title>Loss of Expression of AZGP1 Is Associated With Worse Clinical Outcomes in a Multi-Institutional Radical Prostatectomy Cohort.</ns2:title>
+    <ns1:author>Jun Ho Shin</ns1:author>
+    <ns1:author>Peter R Carroll</ns1:author>
+    <ns1:author>Antonio Hurtado-Coll</ns1:author>
+    <ns1:author>John B Sunwoo</ns1:author>
+    <ns1:author>Dean A Troyer</ns1:author>
+    <ns1:author>Jeff Simko</ns1:author>
+    <ns1:author>Jonathan R Pollack</ns1:author>
+    <ns1:author>James D Brooks</ns1:author>
+    <ns1:author>Lisa F Newcomb</ns1:author>
+    <ns1:author>Lawrence D True</ns1:author>
+    <ns1:author>Ian M Thompson</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Daniel W Lin</ns1:author>
+    <ns1:author>Ladan Fazli</ns1:author>
+    <ns1:author>Jesse K McKenney</ns1:author>
+    <ns1:author>Martin E Gleave</ns1:author>
+    <ns1:author>Wei Wei</ns1:author>
+    <ns1:author>Ziding Feng</ns1:author>
+    <ns1:author>Heidi Auman</ns1:author>
+    <ns1:journal>The Prostate</ns1:journal>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:pmid>27325561</ns1:pmid>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1799">
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Gretchen K Hubbard</ns1:author>
+    <ns1:author>Sarah J Wheelan</ns1:author>
+    <ns1:author>Ajay Vaghasia</ns1:author>
+    <ns1:author>Angelo M De Marzo</ns1:author>
+    <ns2:title>MYC drives overexpression of telomerase RNA (hTR/TERC) in prostate cancer.</ns2:title>
+    <ns1:pmid>28888037</ns1:pmid>
+    <ns1:author>Javier A Baena-Del Valle</ns1:author>
+    <ns1:author>Srinivasan Yegnasubramanian</ns1:author>
+    <ns1:author>Qizhi Zheng</ns1:author>
+    <ns1:author>Christopher M Heaphy</ns1:author>
+    <ns1:author>Mindy K Graham</ns1:author>
+    <ns1:author>Alan K Meeker</ns1:author>
+    <ns1:journal>The Journal of pathology</ns1:journal>
+    <ns1:author>David M Esopi</ns1:author>
+    <ns1:author>Maria C Moncaliano</ns1:author>
+    <ns1:author>Michael Rubenstein</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Andrew Hruszkewycz</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1796">
+    <ns1:author>Yiwey Shieh</ns1:author>
+    <ns1:author>Laura Esserman</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns2:title>Detection of ductal carcinoma in situ and subsequent interval cancers.</ns2:title>
+    <ns1:author>Martin Eklund</ns1:author>
+    <ns1:pmid>26834245</ns1:pmid>
+    <ns1:journal>BMJ (Clinical research ed.)</ns1:journal>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1827">
+    <ns1:author>David C Qian</ns1:author>
+    <ns2:title>A Novel Pathway-Based Approach Improves Lung Cancer Risk Prediction Using Germline Genetic Variations.</ns2:title>
+    <ns1:pmid>27222311</ns1:pmid>
+    <ns1:author>Maria Teresa Landi</ns1:author>
+    <ns1:author>Christopher I Amos</ns1:author>
+    <ns1:journal>Cancer epidemiology, biomarkers &amp; prevention : a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology</ns1:journal>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Rayjean J Hung</ns1:author>
+    <ns1:author>Hae Ri Shin</ns1:author>
+    <ns1:author>Younghun Han</ns1:author>
+    <ns1:author>John R McLaughlin</ns1:author>
+    <ns1:author>Jinyoung Byun</ns1:author>
+    <ns1:author>Daniela Seminara</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1801">
+    <ns1:author>Karen L Reckamp</ns1:author>
+    <ns1:author>David A Elashoff</ns1:author>
+    <ns1:author>Edward Garon</ns1:author>
+    <ns1:author>Gina Lee</ns1:author>
+    <ns1:author>Robert Suh</ns1:author>
+    <ns1:journal>Clinical cancer research : an official journal of the American Association for Cancer Research</ns1:journal>
+    <ns1:author>Fran Rosen</ns1:author>
+    <ns1:author>William D Wallace</ns1:author>
+    <ns1:author>Stacy J Park</ns1:author>
+    <ns1:author>Felicita E Baratelli</ns1:author>
+    <ns1:author>Sarah Lee</ns1:author>
+    <ns1:author>Gang Zeng</ns1:author>
+    <ns1:author>D\xc3\xb6rthe Schaue</ns1:author>
+    <ns1:author>Gerald Wang</ns1:author>
+    <ns1:author>Ramin Salehi-Rad</ns1:author>
+    <ns1:author>Jane Yanagawa</ns1:author>
+    <ns1:author>Ying Lin</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Mi-Heon Lee</ns1:author>
+    <ns1:author>Fereidoun Abtin</ns1:author>
+    <ns2:title>Phase I Trial of Intratumoral Injection of CCL21 Gene-Modified Dendritic Cells in Lung Cancer</ns2:title>
+    <ns1:author>Paul C Tumeh</ns1:author>
+    <ns1:author>Jay M Lee</ns1:author>
+    <ns1:author>Sharon Adams</ns1:author>
+    <ns1:author>Jonathan W Goldman</ns1:author>
+    <ns1:author>Francesco M Marincola</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:pmid>28468947</ns1:pmid>
+    <ns1:author>Tonya C Walser</ns1:author>
+    <ns1:author>Sherven Sharma</ns1:author>
+    <ns1:author>Steven M Dubinett</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1798">
+    <ns1:author>Wenyuan Li</ns1:author>
+    <ns1:author>Kostyantyn Krysan</ns1:author>
+    <ns2:title>CancerLocator: non-invasive cancer diagnosis and tissue-of-origin prediction using methylation profiles of cell-free DNA.</ns2:title>
+    <ns1:author>Quan Chen</ns1:author>
+    <ns1:author>Wei Wang</ns1:author>
+    <ns1:journal>Genome biology</ns1:journal>
+    <ns1:pmid>28335812</ns1:pmid>
+    <ns1:author>Gina Lee</ns1:author>
+    <ns1:author>Qingjiao Li</ns1:author>
+    <ns1:author>Min Yu</ns1:author>
+    <ns1:author>Shuli Kang</ns1:author>
+    <ns1:author>Stacy Park</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Brandon Grimes</ns1:author>
+    <ns1:author>Fengzhu Sun</ns1:author>
+    <ns1:author>Frank Alber</ns1:author>
+    <ns1:author>Steven M Dubinett</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:pi rdf:resource="https://cancer.jpl.nasa.gov/ksdb/personinput/?id=1059"/>
+    <ns1:author>Yonggang Zhou</ns1:author>
+    <ns1:author>Xianghong Jasmine Zhou</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1830">
+    <ns1:journal>BMC cancer</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Zulfiqar G Gulzar</ns1:author>
+    <ns1:author>David S Gunther</ns1:author>
+    <ns1:author>Brian S Roberts</ns1:author>
+    <ns1:author>Sara J Cooper</ns1:author>
+    <ns1:author>James D Brooks</ns1:author>
+    <ns1:author>Richard M Myers</ns1:author>
+    <ns1:author>Ryne C Ramaker</ns1:author>
+    <ns1:author>Devin M Absher</ns1:author>
+    <ns1:author>Brittany N Lasseigne</ns1:author>
+    <ns1:author>Marie K Kirby</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Todd C Burwell</ns1:author>
+    <ns1:pmid>28412973</ns1:pmid>
+    <ns1:author>Nicholas S Davis</ns1:author>
+    <ns2:title>Genome-wide DNA methylation measurements in prostate tissues uncovers novel prostate cancer diagnostic biomarkers</ns2:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=413">
+    <ns1:author>Feng Z</ns1:author>
+    <ns1:pmid>16451567</ns1:pmid>
+    <ns1:author>Yang S</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2005</ns1:year>
+    <ns1:author>Lin J</ns1:author>
+    <ns2:title>A new family-based association test via a least square method</ns2:title>
+    <ns1:journal>BioMed Central Genetics</ns1:journal>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:pi rdf:resource="https://cancer.jpl.nasa.gov/ksdb/personinput/?id=20"/>
+    <ns1:author>Joo J</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1809">
+    <ns1:author>Emma B Holliday</ns1:author>
+    <ns1:author>Jordan Cloyd</ns1:author>
+    <ns1:journal>Cancer</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2018</ns1:year>
+    <ns2:title>Imaging-based biomarkers: Changes in the tumor interface of pancreatic ductal adenocarcinoma on computed tomography scans</ns2:title>
+    <ns1:author>Priya Bhosale</ns1:author>
+    <ns1:author>Eric P Tamm</ns1:author>
+    <ns1:author>Michael J Overman</ns1:author>
+    <ns1:author>Christopher H Crane</ns1:author>
+    <ns1:author>Matthew H Katz</ns1:author>
+    <ns1:author>Sunil Krishnan</ns1:author>
+    <ns1:author>Bruce D Minsky</ns1:author>
+    <ns1:pmid>29370450</ns1:pmid>
+    <ns1:author>Robert A Wolff</ns1:author>
+    <ns1:author>Baishali Chaudhury</ns1:author>
+    <ns1:author>Mohamed Zaid</ns1:author>
+    <ns1:author>Yeonju Lee</ns1:author>
+    <ns1:author>Ching Wei Tzeng</ns1:author>
+    <ns1:author>Jason B Fleming</ns1:author>
+    <ns1:author>Joseph M Herman</ns1:author>
+    <ns1:author>Gauri Varadhachary</ns1:author>
+    <ns1:author>Ott Le</ns1:author>
+    <ns1:author>Cullen M Taniguchi</ns1:author>
+    <ns1:author>Anirban Maitra</ns1:author>
+    <ns1:author>Prajnan Das</ns1:author>
+    <ns1:author>Dalia Elganainy</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Christopher T Wilke</ns1:author>
+    <ns1:author>Eugene J Koay</ns1:author>
+    <ns1:author>Jeffery E Lee</ns1:author>
+    <ns1:author>Ahmed M Amer</ns1:author>
+    <ns1:author>Huamin Wang</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1815">
+    <ns1:author>Michele T Yip-Schneider</ns1:author>
+    <ns1:author>Matthias Hebrok</ns1:author>
+    <ns1:author>Stacy E Hatcher</ns1:author>
+    <ns1:author>Kimberly S Kirkwood</ns1:author>
+    <ns1:author>Charles S Craik</ns1:author>
+    <ns1:author>Anthony J O'Donoghue</ns1:author>
+    <ns2:title>Global Protease Activity Profiling Provides Differential Diagnosis of Pancreatic Cysts.</ns2:title>
+    <ns1:author>Jeremy M Sharib</ns1:author>
+    <ns1:author>Walter G Park</ns1:author>
+    <ns1:author>Randall E Brand</ns1:author>
+    <ns1:author>Grace E Kim</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:journal>Clinical cancer research : an official journal of the American Association for Cancer Research</ns1:journal>
+    <ns1:author>Dana A Dominguez</ns1:author>
+    <ns1:pmid>28424202</ns1:pmid>
+    <ns1:author>Sam L Ivry</ns1:author>
+    <ns1:author>C Max Schmidt</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Nilotpal Roy</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=461">
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2001</ns1:year>
+    <ns2:title>2-D or not 2-D is there a fututre for 2-D gels in proteomics? Insights from the York proteomic meeting</ns2:title>
+    <ns1:journal>Proteomics</ns1:journal>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>S</ns1:author>
+    <ns1:pmid>11678032</ns1:pmid>
+    <ns1:pi rdf:resource="https://cancer.jpl.nasa.gov/ksdb/personinput/?id=1003"/>
+    <ns1:author>Hanash</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1820">
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Kostas Marias</ns1:author>
+    <ns1:author>David Johnson</ns1:author>
+    <ns1:author>Zhihui Wang</ns1:author>
+    <ns1:pmid>26798209</ns1:pmid>
+    <ns2:title>Computer Simulation, Visualization, and Image Processing of Cancer Data and Processes.</ns2:title>
+    <ns1:journal>Cancer informatics</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>James Osborne</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1828">
+    <ns1:author>Jesse K McKenney</ns1:author>
+    <ns1:author>Antonio Hurtado-Coll</ns1:author>
+    <ns1:author>Peter R Carroll</ns1:author>
+    <ns1:author>Peter S Nelson</ns1:author>
+    <ns1:author>Dean A Troyer</ns1:author>
+    <ns1:author>Jeff Simko</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2018</ns1:year>
+    <ns1:author>James D Brooks</ns1:author>
+    <ns1:author>Wei Wei</ns1:author>
+    <ns1:author>Lawrence D True</ns1:author>
+    <ns1:author>Ian M Thompson</ns1:author>
+    <ns2:title>Boolean analysis identifies CD38 as a biomarker of aggressive localized prostate cancer.</ns2:title>
+    <ns1:journal>Oncotarget</ns1:journal>
+    <ns1:author>Ladan Fazli</ns1:author>
+    <ns1:author>Martin E Gleave</ns1:author>
+    <ns1:author>Heidi Auman</ns1:author>
+    <ns1:author>Daniel W Lin</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Debashis Sahoo</ns1:author>
+    <ns1:pmid>29464091</ns1:pmid>
+    <ns1:author>Ziding Feng</ns1:author>
+    <ns1:author>Robin J Leach</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1802">
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>William G Nelson</ns1:author>
+    <ns1:author>Ajay M Vaghasia</ns1:author>
+    <ns1:journal>Nature communications</ns1:journal>
+    <ns1:pi rdf:resource="https://cancer.jpl.nasa.gov/ksdb/personinput/?id=1263"/>
+    <ns1:author>Nicolas Wyhs</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Paula J Hurley</ns1:author>
+    <ns1:author>William B Isaacs</ns1:author>
+    <ns2:title>AIM1 is an actin-binding protein that suppresses cell migration and micrometastatic dissemination.</ns2:title>
+    <ns1:author>Meltem G\xc3\xbcrel</ns1:author>
+    <ns1:author>Jessica Hicks</ns1:author>
+    <ns1:author>Brian W Simons</ns1:author>
+    <ns1:author>Angelo M De Marzo</ns1:author>
+    <ns1:author>Edward M Schaeffer</ns1:author>
+    <ns1:author>Michael C Haffner</ns1:author>
+    <ns1:author>Harrison Tsai</ns1:author>
+    <ns1:author>George J Netto</ns1:author>
+    <ns1:author>Susmita Ghosh</ns1:author>
+    <ns1:author>Debika Biswal Shinohara</ns1:author>
+    <ns1:author>Steven S An</ns1:author>
+    <ns1:pmid>28747635</ns1:pmid>
+    <ns1:author>Tamara L Lotan</ns1:author>
+    <ns1:author>Alcides Chaux</ns1:author>
+    <ns1:author>David M Esopi</ns1:author>
+    <ns1:author>Hong Lam</ns1:author>
+    <ns1:author>Kunhwa Kim</ns1:author>
+    <ns1:author>Nicole Castagna</ns1:author>
+    <ns1:author>Srinivasan Yegnasubramanian</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1806">
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Pierre P Massion</ns1:author>
+    <ns1:pmid>27598832</ns1:pmid>
+    <ns1:author>Nalin Leelatian</ns1:author>
+    <ns1:author>Reid C Thompson</ns1:author>
+    <ns1:author>Mary A Hooks</ns1:author>
+    <ns1:author>Kyle D Weaver</ns1:author>
+    <ns1:journal>Cytometry. Part B, Clinical cytometry</ns1:journal>
+    <ns1:author>Rondi M Kauffmann</ns1:author>
+    <ns1:author>Jay A Werkhaven</ns1:author>
+    <ns1:author>Mark C Kelley</ns1:author>
+    <ns1:author>Lola B Chambless</ns1:author>
+    <ns1:author>Deon B Doxie</ns1:author>
+    <ns1:author>Akshitkumar M Mistry</ns1:author>
+    <ns1:author>Allison R Greenplate</ns1:author>
+    <ns1:author>Rebecca A Ihrie</ns1:author>
+    <ns2:title>Single cell analysis of human tissues and solid tumors with mass cytometry.</ns2:title>
+    <ns1:author>Justine Sinnaeve</ns1:author>
+    <ns1:author>Jonathan M Irish</ns1:author>
+    <ns1:author>Bret C Mobley</ns1:author>
+    <ns1:author>Jonathan M Lehman</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1818">
+    <ns1:author>S R Mahmoud</ns1:author>
+    <ns1:author>Joseph D Butner</ns1:author>
+    <ns1:author>Vittorio Cristini</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>A S Al-Fhaid</ns1:author>
+    <ns1:author>Yao-Li Chuang</ns1:author>
+    <ns1:journal>Journal of theoretical biology</ns1:journal>
+    <ns1:author>Eman Simbawa</ns1:author>
+    <ns1:author>Zhihui Wang</ns1:author>
+    <ns1:pi rdf:resource="https://cancer.jpl.nasa.gov/ksdb/personinput/?id=1288"/>
+    <ns2:title>A hybrid agent-based model of the developing mammary terminal end bud.</ns2:title>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:pmid>27475843</ns1:pmid>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1813">
+    <ns1:author>Zhihui Wang</ns1:author>
+    <ns1:author>Philip K Maini</ns1:author>
+    <ns1:journal>IEEE transactions on bio-medical engineering</ns1:journal>
+    <ns2:title>Editorial: Special Section on Multiscale Cancer Modeling.</ns2:title>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:pmid>28824199</ns1:pmid>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1793">
+    <ns1:author>Laura Esserman</ns1:author>
+    <ns1:author>Christina Yau</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Laura van 't Veer</ns1:author>
+    <ns1:journal>Breast cancer research and treatment</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Dominic Amara</ns1:author>
+    <ns1:author>Denise M Wolf</ns1:author>
+    <ns1:author>Michael Campbell</ns1:author>
+    <ns2:title>Co-expression modules identified from published immune signatures reveal five distinct immune subtypes in breast cancer.</ns2:title>
+    <ns1:pmid>27815749</ns1:pmid>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1838">
+    <ns1:author>Natalie A Page</ns1:author>
+    <ns2:title>Selective expression of long non-coding RNAs in a breast cancer cell progression model.</ns2:title>
+    <ns1:author>Kirsten M Tracy</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Jane B Lian</ns1:author>
+    <ns1:author>Coralee E Tye</ns1:author>
+    <ns1:journal>Journal of cellular physiology</ns1:journal>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Gary S Stein</ns1:author>
+    <ns1:pmid>28488769</ns1:pmid>
+    <ns1:author>Janet L Stein</ns1:author>
+    <ns1:author>Andrew J Fritz</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1805">
+    <ns1:author>Pierre P Massion</ns1:author>
+    <ns1:author>Robert J Gillies</ns1:author>
+    <ns1:author>Gary T Smith</ns1:author>
+    <ns1:author>Thomas Atwater</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>Ronald C Walker</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Sanja Antic</ns1:author>
+    <ns1:author>Matthew B Schabath</ns1:author>
+    <ns2:title>Radiological Image Traits Predictive of Cancer Status in Pulmonary Nodules.</ns2:title>
+    <ns1:pmid>27663588</ns1:pmid>
+    <ns1:author>Qian Li</ns1:author>
+    <ns1:author>Ying Liu</ns1:author>
+    <ns1:author>Yoganand Balagurunathan</ns1:author>
+    <ns1:journal>Clinical cancer research : an official journal of the American Association for Cancer Research</ns1:journal>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1814">
+    <ns1:author>James P Allison</ns1:author>
+    <ns1:author>Arvind Rao</ns1:author>
+    <ns1:author>Dalu Yang</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>Julienne L Carstens</ns1:author>
+    <ns1:author>Valerie S LeBleu</ns1:author>
+    <ns1:author>Raghu Kalluri</ns1:author>
+    <ns1:journal>Nature communications</ns1:journal>
+    <ns1:author>Huamin Wang</ns1:author>
+    <ns1:author>Pedro Correa de Sampaio</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns2:title>Spatial computation of intratumoral T cells correlates with survival of patients with pancreatic cancer.</ns2:title>
+    <ns1:author>Souptik Barua</ns1:author>
+    <ns1:pmid>28447602</ns1:pmid>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1831">
+    <ns1:journal>Proceedings of the National Academy of Sciences of the United States of America</ns1:journal>
+    <ns1:author>James D Brooks</ns1:author>
+    <ns1:author>Robert J Tibshirani</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Richard N Zare</ns1:author>
+    <ns1:pmid>28292895</ns1:pmid>
+    <ns1:author>Rosalie Nolley</ns1:author>
+    <ns1:author>Richard Fan</ns1:author>
+    <ns2:title>Diagnosis of prostate cancer by desorption electrospray ionization mass spectrometric imaging of small metabolites and lipids.</ns2:title>
+    <ns1:author>Shibdas Banerjee</ns1:author>
+    <ns1:author>Christian A Kunder</ns1:author>
+    <ns1:author>Geoffrey A Sonn</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1803">
+    <ns1:author>P Mullane</ns1:author>
+    <ns1:pmid>28117387</ns1:pmid>
+    <ns1:author>J J Tosoian</ns1:author>
+    <ns2:title>Use of the Prostate Health Index for detection of prostate cancer: results from a large academic practice.</ns2:title>
+    <ns1:author>K J Macura</ns1:author>
+    <ns1:author>S C Druskin</ns1:author>
+    <ns1:author>J Agostino</ns1:author>
+    <ns1:author>H B Carter</ns1:author>
+    <ns1:author>L J Sokoll</ns1:author>
+    <ns1:author>S Joo</ns1:author>
+    <ns1:author>K Ghabili</ns1:author>
+    <ns1:author>E M Schaeffer</ns1:author>
+    <ns1:author>M Chappidi</ns1:author>
+    <ns1:author>A E Ross</ns1:author>
+    <ns1:author>D Andreas</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+    <ns1:author>A W Partin</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:journal>Prostate cancer and prostatic diseases</ns1:journal>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1823">
+    <ns1:journal>Scandinavian journal of statistics, theory and applications</ns1:journal>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns2:title>Exact and Approximate Statistical Inference for Nonlinear Regression and the Estimating Equation Approach.</ns2:title>
+    <ns1:author>Eugene Demidenko</ns1:author>
+    <ns1:pmid>29033489</ns1:pmid>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2017</ns1:year>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1807">
+    <ns1:author>Joseph B Shrager</ns1:author>
+    <ns1:author>Alexander F Lovejoy</ns1:author>
+    <ns1:pmid>27018799</ns1:pmid>
+    <ns1:author>Justin N Carter</ns1:author>
+    <ns1:author>Henning Stehr</ns1:author>
+    <ns1:author>Li Zhou</ns1:author>
+    <ns1:author>Scott V Bratman</ns1:author>
+    <ns1:author>Florian Scherer</ns1:author>
+    <ns1:author>George W Sledge</ns1:author>
+    <ns1:author>Maximilian Diehn</ns1:author>
+    <ns1:author>Carmen Say</ns1:author>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+    <ns1:author>Aaron M Newman</ns1:author>
+    <ns1:author>Ash A Alizadeh</ns1:author>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns2:title>Integrated digital error suppression for improved detection of circulating tumor DNA.</ns2:title>
+    <ns1:author>Robert B West</ns1:author>
+    <ns1:author>David M Kurtz</ns1:author>
+    <ns1:journal>Nature biotechnology</ns1:journal>
+    <ns1:author>Chih Long Liu</ns1:author>
+    <ns1:author>Billy W Loo</ns1:author>
+    <ns1:author>Heather A Wakelee</ns1:author>
+    <ns1:author>Joel W Neal</ns1:author>
+    <ns1:author>Daniel M Klass</ns1:author>
+    <ns1:author>Jacob J Chabon</ns1:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cancer.jpl.nasa.gov/ksdb/publicationinput/?id=1825">
+    <ns1:author>Christopher I Amos</ns1:author>
+    <ns2:title>Unsupervised gene set testing based on random matrix theory.</ns2:title>
+    <ns1:pmid>27809777</ns1:pmid>
+    <ns1:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</ns1:year>
+    <ns1:author>H Robert Frost</ns1:author>
+    <ns1:journal>BMC bioinformatics</ns1:journal>
+    <rdf:type rdf:resource="https://cancer.jpl.nasa.gov/rdf/types.rdf#Publication"/>
+  </rdf:Description>
+</rdf:RDF>
