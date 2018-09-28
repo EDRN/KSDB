@@ -106,7 +106,7 @@ class Command(BaseCommand):
                         if pplname != '':
                             self._graph.add( (pubi, self._schema.author, Literal(pplname)) )
                 if pub.journal:
-                    self._graph.add( (pubi, self._schema.journal, Literal(pub.journal)) )
+                    self._graph.add( (pubi, self._schema.journal, Literal(pub.journal.split(":")[0])) )
                 if pub.title:
                     self._graph.add( (pubi, self._terms.title, Literal(pub.title)) )
                 if pub.pubmedid:
