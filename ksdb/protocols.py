@@ -8,7 +8,7 @@ import copy
 
 # Create your views here.
 from ksdb.models import IdSeq
-from ksdb.models import protocol, organ, organ_protocol_link, protocol_custodian_link, protocol_publication_link, person, pi_protocol_link, ci_protocol_link, fundedsite_protocol_link, fundedsite, program, protocol_program_link
+from ksdb.models import protocol, organ, organ_protocol_link, protocol_custodian_link, protocol_publication_link, person, pi_protocol_link, ci_protocol_link, fundedsite_protocol_link, fundedsite, program, protocol_program_link, protocol_institution_link
 
 # Allow external command processing
 from django.http import JsonResponse
@@ -59,6 +59,13 @@ def save_protocol_links(pro_id, request):
         fundedsite_protocol_linkm = fundedsite_protocol_link(protocolid = pro_id, fundedsiteid = fun)
         fundedsite_protocol_linkm.save()
 
+    #delete and save new institution protocol associations
+    protocol_institution_link.objects.filter(protocolid=pro_id).delete()
+    institutionlist = request.POST.getlist('institutions')
+    for pro in institutionlist:
+        protocol_institution_linkm = protocol_institution_link(protocolid = pro_id, institutionid = pro)
+        protocol_institution_linkm.save()
+
     #delete and save new program protocol associations
     protocol_program_link.objects.filter(protocolid=pro_id).delete()
     programlist = request.POST.getlist('programs')
@@ -80,6 +87,7 @@ def gen_protocol_data(request):
     organfield = ekeutils.get_eke_list("organ")
     fundedsitefield = ekeutils.get_eke_list("fundedsite")
     programfield = ekeutils.get_eke_list("program")
+    institutionfield = ekeutils.get_eke_list("institution")
     data = {"action" : "New" ,
                     "pis" : personfield ,
                     "cis" : personfield ,
@@ -87,7 +95,8 @@ def gen_protocol_data(request):
                     "publications" : publicationfield ,
                     "organs" : organfield ,
                     "fundedsites" : fundedsitefield,
-                    "programs" : programfield
+                    "programs" : programfield,
+                    "institutions" : institutionfield
             }
     if request.method == 'GET':
         protocolid = request.GET.get('id')
@@ -103,6 +112,7 @@ def gen_protocol_data(request):
                     "organs" : organfield ,
                     "fundedsites" : fundedsitefield ,
                     "programs" : programfield ,
+                    "institutions" : institutionfield ,
                     "title" : obj.title,
                     "shortname" : obj.shortname,
                     "organ_link_id" : [ opl.organid for opl in list(organ_protocol_link.objects.filter(protocolid=int(protocolid))) ],
@@ -111,6 +121,7 @@ def gen_protocol_data(request):
                     "cus_link_id" : ",".join([ str(ppl.personid)+":"+person.objects.filter(id=ppl.personid)[0].firstname+" "+person.objects.filter(id=ppl.personid)[0].lastname for ppl in list(protocol_custodian_link.objects.filter(protocolid=int(protocolid))) ]),
                     "fundedsite_link_id" : [ fun.fundedsiteid for fun in list(fundedsite_protocol_link.objects.filter(protocolid=int(protocolid))) ],
                     "program_link_id" : [ fun.programid for fun in list(protocol_program_link.objects.filter(protocolid=int(protocolid))) ],
+                    "institution_link_id" : [ fun.institutionid for fun in list(protocol_institution_link.objects.filter(protocolid=int(protocolid))) ],
                     "pub_link_id" : [ ppl.publicationid for ppl in list(protocol_publication_link.objects.filter(protocolid=int(protocolid))) ],
                     "start_date" : str(obj.start_date),
                     "end_date" : str(obj.end_date),
@@ -140,6 +151,7 @@ def delete_protocol(request):
                 protocol_custodian_link.objects.filter(protocolid=pro_id).delete()
 
                 protocol_program_link.objects.filter(protocolid=pro_id).delete()
+                protocol_institution_link.objects.filter(protocolid=pro_id).delete()
                 fundedsite_protocol_link.objects.filter(protocolid=pro_id).delete()
                 #delete organ protocol associations
                 organ_protocol_link.objects.filter(protocolid=pro_id).delete()

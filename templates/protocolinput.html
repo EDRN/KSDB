@@ -10,7 +10,9 @@
                     $('#title').val("{{title}}");
                     $('#organs').select2().val({{organ_link_id}}).trigger("change");
                     $('#publications').select2().val({{pub_link_id}}).trigger("change");
-                    $('#fundedsites').val({{fundedsite_link_id}});
+                    //$('#fundedsites').val({{fundedsite_link_id}});
+                    
+                    $('#institutions').val({{institution_link_id}});
                     $('#programs').val({{program_link_id}});
                     $('#start_date').val("{{start_date}}");
                     $('#end_date').val("{{end_date}}");
@@ -65,7 +67,8 @@
                 $('#protocolend').data('DateTimePicker').date(getTodayDate());
                 updateLists("organ", "organs");
                 updateLists("publication", "publications");
-                updateLists("fundedsite", "fundedsites");
+                //updateLists("fundedsite", "fundedsites");
+                updateLists("institution", "institutions");
                 updateLists("program", "programs");
                 setAutocompleteList('pis','person', '', '', 1);
                 setAutocompleteList('cis','person', '', '', 1);
@@ -160,10 +163,15 @@
                 </select>
                 </fieldset>
                 <fieldset class="form-group">
+                <label for="institutions">Institutions <a data-toggle="modal" id="addinstitution" data-target="#modal" onclick="startModal(this)" target="institutions" href="institution">(Add Institution)</a></label>
+                <select multiple class="form-control" size=5 id="institutions" name="institutions">
+                </select>
+                </fieldset>
+                <!--<fieldset class="form-group">
                 <label for="fundedsites">Participating Sites <a data-toggle="modal" id="addfundedsite" data-target="#modal" onclick="startModal(this)" target="fundedsites" href="fundedsite">(Add Site)</a></label>
                 <select multiple class="form-control" size=5 id="fundedsites" name="fundedsites">
                 </select>
-                </fieldset>
+            </fieldset>-->
                 <fieldset class="form-group">
                     <label for="irb_approval">IRB Approval</label>
                     <div class="radio">

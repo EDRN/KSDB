@@ -8,7 +8,8 @@ class protocol(models.Model):
     title = models.CharField(max_length=128)
     shortname = models.CharField(max_length=128)
     organs = models.CharField(max_length=1000, blank=True, null=True)
-    fundedsites = models.CharField(max_length=1000)
+    fundedsites = models.CharField(max_length=1000, blank=True, null=True)
+    institutions = models.CharField(max_length=1000)
     programs = models.CharField(max_length=1000)
     pis = models.CharField(max_length=1000)
     cis = models.CharField(max_length=1000, blank=True, null=True)
@@ -28,6 +29,14 @@ class protocol(models.Model):
 
     class Meta:
         db_table = u'protocol'
+
+class protocol_institution_link(models.Model):
+    protocolid = models.IntegerField()
+    institutionid = models.IntegerField()
+
+    class Meta:
+        db_table = u'protocol_institution_link'
+        unique_together = (("institutionid", "protocolid"),)
 
 class protocol_program_link(models.Model):
     protocolid = models.IntegerField()

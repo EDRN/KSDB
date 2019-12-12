@@ -542,3 +542,11 @@ CREATE TABLE pi_publication_link(
         UNIQUE ( publicationid, personid ));
 
 alter table publication alter column title type varchar(2000)
+
+CREATE TABLE protocol_institution_link(
+            id serial NOT NULL,
+                    institutionid int references institution(id),
+                            protocolid int references protocol(id),
+                                    UNIQUE ( institutionid, protocolid ));
+
+                                alter table publication add column title type varchar(2000)
