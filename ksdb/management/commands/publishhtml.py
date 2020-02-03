@@ -14,7 +14,7 @@ import re
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    _baseurl = settings.RDF_URL
+    _baseurl = settings.MCL_URL
     _schema = Namespace("https://cancer.jpl.nasa.gov/rdf/schema.rdf#")
     _terms = Namespace("http://purl.org/dc/terms/")
     _faof = Namespace("http://xmlns.com/foaf/0.1/")
@@ -22,7 +22,7 @@ class Command(BaseCommand):
     _publication = Namespace(_baseurl+"ksdb/publicationinput/?id=")
     _committee = Namespace(_baseurl+"ksdb/committeeinput/?id=")
     _protocol = Namespace(_baseurl+"ksdb/protocolinput/?id=")
-    _person = Namespace(_baseurl+"ksdb/personinput/?id=")
+    _person = _baseurl+"resources/people/"
     _degree = Namespace(_baseurl+"ksdb/degreeinput/?id=")
     _institution = Namespace(_baseurl+"ksdb/institutioninput/?id=")
     _program = Namespace(_baseurl+"ksdb/programinput/?id=")
@@ -138,8 +138,8 @@ class Command(BaseCommand):
             if pro.abstract:
                 abstract_html += pro.abstract
             for ppl in list(person.objects.filter(id__in = set([obj.personid for obj in pi_protocol_link.objects.filter(protocolid=pro.id)]))):
-                pi_html += "<a href='"+self._person[str(ppl.id)]+"'>"+str(ppl.firstname)+" "+str(ppl.lastname)+"</a>"
-
+                pi_html += "<a href='"+self._person+str(ppl.lastname).lower()+"-"+str(ppl.firstname).lower()+"'>"+str(ppl.firstname)+" "+str(ppl.lastname)+"</a>,"
+            pi_html = pi_html[:-1]
             protocol_row = [str(pro.id), title_html, abstract_html, pi_html]
 
             self._html += "<tr><td>"+"</td><td>".join(protocol_row)+"</td></tr>"
