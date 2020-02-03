@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^degreeinput/$', degree.degree_input, name='degreeinput'),
     url(r'^querypubmed/$', querypubmed.pubmed_query, name='querypubmed'),
     url(r'^publishrdf/$', publishRDF.publishrdf, name='publishrdf'),
+    url(r'^publishhtml/$', publishRDF.publishhtml, name='publishhtml'),
     url(r'^publishexcel/$', publishRDF.publishexcel, name='publishexcel'),
     url(r'^ingestrdf/$', ingestRDF.ingestrdf, name='ingestrdf'),
     url(r'^deleteprotocol/$', protocols.delete_protocol, name='deleteprotocol'),

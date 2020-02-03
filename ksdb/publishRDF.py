@@ -28,6 +28,23 @@ def publishrdf(request):
         rdf_resp = rdf_resp.replace("\\n", "\n")
         return HttpResponse(rdf_resp.strip(), content_type='application/rdf+xml')
 
+def publishhtml(request):
+    if request.method == 'GET':
+        htmltype = request.GET.get('rdftype')
+        filterby = request.GET.get('filterby')
+        filterval = request.GET.get('filterval')
+        html = StringIO()
+        call_command('publishhtml', htmltype, filterby, filterval, stdout=html)
+        html.seek(0)
+        html_resp = html.read()
+        html_resp = html_resp.strip()
+        if html_resp.startswith("b'"):
+            html_resp = html_resp[2:]
+        if html_resp.endswith("'"):
+            html_resp = html_resp[:-1]
+        html_resp = html_resp.replace("\\n", "\n")
+        return HttpResponse(html_resp.strip(), content_type='text/plain; charset=us-ascii')
+
 def publishexcel(request):
     if request.method == 'GET':
         workbook = Workbook()
