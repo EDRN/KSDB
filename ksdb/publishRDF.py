@@ -1,7 +1,7 @@
 # publishRDF.py
 from django.http import HttpResponse
 from django.core.management import call_command
-from io import StringIO
+from io import BytesIO, StringIO
 
 #import settings
 import logging
@@ -9,7 +9,6 @@ import json
 logger = logging.getLogger(__name__)
 
 from openpyxl import Workbook
-from openpyxl.writer.excel import save_virtual_workbook
 
 def publishrdf(request):
     if request.method == 'GET':
@@ -42,7 +41,7 @@ def publishhtml(request):
             html_resp = html_resp[2:]
         if html_resp.endswith("'"):
             html_resp = html_resp[:-1]
-        html_resp = html_resp.replace("\\n", "\n")
+        html_resp = html_resp.replace("\\n", "\n").encode('utf-8')
         return HttpResponse(html_resp.strip(), content_type='text/plain; charset=us-ascii')
 
 def publishexcel(request):
@@ -70,6 +69,8 @@ def publishexcel(request):
             for row in excel_resp:
                 worksheet.append(row)
 
-        response = HttpResponse(content=save_virtual_workbook(workbook), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        excel_buffer = BytesIO()
+        workbook.save(excel_buffer)
+        response = HttpResponse(content=excel_buffer.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=ksdb.xlsx'
         return response

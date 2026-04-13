@@ -1,5 +1,5 @@
 from django.db.models import Q
-from ksdb.models import person, publication, program, institution, fundedsite, protocol, organ, degree, group, disease, committee, discipline, species, specimentype
+from ksdb.models import person, publication, program, institution, fundedsite, protocol, organ, labcas_assaytype, degree, group, disease, committee, discipline, species, specimentype
 from ksdb.ekeutils import _KSDBhref, getPersonNameByID, getProgramTitleByID
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
@@ -276,6 +276,29 @@ class DiseaseView(BaseDatatableView):
         search = self.request.GET.get(u'search[value]', None)
         if search:
             qs = qs.filter(Q(icd10__icontains=search) |
+                           Q(id__icontains=search))
+        return qs
+
+class AssayTypeView(BaseDatatableView):
+    model = labcas_assaytype
+    objtype = "assaytype"
+    # define the columns that will be returned
+    columns = ['Select', 'id', 'name']
+
+    order_columns = ['id', 'id', 'name']
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # We want to render user as a custom column
+        if column == 'Select':
+            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+        else:
+            obj = super(AssayTypeView, self).render_column(row, column)
+            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+    def filter_queryset(self, qs):
+        search = self.request.GET.get(u'search[value]', None)
+        if search:
+            qs = qs.filter(Q(name__icontains=search) |
                            Q(id__icontains=search))
         return qs
 

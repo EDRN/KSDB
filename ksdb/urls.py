@@ -2,7 +2,7 @@
 
 from django.conf.urls import url
 
-from ksdb import protocols, program, person, institution, publication, fundedsite, group, committee, view, organ, discipline, specimentype, species, disease, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils, ksdbviews
+from ksdb import protocols, program, person, institution, publication, fundedsite, group, committee, view, organ, labcas_assaytype, discipline, specimentype, species, disease, degree, querypubmed, publishRDF, ingestRDF, ModalView, ekeutils, ksdbviews
 from sitemain import settings
 
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^groupinput/$', group.group_input, name='groupinput'),
     url(r'^committeeinput/$', committee.committee_input, name='committeeinput'),
     url(r'^organinput/$', organ.organ_input, name='organinput'),
+    url(r'^assaytypeinput/$', labcas_assaytype.assaytype_input, name='assaytypeinput'),
     url(r'^disciplineinput/$', discipline.discipline_input, name='disciplineinput'),
     url(r'^speciesinput/$', species.species_input, name='speciesinput'),
     url(r'^specimentypeinput/$', specimentype.specimentype_input, name='specimentypeinput'),
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^deleteperson/$', person.delete_person, name='deleteperson'),
     url(r'^deletepublication/$', publication.delete_publication, name='deletepublication'),
     url(r'^deleteorgan/$', organ.delete_organ, name='deleteorgan'),
+    url(r'^deleteassaytype/$', labcas_assaytype.delete_assaytype, name='deleteassaytype'),
     url(r'^deletespecimentype/$', specimentype.delete_specimentype, name='deletespecimentype'),
     url(r'^deletespecies/$', species.delete_species, name='deletespecies'),
     url(r'^deletediscipline/$', discipline.delete_discipline, name='deletediscipline'),
@@ -51,6 +53,7 @@ urlpatterns = [
     url(r'^committeeview/$', ksdbviews.CommitteeView.as_view(), name='committeeview'),
     url(r'^protocolview/$', ksdbviews.ProtocolView.as_view(), name='protocolview'),
     url(r'^organview/$', ksdbviews.OrganView.as_view(), name='organview'),
+    url(r'^assaytypeview/$', ksdbviews.AssayTypeView.as_view(), name='assaytypeview'),
     url(r'^disciplineview/$', ksdbviews.DisciplineView.as_view(), name='disciplineview'),
     url(r'^speciesview/$', ksdbviews.SpeciesView.as_view(), name='speciesview'),
     url(r'^specimentypeview/$', ksdbviews.SpecimenTypeView.as_view(), name='specimentypeview'),

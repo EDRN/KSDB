@@ -1,101 +1,82 @@
-# ingestpublications.py
-from django.core.management.base import BaseCommand, CommandError
-from ksdb.models import publication, IdSeq
-from ksdb.forms import PublicationForm
+from django.core.management.base import BaseCommand
+from rdflib.term import URIRef
 
-import rdflib
-from rdflib.term import URIRef, Literal
+from ksdb.models import publication, publication_program_link
+from ksdb.rdf_ingest_utils import (
+    ensure_default_programs,
+    fetch_rdf_graph,
+    next_sequence_value,
+    parse_statements,
+    text_value,
+)
 
-#import settings
 import logging
-import json
+
+
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
-    help = 'Ingest publications'
+    help = "Ingest publications from the EDRN RDF feed."
     publicationurl = "https://edrn.jpl.nasa.gov/cancerdataexpo/rdf-data/publications/@@rdf"
-    #Well-known URI refs
-    _publicationTypeURI = URIRef('http://edrn.nci.nih.gov/rdf/types.rdf#Publication')
-    _typeURI            = URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-    _pmidURI            = URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#pmid')
-    _yearURI            = URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#year')
-    _journalURI         = URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#journal')
-    _authorURI          = URIRef('http://purl.org/dc/terms/author')
-    _titleURI           = URIRef('http://purl.org/dc/terms/title')
-    _volumeURI          = URIRef('http://edrn.nci.nih.gov/rdf/schema.rdf#volume')
+    _pmid_uri = URIRef("http://edrn.nci.nih.gov/rdf/schema.rdf#pmid")
+    _year_uri = URIRef("http://edrn.nci.nih.gov/rdf/schema.rdf#year")
+    _journal_uri = URIRef("http://edrn.nci.nih.gov/rdf/schema.rdf#journal")
+    _author_uri = URIRef("http://purl.org/dc/terms/author")
+    _title_uri = URIRef("http://purl.org/dc/terms/title")
 
     def handle(self, *args, **options):
-        g = rdflib.Graph()
-        result = g.parse(self.publicationurl)
+        ensure_default_programs()
+        graph = fetch_rdf_graph(self.publicationurl)
+        statements = parse_statements(graph)
         imported_count = 0
-        pubStatements = self._parseRDF(g)
-        for pub in pubStatements:
-            if self._titleURI not in pubStatements[pub] or self._pmidURI not in pubStatements[pub] or self._yearURI not in pubStatements[pub] or self._journalURI not in pubStatements[pub] or self._authorURI not in pubStatements[pub]:
-                continue
-            titles   = pubStatements[pub][self._titleURI]
-            pmids    = pubStatements[pub][self._pmidURI]
-            years    = pubStatements[pub][self._yearURI]
-            journals = pubStatements[pub][self._journalURI]
-            authors  = pubStatements[pub][self._authorURI]
-            title = None
-            pmid = None
-            year = None
-            journal = None
-            if len(titles) < 1:
-                continue
-            else:
-                title = titles[0]
-            if len(pmids) < 1:
-                continue
-            else:
-                pmid = pmids[0]
-            if len(years) < 1:
-                continue
-            else:
-                year = years[0]
-            if len(journals) < 1:
-                continue
-            else:
-                journal = journals[0]
-            
-            if not self._exists(pmid.encode('utf-8').strip()):
-                parameters = {}
-                pub_id = IdSeq.objects.raw("select sequence_name, nextval('publication_seq') from publication_seq")[0].nextval
-                
-                parameters["id"] = pub_id
-                parameters["title"] = title.encode('utf-8').strip()
-                parameters["authors"] = ", ".join(authors).encode('utf-8').strip()
-                parameters["pubmedid"] = pmid.encode('utf-8').strip()
-                parameters["pubyear"] = year.encode('utf-8').strip()
-                parameters["journal"] = journal.encode('utf-8').strip()
-                
-                publicationm = PublicationForm(parameters)
+        updated_count = 0
 
-                if publicationm.is_valid():
-                    publicationm.save()
-                    imported_count += 1
+        for subject in statements:
+            title = text_value(statements[subject].get(self._title_uri, [""])[0])
+            pmid = text_value(statements[subject].get(self._pmid_uri, [""])[0])
+            year = text_value(statements[subject].get(self._year_uri, [""])[0])
+            journal = text_value(statements[subject].get(self._journal_uri, [""])[0])
+            authors = [text_value(author) for author in statements[subject].get(self._author_uri, [])]
 
-        logger.info("Successfully imported {} publication from cancerdataexpo rdf.".format(imported_count))
-    def _exists(self, pubid):
-        #returns true if no object exist, returns false if one or more object exist
-        exist = True
-        try:
-            publication.objects.get(pubmedid=pubid)
-        except publication.DoesNotExist:
-            exist = False
-            pass
-        except publication.MultipleObjectsReturned:
-            pass
-        return exist
-    def _parseRDF(self, graph):
-            statements = {}
-            for s, p, o in graph:
-                if s not in statements:
-                    statements[s] = {}
-                predicates = statements[s]
-                if p not in predicates:
-                    predicates[p] = []
-                predicates[p].append(o)
-            return statements
+            if not (title and pmid and year and journal and authors):
+                continue
 
+            try:
+                pubyear = int(year)
+            except (TypeError, ValueError):
+                continue
 
+            defaults = {
+                "title": title,
+                "authors": ", ".join([author for author in authors if author]),
+                "journal": journal,
+                "pubyear": pubyear,
+                "programs": "2",
+            }
+            existing = publication.objects.filter(pubmedid=pmid).first()
+
+            if existing is None:
+                publication_obj = publication.objects.create(
+                    id=next_sequence_value("publication_seq"),
+                    pubmedid=pmid,
+                    **defaults
+                )
+                imported_count += 1
+            else:
+                for field, value in defaults.items():
+                    setattr(existing, field, value)
+                existing.save(update_fields=list(defaults.keys()))
+                publication_obj = existing
+                updated_count += 1
+
+            publication_program_link.objects.get_or_create(
+                publicationid=publication_obj.id,
+                programid=2,
+            )
+
+        logger.info(
+            "Successfully imported %s publications and updated %s publications from cancerdataexpo rdf.",
+            imported_count,
+            updated_count,
+        )
