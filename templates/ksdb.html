@@ -89,6 +89,8 @@
                 </li>
                 <li><a id="degreetab" href="#degree">Degrees</a>
                 </li>
+                <li><a id="assaytypetab" href="#assaytype">Assay Type</a>
+                </li>
                 <li><a id="rdftab" href="#rdf">KSDB RDFs</a>
                 </li>
             </ul>
@@ -125,6 +127,9 @@
                 </div>
                 <div class="tab-pane" id="organ">
                     {% include "ksdbobjview.html" with ksdbobj="organ" ksdbobjtitle="Organ" ksdbobjheaders=organheaders %} 
+                </div>
+                <div class="tab-pane" id="assaytype">
+                    {% include "ksdbobjview.html" with ksdbobj="assaytype" ksdbobjtitle="Assay Type" ksdbobjheaders=assaytypeheaders %} 
                 </div>
                 <div class="tab-pane" id="discipline">
                     {% include "ksdbobjview.html" with ksdbobj="discipline" ksdbobjtitle="Discipline" ksdbobjheaders=disciplineheaders %} 

@@ -17,9 +17,9 @@ def setupTable(frame, objtype):
         objid = frameline[0]
         frameline.insert(0, "<input type='checkbox' name='"+objtype+"' id='"+str(frameline[0])+"'>")
         for j in range(1, len(frameline)):
-            #ignore unicode characters
-            if isinstance(frameline[j], basestring):
-                frameline[j] = frameline[j].encode('ascii', 'ignore')
+            # Normalize display text for Python 3 without leaking byte reprs.
+            if isinstance(frameline[j], str):
+                frameline[j] = frameline[j].encode('ascii', 'ignore').decode('ascii')
             frameline[j] = "<a href='"+_KSDBhref+objtype+"input/?id="+str(objid)+"'>"+str(frameline[j])+"</a>"
         newframe.append(frameline)
     return newframe
@@ -35,6 +35,7 @@ def view_service(request):
     institutionheaders = ["Select","Institution ID", "Name", "Abbreviation"]
     programheaders = ["Select","Program ID", "Title", "Abbreviation"]
     organheaders = ["Select","Organ ID", "Name"]
+    assaytypeheaders = ["Select","Assay ID", "Name"]
     disciplineheaders = ["Select","Discipline ID", "Name"]
     speciesheaders = ["Select","Species ID", "Name"]
     specimentypeheaders = ["Select","Specimen Type ID", "Name"]
@@ -52,6 +53,7 @@ def view_service(request):
             'institutionheaders': institutionheaders,
             'programheaders': programheaders,
             'organheaders': organheaders,
+            'assaytypeheaders': assaytypeheaders,
             'disciplineheaders': disciplineheaders,
             'speciesheaders': speciesheaders,
             'specimentypeheaders': specimentypeheaders,
@@ -61,4 +63,3 @@ def view_service(request):
             'committeeheaders': committeeheaders,
         }
     )
-

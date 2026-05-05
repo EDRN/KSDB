@@ -5,19 +5,20 @@ from tinymce.models import HTMLField
 #Protocol related models
 class protocol(models.Model):
     id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=128)
-    shortname = models.CharField(max_length=128)
+    title = models.CharField(max_length=1000)
+    edrn_id =  models.CharField(max_length=1000, blank=True, null=True)
+    shortname = models.CharField(max_length=128, blank=True, null=True)
     organs = models.CharField(max_length=1000, blank=True, null=True)
     fundedsites = models.CharField(max_length=1000, blank=True, null=True)
-    institutions = models.CharField(max_length=1000)
+    institutions = models.CharField(max_length=1000, blank=True, null=True)
     programs = models.CharField(max_length=1000)
-    pis = models.CharField(max_length=1000)
+    pis = models.CharField(max_length=1000, blank=True, null=True)
     cis = models.CharField(max_length=1000, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
     site_contact = models.CharField(max_length=500, blank=True, null=True)
     site_contact_email = models.EmailField(max_length=500, blank=True, null=True)
-    irb_approval = models.CharField(max_length=128)
+    irb_approval = models.CharField(max_length=128, blank=True, null=True)
     irb_approval_num = models.CharField(max_length=128, blank=True, null=True)
     irb_contact = models.CharField(max_length=500, blank=True, null=True)
     irb_contact_email = models.EmailField(max_length=500, blank=True, null=True)
@@ -235,6 +236,15 @@ class fundedsite_program_link(models.Model):
     class Meta:
         db_table = u'fundedsite_program_link'
         unique_together = (("programid", "fundedsiteid"),)
+
+class fundedsite_institution_visible_id(models.Model):
+    fundedsiteid = models.IntegerField()
+    institutionid = models.IntegerField()
+    fundedsite_institution_visible_id = models.IntegerField()
+
+    class Meta:
+        db_table = u'fundedsite_institution_visible_id'
+        unique_together = (("fundedsiteid", "institutionid", "fundedsite_institution_visible_id"),)
 
 class fundedsite_institution_link(models.Model):
     fundedsiteid = models.IntegerField()
@@ -475,3 +485,44 @@ class IdSeq(models.Model):
     log_cnt = models.IntegerField()
     is_cycled = models.BooleanField()
     is_called = models.BooleanField()
+
+class labcas_user_profiles(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=1024)
+    search_profile = models.TextField(blank=True, null=True)
+    search_name = models.CharField(max_length=1024)
+    
+    class Meta:
+        db_table = u'labcas_user_profiles'
+        unique_together = (("username", "search_name"),)
+
+class labcas_user_dicom_states(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=1024)
+    dicom_state = models.TextField(blank=True, null=True)
+    state_name = models.CharField(max_length=1024)
+    
+    class Meta:
+        db_table = u'labcas_user_dicom_states'
+        unique_together = (("username", "state_name"),)
+
+class labcas_person(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=1024)
+    firstname = models.CharField(max_length=1024)
+    lastname = models.CharField(max_length=1024)
+    email = models.CharField(max_length=1024)
+    accepted = models.BooleanField()
+    firsttime = models.BooleanField()
+    time_accepted = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        db_table = u'labcas_person'
+
+class labcas_assaytype(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=2048)
+    alias = models.CharField(max_length=2048)
+
+    class Meta:
+         db_table = u'labcas_assaytype'

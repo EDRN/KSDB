@@ -1,0 +1,80 @@
+services:
+  db:
+    image: postgres:14
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ksdb}
+      POSTGRES_USER: ${POSTGRES_USER:-ksdb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ksdb}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./conf/createtables.sql:/schema/createtables.sql:ro
+      - ./docker/postgres-init/10-load-schema.sh:/docker-entrypoint-initdb.d/10-load-schema.sh:ro
+      - ./docker/postgres-init/20-schema-fixes.sql:/docker-entrypoint-initdb.d/20-schema-fixes.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  init:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SETTINGS_MODULE: sitemain.settings_docker
+      DATABASE_NAME: ${POSTGRES_DB:-ksdb}
+      DATABASE_USER: ${POSTGRES_USER:-ksdb}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-ksdb}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-1}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-ksdb-local-dev-secret-key}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-*}
+      RDF_URL: ${RDF_URL:-http://localhost:8000/}
+      MCL_URL: ${MCL_URL:-http://localhost:8000/}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME:-admin}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:-admin@example.com}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-admin}
+      KSDB_PRELOAD_DATA: ${KSDB_PRELOAD_DATA:-1}
+    volumes:
+      - staticfiles:/app/staticfiles
+    command: ["/usr/local/bin/ksdb-init"]
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    environment:
+      DJANGO_SETTINGS_MODULE: sitemain.settings_docker
+      DATABASE_NAME: ${POSTGRES_DB:-ksdb}
+      DATABASE_USER: ${POSTGRES_USER:-ksdb}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-ksdb}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-1}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-ksdb-local-dev-secret-key}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-*}
+      RDF_URL: ${RDF_URL:-http://localhost:8000/}
+      MCL_URL: ${MCL_URL:-http://localhost:8000/}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME:-admin}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:-admin@example.com}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-admin}
+      KSDB_PRELOAD_DATA: ${KSDB_PRELOAD_DATA:-1}
+    volumes:
+      - staticfiles:/app/staticfiles
+    ports:
+      - "${KSDB_PORT:-8000}:8000"
+
+volumes:
+  postgres_data:
+  staticfiles:

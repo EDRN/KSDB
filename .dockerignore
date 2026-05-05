@@ -1,0 +1,16 @@
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+dist/
+build/
+staticfiles/
+ksdb/static/tmp/
+test
+
