@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from rdflib.term import URIRef
 
 from ksdb.models import organ
@@ -20,18 +21,19 @@ class Command(BaseCommand):
         statements = parse_statements(graph)
         imported_count = 0
 
-        for subject in statements:
-            title = text_value(statements[subject].get(self._body_system_title, [""])[0])
-            if not title:
-                continue
-            if organ.objects.filter(name=title).exists():
-                continue
+        with transaction.atomic():
+            for subject in statements:
+                title = text_value(statements[subject].get(self._body_system_title, [""])[0])
+                if not title:
+                    continue
+                if organ.objects.filter(name=title).exists():
+                    continue
 
-            organ.objects.create(
-                id=next_sequence_value("organ_seq"),
-                name=title,
-                description="",
-            )
-            imported_count += 1
+                organ.objects.create(
+                    id=next_sequence_value("organ_seq"),
+                    name=title,
+                    description="",
+                )
+                imported_count += 1
 
         logger.info("Successfully imported %s organs from cancerdataexpo rdf.", imported_count)

@@ -1,7 +1,17 @@
 from django.db.models import Q
+from django.utils.html import format_html
 from ksdb.models import person, publication, program, institution, fundedsite, protocol, organ, labcas_assaytype, degree, group, disease, committee, discipline, species, specimentype
 from ksdb.ekeutils import _KSDBhref, getPersonNameByID, getProgramTitleByID
 from django_datatables_view.base_datatable_view import BaseDatatableView
+
+
+def _select_input(objtype, row_id):
+    return format_html('<input type="checkbox" name="{}" id="{}">', objtype, row_id)
+
+
+def _edit_link(objtype, row_id, label):
+    return format_html('<a href="{}{}input/?id={}">{}</a>', _KSDBhref, objtype, row_id, label)
+
 
 class PersonView(BaseDatatableView):
     model = person
@@ -16,10 +26,10 @@ class PersonView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(PersonView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -43,10 +53,10 @@ class PublicationView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(PublicationView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -70,10 +80,10 @@ class ProgramView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(ProgramView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
@@ -96,10 +106,10 @@ class InstitutionView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(InstitutionView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -121,7 +131,7 @@ class CommitteeView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(CommitteeView, self).render_column(row, column)
             if column == 'members':
@@ -138,7 +148,7 @@ class CommitteeView(BaseDatatableView):
                     if proid:
                         programs.append(proid)
                 obj = ",".join(programs)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
@@ -162,7 +172,7 @@ class GroupView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(GroupView, self).render_column(row, column)
             if column == 'members':
@@ -179,7 +189,7 @@ class GroupView(BaseDatatableView):
                     if proid:
                         programs.append(proid)
                 obj = ",".join(programs)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
@@ -203,7 +213,7 @@ class FundedSiteView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(FundedSiteView, self).render_column(row, column)
             if column == 'pis':
@@ -220,7 +230,7 @@ class FundedSiteView(BaseDatatableView):
                     if proid:
                         programs.append(proid)
                 obj = ",".join(programs)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -244,10 +254,10 @@ class ProtocolView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(ProtocolView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -268,10 +278,10 @@ class DiseaseView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(DiseaseView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -291,10 +301,10 @@ class AssayTypeView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(AssayTypeView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -314,10 +324,10 @@ class OrganView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(OrganView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -337,10 +347,10 @@ class DisciplineView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(DisciplineView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -360,10 +370,10 @@ class SpecimenTypeView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(SpecimenTypeView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -383,10 +393,10 @@ class SpeciesView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(SpeciesView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
@@ -406,10 +416,10 @@ class DegreeView(BaseDatatableView):
     def render_column(self, row, column):
         # We want to render user as a custom column
         if column == 'Select':
-            return '<input type="checkbox" name="{0}" id="{1}">'.format(self.objtype, row.id)
+            return _select_input(self.objtype, row.id)
         else:
             obj = super(DegreeView, self).render_column(row, column)
-            return '<a href="{0}{1}input/?id={2}">{3}</a>'.format(_KSDBhref, self.objtype, row.id, obj)
+            return _edit_link(self.objtype, row.id, obj)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)

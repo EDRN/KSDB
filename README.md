@@ -2,7 +2,7 @@
 
 Knowledge System DB: The goal of this system is to maintain generalized project information to be used for any bioinformatics knowledge system that the JPL Informatics Center supports. For example, EDRN or MCL.
 
-#DEPENDENCIES
+# DEPENDENCIES
 
 sudo yum install postgresql-server postgresql-devel gcc openldap-devel openssl openssl-devel
 python3:
@@ -16,9 +16,9 @@ pip3:
     curl -O https://bootstrap.pypa.io/get-pip.py
     sudo python3 get-pip.py 
 
-#SETUP POSTGRES
+# SETUP POSTGRES
 
-#setup postgres
+# setup postgres
     sudo service postgresql initdb
     sudo chkconfig postgresql on
     sudo service postgresql start
@@ -29,7 +29,7 @@ pip3:
         alter user edrn password 'edrn';
         GRANT ALL ON database ksdb TO edrn;
 
-#insert tables
+# insert tables
     ctrl^D once to exit out of database
     sudo service postgresql restart
     export PGPASSWORD=edrn
@@ -94,4 +94,5 @@ Notes:
 
 - `./deploy.sh` builds the image, starts Postgres and Django, loads the schema, preloads supported KSDB data, and exposes the app on `http://localhost:8000/`
 - `./deploy.sh fresh` also deletes the Docker volume and rebuilds the database from scratch
+- One-time database initialization runs in a separate Compose `init` service before the web service starts
 - The default login is `admin` / `admin` unless you override the compose environment variables

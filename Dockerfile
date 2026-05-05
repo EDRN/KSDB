@@ -5,17 +5,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+COPY requirements-docker.txt /app/requirements-docker.txt
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential ca-certificates \
+    && pip install --no-cache-dir --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir -r /app/requirements-docker.txt \
+    && apt-get purge -y --auto-remove build-essential \
     && rm -rf /var/lib/apt/lists/*
-
-COPY requirements-docker.txt /app/requirements-docker.txt
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
-    && pip install --no-cache-dir -r /app/requirements-docker.txt
 
 COPY . /app
 COPY docker/entrypoint.sh /usr/local/bin/ksdb-entrypoint
-RUN chmod +x /usr/local/bin/ksdb-entrypoint
+COPY docker/init.sh /usr/local/bin/ksdb-init
+RUN chmod +x /usr/local/bin/ksdb-entrypoint /usr/local/bin/ksdb-init
 
 EXPOSE 8000
 
